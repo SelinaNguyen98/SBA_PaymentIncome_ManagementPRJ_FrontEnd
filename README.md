@@ -53,7 +53,10 @@ SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.gi
         npm run build (Or: yarn build)
 ## 7. Gitflow Workflow
 ![Checkout develop](https://images.viblo.asia/84f47fd1-a009-4beb-8957-26395fe1023d.png)
-## Note: Checkout develop before coding
+## Note: 
+### Checkout develop before coding
+    $ git checkout -b branch_mane (Create and move code to new branch)
+### After pushing the code on the child branch, create a pull request to the develop branch
 
 
 
