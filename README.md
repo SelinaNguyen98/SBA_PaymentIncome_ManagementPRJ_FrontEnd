@@ -35,9 +35,9 @@ Currently, two official plugins are available:
 
 # How to Run a Project
 ## 1. Clone Project From GitHub
-git clone 
-HTTPs: https://github.com/SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.git
-SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.git
+git clone  
+HTTPs: https://github.com/SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.git  
+SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.git  
 ## 2. Access the project
     cd SBA_PaymentIncome_ManagementPRJ_FrontEnd
 ## 3. Install Dependencies
