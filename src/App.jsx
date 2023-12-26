@@ -1,8 +1,24 @@
+/* eslint-disable no-unused-vars */
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 function App() {
   return (
-    <div className="text-[#000000] text-3xl">
-          
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route  />
+        <Route ></Route>
+        <Route >
+          <Route />
+          <Route />
+          <Route />
+          <Route />
+          <Route />
+          <Route />
+          <Route />
+          <Route />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
