@@ -12,6 +12,7 @@ Currently, two official plugins are available:
 # │   ├── node_modules/  <br>
 # │   ├── public/  <br>
 # │   ├── src/  <br>
+# │   │   ├──assets/Images <br>
 # │   │   ├──Components/  <br>
 # │   │   │  ├──Account_Category/  <br>
 # │   │   │  ├──Account_Category_Group/  <br>
