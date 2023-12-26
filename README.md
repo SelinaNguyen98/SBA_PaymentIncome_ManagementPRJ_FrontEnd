@@ -52,7 +52,7 @@ SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.gi
 ## 6. Build Applications for Production
         npm run build (Or: yarn build)
 ## 7. Gitflow Workflow
-![Checkout develop](/Users/selinanguyen/Documents/SBA/SBA_PaymentIncome_ManagementPRJ_FrontEnd/src/assets/Images/GitFlow.webp)
+![Checkout develop](https://images.viblo.asia/84f47fd1-a009-4beb-8957-26395fe1023d.png)
 ## Note: Checkout develop before coding
 
 
