@@ -12,6 +12,7 @@ Currently, two official plugins are available:
 # │   ├── node_modules/  <br>
 # │   ├── public/  <br>
 # │   ├── src/  <br>
+# │   │   ├──assets/Images <br>
 # │   │   ├──Components/  <br>
 # │   │   │  ├──Account_Category/  <br>
 # │   │   │  ├──Account_Category_Group/  <br>
@@ -50,5 +51,8 @@ SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.gi
    Note: Make sure the forwarded port (here 8080) matches your needs
 ## 6. Build Applications for Production
         npm run build (Or: yarn build)
+
+
+
 
 
