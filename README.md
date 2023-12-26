@@ -51,6 +51,9 @@ SSH  : git@github.com:SelinaNguyen98/SBA_PaymentIncome_ManagementPRJ_FrontEnd.gi
    Note: Make sure the forwarded port (here 8080) matches your needs
 ## 6. Build Applications for Production
         npm run build (Or: yarn build)
+## 7. Gitflow Workflow
+![Checkout develop](/Users/selinanguyen/Documents/SBA/SBA_PaymentIncome_ManagementPRJ_FrontEnd/src/assets/Images/GitFlow.webp)
+## Note: Checkout develop before coding
 
 
 
