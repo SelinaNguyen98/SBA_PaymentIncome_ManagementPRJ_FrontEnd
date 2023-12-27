@@ -1,8 +1,7 @@
-import React, { useId, useRef, useState } from "react";
+import { useId, useState } from "react";
 import {
   useFloating,
   FloatingPortal,
-  arrow,
   shift,
   offset,
   autoUpdate,
@@ -23,14 +22,12 @@ export default function Popover({
 }) {
   const [open, setOpen] = useState(initialOpen || false);
 
-  const arrowRef = useRef(null);
-
   const id = useId();
 
-  const { refs, floatingStyles, middlewareData, context } = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
-    middleware: [offset(2), shift(), arrow({ element: arrowRef })],
+    // middleware: [offset(2), shift(), arrow({ element: arrowRef })],
     middleware: [offset(2), shift()],
     whileElementsMounted: autoUpdate,
     transform: false,

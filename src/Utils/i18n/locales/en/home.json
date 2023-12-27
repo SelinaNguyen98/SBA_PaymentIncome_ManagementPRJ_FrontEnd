@@ -1,5 +1,5 @@
 {
-  "topBar": {
+  "navHeader": {
     "invoiceDetails": "Invoice Details",
     "accountAnalytics": "Account Analytics",
     "orders": "Orders"

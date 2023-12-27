@@ -1,13 +1,13 @@
 import React from "react";
 import "../../../Utils/style.css";
-import TopBar from "../../TopBar";
+import NavHeader from "../../NavHeader";
 import InvoiceTable from "./InvoiceTable";
 
 export default function InvoiceDetails() {
   return (
     <div className=" grid grid-cols-12 gap-4 bg-main-theme h-[600px] ">
       <div className="col-span-10 col-start-3 border">
-        <TopBar />
+        <NavHeader />
 
         <div className="mt-4 px-6 flex flex-shrink-0 items-center">
           <svg

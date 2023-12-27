@@ -1,4 +1,3 @@
-import React from "react";
 import { useTranslation } from "react-i18next";
 import { PiTranslateFill } from "react-icons/pi";
 import { locales } from "../../Utils/i18n/i18n";
@@ -7,7 +6,7 @@ import Popover from "../Popover";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 
-export default function TopBar({ isHiddtenMainButton = false }) {
+export default function NavHeader({ isHiddenMainButton = false }) {
   // Chuyển đổi ngôn ngữ
   const { i18n, t } = useTranslation();
   const currentLanguage = locales[i18n.language];
@@ -109,17 +108,18 @@ export default function TopBar({ isHiddtenMainButton = false }) {
       </div>
       <div
         className={`col-span-12 lg:col-span-9 px-5 items-center ${
-          isHiddtenMainButton ? "hidden" : ""
+          isHiddenMainButton ? "hidden" : ""
         } `}
       >
         <div className="grid grid-cols-12 gap-4 ">
           <button
             className={classNames(
-              "col-span-4 rounded-[20px] border-black border-2 lg:mx-5 lg:px-3 py-1 font-bold shadow-sm text-center bg-white",
-              { "bg-yellow-bold": customProp === "invoiceDetails" }
+              "col-span-4 rounded-[20px]   border-black border-2 lg:mx-5 lg:px-3 py-1 font-bold shadow-sm text-center bg-yellow",
+              // { "bg-yellow-bold": customProp === "invoiceDetails" }
+              { " bg-yellow": customProp === "invoiceDetails" }
             )}
           >
-            {t("topBar.invoiceDetails")}
+            {t("navHeader.invoiceDetails")}
           </button>
           <button
             className={classNames(
@@ -127,7 +127,7 @@ export default function TopBar({ isHiddtenMainButton = false }) {
               { "bg-yellow-bold": customProp === "accountAnalytics" }
             )}
           >
-            {t("topBar.accountAnalytics")}
+            {t("navHeader.accountAnalytics")}
           </button>
           <button
             className={classNames(
@@ -135,14 +135,14 @@ export default function TopBar({ isHiddtenMainButton = false }) {
               { "bg-yellow-bold": customProp === "orders" }
             )}
           >
-            {t("topBar.orders")}
+            {t("navHeader.orders")}
           </button>
           {/* <Link
                 className="col-span-4 rounded-[20px] border-black border-2 lg:mx-5 lg:px-3 py-1 font-bold bg-yellow-bold shadow-sm text-center "
                 to={"/"}
                 state={{ customProp: "top1" }}
               >
-                {t("topBar.invoiceDetails")}
+                {t("NavHeader.invoiceDetails")}
               </Link>
               <Link
                 className={classNames(
@@ -152,7 +152,7 @@ export default function TopBar({ isHiddtenMainButton = false }) {
                 to={"/"}
                 state={{ customProp: "top1" }}
               >
-                {t("topBar.accountAnalytics")}
+                {t("NavHeader.accountAnalytics")}
               </Link>
               <Link
                 className={classNames(
@@ -162,7 +162,7 @@ export default function TopBar({ isHiddtenMainButton = false }) {
                 to={"/"}
                 state={{ customProp: "top2" }}
               >
-                {t("topBar.orders")}
+                {t("NavHeader.orders")}
               </Link> */}
         </div>
       </div>

@@ -73,59 +73,22 @@ export default function InvoiceTable() {
           </Button>
         </div>
       </div>
-      <table className=" w-full h-full bg-white mt-2 pt-2 " style={{}}>
-        <thead className=" text-sm bg-main-theme ">
+      <table className=" w-full bg-white mt-2 pt-2">
+        <thead className=" uppercase text-sm rounded--   bg-main-theme font-medium bg-main-theme  ">
           <tr>
-            <th></th>
-            <th>No</th>
-            <th>Date</th>
-            <th>Name</th>
-            <th>JPY</th>
-            <th>VND</th>
-            <th>USD</th>
-            <th>JOURNAL</th>
-            <th>INVOICE</th>
-            <th>PAY</th>
-            <th>ACTION</th>
-            <th></th>
+            <th className=" font-medium">No</th>
+            <th className=" font-medium">Date</th>
+            <th className=" font-medium">Name</th>
+            <th className=" font-medium">JPY</th>
+            <th className=" font-medium">VND</th>
+            <th className=" font-medium">USD</th>
+            <th className=" font-medium">JOURNAL</th>
+            <th className=" font-medium">INVOICE</th>
+            <th className=" font-medium">PAY</th>
+            <th className=" font-medium">ACTION</th>
           </tr>
         </thead>
-        <tbody>
-          <tr className=" bg-main-theme h-[0px] py-0 my-0">
-            <td colSpan={12}></td>
-          </tr>
-          <tr className=" bg-main-theme">
-            <td></td>
-            <td>dsfs</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>UsdfSD</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>PAY</td>
-            <td>sdf</td>
-            <td></td>
-          </tr>
-          <tr className=" bg-main-theme">
-            <td></td>
-            <td>dsfs</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>UsdfSD</td>
-            <td>sdf</td>
-            <td>sdf</td>
-            <td>PAY</td>
-            <td>sdf</td>
-            <td></td>
-          </tr>
-          <tr className=" bg-main-theme h-[0px] py-0 my-0">
-            <td colSpan={12}></td>
-          </tr>
-        </tbody>
+        tbody
       </table>
     </div>
   );
