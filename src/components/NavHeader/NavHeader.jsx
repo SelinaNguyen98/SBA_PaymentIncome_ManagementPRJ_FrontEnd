@@ -23,7 +23,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
   const customProp = "invoiceDetails";
 
   return (
-    <div className="grid grid-cols-10 gap-4 items-center mt-6 px-5 py-2 bg-main-theme">
+    <div className="grid grid-cols-10 gap-4 items-center mt-2 px-5 py-2 bg-main-theme">
       <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
         {/* TO DO icon swich sidebar */}
         <svg
@@ -41,7 +41,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
         <Popover
           className="flex items-center cursor-pointer ml-2"
           renderPopover={
-            <div className=" bg-yellow-bold rounded-[12px]">
+            <div className=" bg-yellow rounded-[12px]">
               <div className="flex flex-col items-center justify-center px-4 py-2  ">
                 <button
                   className="flex items-center py-2 px-3 rounded-[16px] text-left font-bold text-sm uppercase bg-white w-[106px] justify-between"
