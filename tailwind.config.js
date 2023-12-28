@@ -2,7 +2,11 @@
 export default {
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      inset: {
+        '65px': '65px',
+      }
+    },
   },
   plugins: [],
 }
