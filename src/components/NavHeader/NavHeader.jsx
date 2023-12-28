@@ -5,6 +5,8 @@ import "../../Utils/style.css";
 import Popover from "../Popover";
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
+import { useContext } from "react";
+import { AppContext } from "../../Utils/contexts/app.context.jsx";
 
 export default function NavHeader({ isHiddenMainButton = false }) {
   // Chuyển đổi ngôn ngữ
@@ -13,6 +15,8 @@ export default function NavHeader({ isHiddenMainButton = false }) {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
+
+  const { toggleAsideFilter } = useContext(AppContext);
 
   /**
    * TO DO
@@ -27,7 +31,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
       <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
         {/* TO DO icon swich sidebar */}
         <svg
-          onClick={() => {}}
+          onClick={toggleAsideFilter}
           className="w-9 h-9 cursor-pointer flex-shrink-0"
           viewBox="0 0 49 37"
           fill="none"
@@ -39,7 +43,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
         </svg>
 
         <Popover
-          className="flex items-center cursor-pointer ml-2"
+          className="flex items-center cursor-pointer ml-2 "
           renderPopover={
             <div className=" bg-yellow rounded-[12px]">
               <div className="flex flex-col items-center justify-center px-4 py-2  ">

@@ -1,19 +1,45 @@
-import React from "react";
 import "../../../Utils/style.css";
 import NavHeader from "../../NavHeader";
-import InvoiceTable from "./InvoiceTable";
+// import InvoiceTable from "./InvoiceTable";
 import Button from "../../Button";
-import InvoiceFooter from "./InvoiceFooter/InvoiceFooter";
+import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
+import "./styles.css";
+import { useContext, useState } from "react";
+import { AppContext } from "../../../Utils/contexts/app.context";
+import Modal from "../../Modal/Modal";
+import NewPaymentForm from "./NewPaymentForm";
 
 export default function InvoiceDetails() {
+  const { isShowAsideFilter } = useContext(AppContext);
+  // const [isShowConfirmModal, setShowConfirmModal] = useState(false);
+  // const [isShowFormNewPayment, setShowFormNewPayment] = useState(true);
+
+  const [state, setState] = useState({
+    isShowConfirmModal: false,
+    isShowFormNewPayment: false,
+  });
+  const { isShowConfirmModal, isShowFormNewPayment } = state;
+
+  const updateState = (data) => setState(() => ({ ...state, ...data }));
+
   return (
-    <div className=" grid grid-cols-12 gap-4 bg-main-theme h-full ">
-      <div className="col-span-10 col-start-3 border">
+    <div className={`grid grid-cols-12 gap-0 bg-main-theme`}>
+      {isShowAsideFilter && (
+        <div className="col-span-2  bg-red p-3	">
+          <button>Toggle modal</button>
+        </div>
+      )}
+      <div
+        id="contentInvoiceDetail"
+        className={` relative bg-main-theme pb-5     ${
+          isShowAsideFilter ? "col-span-10" : "col-span-12"
+        }`}
+      >
         {/* heder */}
         <NavHeader />
 
         {/* Lable */}
-        <div className="mt-1 px-6 flex flex-shrink-0 items-center">
+        <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
           <svg
             viewBox="0 0 34 27"
             fill="none"
@@ -29,7 +55,7 @@ export default function InvoiceDetails() {
         </div>
 
         {/* control area */}
-        <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
+        <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
           <div className="grid grid-cols-12 gap-8 items-center ">
             <input
               type="date"
@@ -66,6 +92,7 @@ export default function InvoiceDetails() {
 
             <div className="flex col-span-12 lg:col-span-3 items-center justify-end">
               <Button
+                onClick={() => updateState({ isShowFormNewPayment: true })}
                 icon={
                   <svg
                     width="16"
@@ -85,6 +112,9 @@ export default function InvoiceDetails() {
               </Button>
 
               <Button
+                onClick={() => {
+                  updateState({ isShowConfirmModal: true });
+                }}
                 className="bg-red ml-2 "
                 icon={
                   <svg
@@ -107,10 +137,101 @@ export default function InvoiceDetails() {
           </div>
 
           {/* table data */}
-          <InvoiceTable />
+          <table id="invoiceTable" className="">
+            <thead>
+              <tr>
+                <th></th>
+                <th>No</th>
+                <th>Date</th>
+                <th>Name</th>
+                <th>JPY</th>
+                <th>VND</th>
+                <th>USD</th>
+                <th>JOURNAL</th>
+                <th>INVOICE</th>
+                <th>PAY</th>
+                <th>ACTION</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="">
+                <td colSpan={100}></td>
+              </tr>
 
-          <InvoiceFooter />
+              {Array(10)
+                .fill(0)
+                .map((_, index) => (
+                  <tr key={index}>
+                    <td></td>
+                    <td>dsfs</td>
+                    <td>sdf</td>
+                    <td>sdf</td>
+                    <td>sdf</td>
+                    <td>sdf</td>
+                    <td>UsdfSD</td>
+                    <td>sdf</td>
+                    <td>sdf</td>
+                    <td>PAY</td>
+                    <td>sdf</td>
+                    <td></td>
+                  </tr>
+                ))}
+
+              <tr className=" bg-main-theme h-[0px] py-0 my-0">
+                <td colSpan={100}></td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* InvoiceDetailFooter */}
+          <InvoiceDetailFooter />
         </div>
+
+        <Modal
+          visible={isShowConfirmModal}
+          // cancel={() => {
+          //   setShowConfirmModal(false);
+          // }}
+        >
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
+            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+              delete Invoice detail
+            </span>
+
+            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+              Are you sure you want to delete this payment ?
+            </div>
+
+            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+              <Button
+                onClick={() => {
+                  // setShowConfirmModal(false);
+                }}
+                className={" bg-red py-2 px-6"}
+              >
+                Confirm
+              </Button>
+              <Button
+                onClick={() => {
+                  updateState({ isShowConfirmModal: false });
+                }}
+                className={" border-red-500 bg-white border-2   py-2 px-6"}
+              >
+                <span className=" text-red-500  ml-1 font-medium uppercase">
+                  Cancel
+                </span>
+              </Button>
+            </div>
+          </div>
+        </Modal>
+
+        <NewPaymentForm
+          visible={isShowFormNewPayment}
+          cancel={() => {
+            updateState({ isShowFormNewPayment: false });
+          }}
+        />
       </div>
     </div>
   );

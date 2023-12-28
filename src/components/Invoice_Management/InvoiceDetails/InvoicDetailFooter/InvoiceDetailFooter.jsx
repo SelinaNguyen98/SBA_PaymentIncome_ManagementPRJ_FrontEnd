@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Pagination from "../Pagination";
 
-export default function InvoiceFooter() {
+export default function InvoiceDetailFooter() {
   return (
     <div className=" mt-3">
       <div className=" flex flex-wrap gap-4 items-center">
