@@ -2,12 +2,17 @@
   width: 100%;
   background-color: white;
   margin-top: 0.7rem;
+  overflow: scroll;
+  /* max-width: 100%; */
+  /* flex: content; */
+  /* display: flex; */
+  /* display: block; */
 }
 
-#invoiceTable table thead {
+/* #invoiceTable table thead {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
+} */
 
 #invoiceTable thead th {
   background-color: #e3edf9;
@@ -20,11 +25,11 @@
 /* border-radius = top left, top right, bottom right, bottom left */
 /* curves the top left */
 /* curves the top right */
-#invoiceTable table th:first-child {
+#invoiceTable th:first-child {
   border-radius: 10px 0 0 10px;
 }
 
-#invoiceTable table th:last-child {
+#invoiceTable th:last-child {
   border-radius: 0 10px 10px 0;
 }
 /* //////////////////////////////////// */
@@ -45,6 +50,7 @@
   text-align: center;
   border: 1px solid gray;
   padding: 6px;
+  overflow: hidden;
 }
 
 @media (min-width: 1537px) {

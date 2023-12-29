@@ -4,15 +4,15 @@ import NavHeader from "../../NavHeader";
 import Button from "../../Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function InvoiceDetails() {
   const { isShowAsideFilter } = useContext(AppContext);
-  // const [isShowConfirmModal, setShowConfirmModal] = useState(false);
-  // const [isShowFormNewPayment, setShowFormNewPayment] = useState(true);
 
   const [state, setState] = useState({
     isShowConfirmModal: false,
@@ -21,6 +21,40 @@ export default function InvoiceDetails() {
   const { isShowConfirmModal, isShowFormNewPayment } = state;
 
   const updateState = (data) => setState(() => ({ ...state, ...data }));
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [inputValue, setInputValue] = useState("");
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const CustomInput = ({ value, onClick }) => (
+    <div
+      className={`flex rounded-lg text-center justify-center items-center font-medium border-black border-2 px-2 py-1 cursor-pointer`}
+    >
+      <svg
+        onClick={onClick}
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+        />
+      </svg>
+      <input
+        value={value}
+        className=" text-center w-full focus:outline-none"
+        onClick={onClick}
+      />
+    </div>
+  );
 
   return (
     <div className={`grid grid-cols-12 gap-0 bg-main-theme`}>
@@ -32,7 +66,7 @@ export default function InvoiceDetails() {
       <div
         id="contentInvoiceDetail"
         className={` relative bg-main-theme pb-5     ${
-          isShowAsideFilter ? "col-span-10" : "col-span-12"
+          isShowAsideFilter ? "col-span-10" : "col-span-full"
         }`}
       >
         {/* heder */}
@@ -56,11 +90,31 @@ export default function InvoiceDetails() {
 
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
-          <div className="grid grid-cols-12 gap-8 items-center ">
-            <input
-              type="date"
-              className="col-span-12 lg:col-span-2 rounded-lg font-medium border-black border-2 px-2 py-1 "
-            />
+          <div className="grid grid-cols-12 gap-8 items-center w-full overflow-auto ">
+            <div className="col-span-12 lg:col-span-2">
+              {/* <ReactDatePicker
+                selected={selectedDate}
+                onChange={handleDateChange}
+                dateFormat="MM-yyyy"
+                showMonthYearPicker
+                // showMonthYearDropdown
+                customInput={<CustomInput />}
+                // value={inputValue}
+              /> */}
+
+              <div>
+                {/* <input type="month" value="2001-06"  /> */}
+                <ReactDatePicker
+                  selected={selectedDate}
+                  onChange={handleDateChange}
+                  dateFormat="MM-yyyy"
+                  showMonthYearPicker
+                  customInput={<CustomInput />}
+
+                  // customInput={<CustomInput />}
+                />
+              </div>
+            </div>
 
             <div className=" col-span-12 lg:col-span-7 bg-main-theme items-center py-1 rounded-md ">
               <div className="grid grid-cols-9 items-center px-5 ">
@@ -137,24 +191,25 @@ export default function InvoiceDetails() {
           </div>
 
           {/* table data */}
-          <table id="invoiceTable" className="">
+          <table id="invoiceTable" className=" w-full ">
             <thead>
               <tr>
-                <th></th>
-                <th>No</th>
-                <th>Date</th>
-                <th>Name</th>
-                <th>JPY</th>
-                <th>VND</th>
-                <th>USD</th>
-                <th>JOURNAL</th>
-                <th>INVOICE</th>
-                <th>PAY</th>
-                <th>ACTION</th>
-                <th></th>
+                <th className=" w-[1%]"></th>
+                <th className=" w-[10%]">No</th>
+                <th className=" w-[10%]">Date</th>
+                <th className=" w-[10%]">Name</th>
+                <th className=" w-[10%]">JPY</th>
+                <th className=" w-[10%]">VND</th>
+                <th className=" w-[10%]">USD</th>
+                <th className=" w-[10%]">JOURNAL</th>
+                <th className=" w-[10%]">INVOICE</th>
+                <th className=" w-[10%]">PAY</th>
+                <th className=" w-[8%]">ACTION</th>
+                <th className=" w-[1%]"></th>
               </tr>
             </thead>
             <tbody>
+              {/* Firsh row is like padding-top */}
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
@@ -163,21 +218,87 @@ export default function InvoiceDetails() {
                 .fill(0)
                 .map((_, index) => (
                   <tr key={index}>
-                    <td></td>
-                    <td>dsfs</td>
-                    <td>sdf</td>
-                    <td>sdf</td>
-                    <td>sdf</td>
-                    <td>sdf</td>
-                    <td>UsdfSD</td>
-                    <td>sdf</td>
-                    <td>sdf</td>
-                    <td>PAY</td>
-                    <td>sdf</td>
-                    <td></td>
+                    {/* First column of each row is like padding-left */}
+                    <td className=" w-[1%]"></td>
+
+                    {/* DATA MAIN*/}
+                    <td className=" w-[10%]" name="tb_no">
+                      dsfs
+                    </td>
+                    <td className=" w-[10%]" name="tb_date">
+                      sdf
+                    </td>
+                    <td className=" w-[10%]" name="tb_name">
+                      sdf
+                    </td>
+                    <td className=" w-[10%]" name="tb_jyp">
+                      9
+                    </td>
+                    <td className=" w-[10%] overflow-x-hidden" name="tb_vnd">
+                      sdf
+                    </td>
+                    <td
+                      className=" max-w-[10%]  min-w-[10%] w-[10%] overflow-x-hidden overflow-scroll"
+                      name="tb_usd"
+                    >
+                      1 1
+                    </td>
+                    <td className=" w-[10%]" name="tb_journal">
+                      sdf
+                    </td>
+                    <td className=" w-[10%]" name="tb_invoice">
+                      sdf
+                    </td>
+                    <td className=" w-[10%]" name="tb_pay">
+                      PAY
+                    </td>
+                    <td className=" w-[8%]" name="tb_action">
+                      <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                        <svg
+                          width="19"
+                          height="19"
+                          viewBox="0 0 19 19"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                            fill="#FFC107"
+                          />
+                          <path
+                            d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                            fill="black"
+                            fill-opacity="0.2"
+                          />
+                        </svg>
+                        <div className=" border border-gray-400 mx-2 "></div>
+
+                        <svg
+                          width="19"
+                          height="19"
+                          viewBox="0 0 16 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                            fill="#F44336"
+                          />
+                          <path
+                            d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                            fill="black"
+                            fill-opacity="0.2"
+                          />
+                        </svg>
+                      </div>
+                    </td>
+
+                    {/* Last column of each row is like padding-right */}
+                    <td className=" w-[1%]"></td>
                   </tr>
                 ))}
 
+              {/* Last row is like padding-bottom */}
               <tr className=" bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
               </tr>
@@ -188,12 +309,7 @@ export default function InvoiceDetails() {
           <InvoiceDetailFooter />
         </div>
 
-        <Modal
-          visible={isShowConfirmModal}
-          // cancel={() => {
-          //   setShowConfirmModal(false);
-          // }}
-        >
+        <Modal visible={isShowConfirmModal}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
               delete Invoice detail
@@ -204,12 +320,7 @@ export default function InvoiceDetails() {
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-              <Button
-                onClick={() => {
-                  // setShowConfirmModal(false);
-                }}
-                className={" bg-red py-2 px-6"}
-              >
+              <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
                 Confirm
               </Button>
               <Button

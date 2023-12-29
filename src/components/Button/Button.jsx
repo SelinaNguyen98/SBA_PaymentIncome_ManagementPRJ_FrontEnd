@@ -2,7 +2,7 @@ export default function Button({ className, icon, children, ...refs }) {
   return (
     <button
       {...refs}
-      className={` ${className} bg-green text-white px-4 py-1 rounded-[18px] hover:opacity-80 text-sm flex justify-center items-center flex-shrink-0 font-medium uppercase  `}
+      className={` bg-green text-white px-4 py-1 rounded-[18px] hover:opacity-80 text-sm flex justify-center items-center flex-shrink-0 font-medium uppercase  ${className}  `}
     >
       {icon && <div className=" w-4 h-4 mr-2 items-start">{icon}</div>}
 
