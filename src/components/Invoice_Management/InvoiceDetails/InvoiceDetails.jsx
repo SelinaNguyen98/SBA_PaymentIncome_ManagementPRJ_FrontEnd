@@ -4,12 +4,11 @@ import NavHeader from "../../NavHeader";
 import Button from "../../Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import MonthYearPicker from "../../MonthYearPicker";
 
 export default function InvoiceDetails() {
   const { isShowAsideFilter } = useContext(AppContext);
@@ -23,38 +22,6 @@ export default function InvoiceDetails() {
   const updateState = (data) => setState(() => ({ ...state, ...data }));
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [inputValue, setInputValue] = useState("");
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  const CustomInput = ({ value, onClick }) => (
-    <div
-      className={`flex rounded-lg text-center justify-center items-center font-medium border-black border-2 px-2 py-1 cursor-pointer`}
-    >
-      <svg
-        onClick={onClick}
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="w-6 h-6"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
-        />
-      </svg>
-      <input
-        value={value}
-        className=" text-center w-full focus:outline-none"
-        onClick={onClick}
-      />
-    </div>
-  );
 
   return (
     <div className={`grid grid-cols-12 gap-0 bg-main-theme`}>
@@ -91,30 +58,8 @@ export default function InvoiceDetails() {
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
           <div className="grid grid-cols-12 gap-8 items-center w-full overflow-auto ">
-            <div className="col-span-12 lg:col-span-2">
-              {/* <ReactDatePicker
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="MM-yyyy"
-                showMonthYearPicker
-                // showMonthYearDropdown
-                customInput={<CustomInput />}
-                // value={inputValue}
-              /> */}
-
-              <div>
-                {/* <input type="month" value="2001-06"  /> */}
-                <ReactDatePicker
-                  selected={selectedDate}
-                  onChange={handleDateChange}
-                  dateFormat="MM-yyyy"
-                  showMonthYearPicker
-                  customInput={<CustomInput />}
-
-                  // customInput={<CustomInput />}
-                />
-              </div>
-            </div>
+            {/* <div className="col-span-12 lg:col-span-2"></div> */}
+            <MonthYearPicker className="col-span-12 lg:col-span-2"/>
 
             <div className=" col-span-12 lg:col-span-7 bg-main-theme items-center py-1 rounded-md ">
               <div className="grid grid-cols-9 items-center px-5 ">
@@ -268,7 +213,7 @@ export default function InvoiceDetails() {
                           <path
                             d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
                             fill="black"
-                            fill-opacity="0.2"
+                            fillOpacity="0.2"
                           />
                         </svg>
                         <div className=" border border-gray-400 mx-2 "></div>
@@ -287,7 +232,7 @@ export default function InvoiceDetails() {
                           <path
                             d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
                             fill="black"
-                            fill-opacity="0.2"
+                            fillOpacity="0.2"
                           />
                         </svg>
                       </div>

@@ -3,7 +3,6 @@ import App from "./App.jsx";
 import "./Utils/output.css";
 import InvoiceDetails from "./components/Invoice_Management/InvoiceDetails";
 import { AppProvider } from "./Utils/contexts/app.context.jsx";
-import MonthYearPicker from "./components/MonthYearPicker/MonthYearPicker.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   // <React.StrictMode>
@@ -11,7 +10,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   // </React.StrictMode>
 
   <AppProvider>
-    {/* <InvoiceDetails /> */}
-    <MonthYearPicker></MonthYearPicker>
+    <InvoiceDetails />
+    {/* <MonthYearPicker></MonthYearPicker> */}
   </AppProvider>
 );
