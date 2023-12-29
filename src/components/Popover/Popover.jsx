@@ -13,7 +13,6 @@ import {
   useInteractions,
 } from "@floating-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createPortal } from "react-dom";
 
 export default function Popover({
   children,
@@ -25,7 +24,7 @@ export default function Popover({
 
   const id = useId();
 
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, floatingStyles, middlewareData, context } = useFloating({
     open,
     onOpenChange: setOpen,
     // middleware: [offset(2), shift(), arrow({ element: arrowRef })],
@@ -57,7 +56,7 @@ export default function Popover({
               ref={refs.setFloating}
               style={{
                 ...floatingStyles,
-                // transformOrigin: "top",
+                transformOrigin: `left top`,
                 // transformOrigin: "top",
               }}
               {...getFloatingProps()}

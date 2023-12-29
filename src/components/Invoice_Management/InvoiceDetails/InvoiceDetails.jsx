@@ -4,7 +4,7 @@ import NavHeader from "../../NavHeader";
 import Button from "../../Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
@@ -23,8 +23,12 @@ export default function InvoiceDetails() {
 
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  useEffect(() => {
+    console.log(selectedDate);
+  }, [selectedDate]);
+
   return (
-    <div className={`grid grid-cols-12 gap-0 bg-main-theme`}>
+    <div className={`grid grid-cols-12  bg-main-theme`}>
       {isShowAsideFilter && (
         <div className="col-span-2  bg-red p-3	">
           <button>Toggle modal</button>
@@ -57,9 +61,13 @@ export default function InvoiceDetails() {
 
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
-          <div className="grid grid-cols-12 gap-8 items-center w-full overflow-auto ">
+          <div className="grid grid-cols-12 gap-2 items-center w-full overflow-auto ">
             {/* <div className="col-span-12 lg:col-span-2"></div> */}
-            <MonthYearPicker className="col-span-12 lg:col-span-2"/>
+            <MonthYearPicker
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              className="col-span-12 lg:col-span-2"
+            />
 
             <div className=" col-span-12 lg:col-span-7 bg-main-theme items-center py-1 rounded-md ">
               <div className="grid grid-cols-9 items-center px-5 ">
