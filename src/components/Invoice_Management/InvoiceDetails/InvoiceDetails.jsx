@@ -12,10 +12,8 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../MonthYearPicker";
 
 export default function InvoiceDetails() {
-
   const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
-
 
   const [state, setState] = useState({
     isShowConfirmModal: false,
