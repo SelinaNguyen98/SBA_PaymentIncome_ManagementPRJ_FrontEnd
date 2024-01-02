@@ -3,5 +3,8 @@
     "invoiceDetails": "インボイス管理",
     "accountAnalytics": "勘定科目毎の合計",
     "orders": "受注管理"
+  },
+  "titlePage": {
+    "invoiceDetail" : "インボイス管理"
   }
 }

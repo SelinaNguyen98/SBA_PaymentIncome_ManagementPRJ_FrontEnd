@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Pagination from "../Pagination";
+import Pagination2 from "../Pagination2";
 
 export default function InvoiceDetailFooter() {
   return (
@@ -32,7 +33,7 @@ export default function InvoiceDetailFooter() {
         </div>
         <div className=" flex-1  flex justify-end">
           {/* flex-shrink-0 */}
-          <Pagination />
+          <Pagination2 />
         </div>
       </div>
     </div>

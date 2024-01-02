@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { PiTranslateFill } from "react-icons/pi";
 import { locales } from "../../Utils/i18n/i18n";
+
 import "../../Utils/style.css";
 import Popover from "../Popover";
 import { Link, useLocation } from "react-router-dom";

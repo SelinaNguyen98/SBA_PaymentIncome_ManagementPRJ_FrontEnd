@@ -3,5 +3,9 @@
     "invoiceDetails": "Invoice Details",
     "accountAnalytics": "Account Analytics",
     "orders": "Orders"
+  },
+  "titlePage": {
+    "invoiceDetail" : "Invoice Details"
   }
+
 }

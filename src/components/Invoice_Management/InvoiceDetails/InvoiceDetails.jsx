@@ -1,6 +1,7 @@
 import "../../../Utils/style.css";
 import NavHeader from "../../NavHeader";
-// import InvoiceTable from "./InvoiceTable";
+import { useTranslation } from "react-i18next";
+
 import Button from "../../Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
@@ -11,7 +12,10 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../MonthYearPicker";
 
 export default function InvoiceDetails() {
+
   const { isShowAsideFilter } = useContext(AppContext);
+  const { t } = useTranslation();
+
 
   const [state, setState] = useState({
     isShowConfirmModal: false,
@@ -56,7 +60,7 @@ export default function InvoiceDetails() {
               fill="black"
             />
           </svg>
-          Invoice Details
+          {t("titlePage.invoiceDetail")}
         </div>
 
         {/* control area */}
