@@ -2,7 +2,9 @@
   width: 100%;
   background-color: white;
   margin-top: 0.7rem;
-  overflow: scroll;
+  border-collapse: collapse;
+
+  /* overflow: scroll; */
   /* max-width: 100%; */
   /* flex: content; */
   /* display: flex; */
@@ -42,19 +44,19 @@
   display: block;
 }
 
-#invoiceTable tbody tr,
+/* #invoiceTable tbody tr, */
 #invoiceTable tbody td {
   background-color: #e3edf9;
-  font-size: 15px;
-  align-items: center;
+  font-size: 14px;
   text-align: center;
   border: 1px solid gray;
   padding: 6px;
+  overflow-wrap: break-word;
   overflow: hidden;
 }
 
 @media (min-width: 1537px) {
-  #invoiceTable tbody tr,
+  /* #invoiceTable tbody tr, */
   #invoiceTable tbody td {
     font-size: 20px;
     padding: 10px;

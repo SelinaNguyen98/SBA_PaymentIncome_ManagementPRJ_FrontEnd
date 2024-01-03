@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Pagination from "../Pagination";
-import Pagination2 from "../Pagination2";
 
-export default function InvoiceDetailFooter() {
+export default function InvoiceDetailFooter({ queryConfig, totalPage }) {
   return (
     <div className=" mt-3">
       <div className=" flex flex-wrap gap-4 items-center">
@@ -33,7 +32,7 @@ export default function InvoiceDetailFooter() {
         </div>
         <div className=" flex-1  flex justify-end">
           {/* flex-shrink-0 */}
-          <Pagination2 />
+          <Pagination totalPage={totalPage} queryConfig={queryConfig} />
         </div>
       </div>
     </div>

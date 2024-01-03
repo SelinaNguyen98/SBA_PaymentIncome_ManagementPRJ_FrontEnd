@@ -1,28 +1,25 @@
 import React, { useState } from "react";
+import { Link, createSearchParams } from "react-router-dom";
 
 /**
  * voi Range -2 ap dung cho khoang cach dau va cuoi
- *  [1] 2 3 ... 19 20
- *  1 [2] 3 4 ... 19 20
- *  1 2 [3] 4 5 ... 19 20
- *  1 2 3 [4] 5 6 ... 19 20
- *  1 2 3 4 [5] 6 7 ... 10 20
- *
- *
- *  1 2 ... 4 5 [6] 7 8 ... 19 20
- *  1 2 ... 13 14 [15] 16 17 ... 19 20
- *
- *  1 2 ... 14 15 [16] 17 18 19 20
- *  1 2 ... 15 16 [17] 18 19 20
- *  1 2 ... 16 17 [18] 19 20
- *  1 2 ... 17 18 [19] 20
- *  1 2 ... 18 19 [20]
- *
+ *  [1] 2 3 ... 20
+ *   1 [2] 3 ... 20
+ *   1 2 [3] 4 ... 20
+ * 
+ *   1 ... 3 [4] 5 ... 20
+ *   1 ... 16 [17] 18 ... 20
+
+ *   1 ... 17 [18] 19 20
+ *   1 ... 18 [19] 20
+ *   1 ... 18 19 [20]
  */
 
-const RANGE = 2;
-export default function Pagination({ pageSize = 30 }) {
-  const [page, setPage] = useState(1);
+const RANGE = 1;
+export default function Pagination({ totalPage = 0, queryConfig }) {
+  // const [page, setPage] = useState(1);
+
+  const page = Number(queryConfig?._page);
 
   const renderPsgination = () => {
     let dotAfter = false;
@@ -59,7 +56,10 @@ export default function Pagination({ pageSize = 30 }) {
       return null;
     };
 
-    return Array(pageSize)
+    if (totalPage <= 0 || isNaN(totalPage)) {
+      return null;
+    }
+    return Array(totalPage)
       .fill(0)
       .map((_, index) => {
         const pageNumber = index + 1;
@@ -67,48 +67,67 @@ export default function Pagination({ pageSize = 30 }) {
         // Dieu kien return ve ky tu 3 cham
         if (
           page <= RANGE + 1 &&
-          pageNumber > page + RANGE &&
-          pageNumber < pageSize - RANGE + 1
+          pageNumber > 3 &&
+          pageNumber < totalPage - RANGE + 1
         ) {
           return renderDotAfter(index);
-        } else if (page > RANGE + 1 && page < pageSize - RANGE) {
+        } else if (page > RANGE + 1 && page < totalPage - RANGE) {
           if (pageNumber < page - RANGE && pageNumber > RANGE) {
             return renderDotBefore(index);
           } else if (
             pageNumber > page + RANGE &&
-            pageNumber < pageSize - RANGE + 1
+            pageNumber < totalPage - RANGE + 1
           ) {
             return renderDotAfter(index);
           }
         } else if (
-          page >= pageSize - RANGE &&
           pageNumber > RANGE &&
-          pageNumber < page - RANGE
+          pageNumber <= totalPage - 3 &&
+          page >= totalPage - RANGE
         )
           return renderDotBefore(index);
 
+        /**
+         * 18 19 20
+         * nung so nho hon 18 deu phai  ...
+         */
+
+        ///////////////////////////////////////////
         if (page === pageNumber) {
           return (
-            <button
+            <Link
+              to={{
+                pathname: "/payment",
+                search: createSearchParams({
+                  ...queryConfig,
+                  _page: pageNumber.toString(),
+                }).toString(),
+              }}
               key={index}
               className="m-2 cursor-pointer "
-              onClick={() => setPage(pageNumber)}
+              // onClick={() => setPage(pageNumber)}
             >
               <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
               </div>
-            </button>
+            </Link>
           );
         }
 
         return (
-          <button
+          <Link
+            to={{
+              pathname: "/payment",
+              search: createSearchParams({
+                ...queryConfig,
+                _page: pageNumber.toString(),
+              }).toString(),
+            }}
             key={index}
             className="m-2 cursor-pointer "
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
-          </button>
+          </Link>
         );
       });
   };
@@ -131,7 +150,15 @@ export default function Pagination({ pageSize = 30 }) {
           </svg>
         </span>
       ) : (
-        <button onClick={() => setPage(page - 1)}>
+        <Link
+          to={{
+            pathname: "/payment",
+            search: createSearchParams({
+              ...queryConfig,
+              _page: (page - 1).toString(),
+            }).toString(),
+          }}
+        >
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -144,11 +171,12 @@ export default function Pagination({ pageSize = 30 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </button>
+        </Link>
       )}
+
       {renderPsgination()}
 
-      {page === pageSize ? (
+      {page === totalPage ? (
         <span className="bg-gray/60 cursor-not-allowed ">
           <svg
             className="w-10 h-6"
@@ -164,7 +192,15 @@ export default function Pagination({ pageSize = 30 }) {
           </svg>
         </span>
       ) : (
-        <button onClick={() => setPage(page + 1)}>
+        <Link
+          to={{
+            pathname: "/payment",
+            search: createSearchParams({
+              ...queryConfig,
+              _page: (page + 1).toString(),
+            }).toString(),
+          }}
+        >
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -177,7 +213,7 @@ export default function Pagination({ pageSize = 30 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </button>
+        </Link>
       )}
     </div>
   );

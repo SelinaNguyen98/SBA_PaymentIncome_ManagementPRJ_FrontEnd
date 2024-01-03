@@ -1,38 +1,83 @@
 import "../../../Utils/style.css";
-import NavHeader from "../../NavHeader";
-import { useTranslation } from "react-i18next";
-
-import Button from "../../Button";
-import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
+
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
+import { useTranslation } from "react-i18next";
+
+import NavHeader from "../../NavHeader";
+import Button from "../../Button";
+import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import Modal from "../../Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../MonthYearPicker";
+import EditPaymentForm from "./EditPaymentForm";
+import http from "../../../Utils/utils/https";
+import { useSearchParams } from "react-router-dom";
+
+function useQueryParam() {
+  const [searchParams] = useSearchParams();
+  return Object.fromEntries([...searchParams]);
+}
 
 export default function InvoiceDetails() {
   const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
 
-  const [state, setState] = useState({
+  const [stateControl, setStateControl] = useState({
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
+    isShowFormEditPayment: false,
+    selectedRowData: null,
   });
-  const { isShowConfirmModal, isShowFormNewPayment } = state;
 
-  const updateState = (data) => setState(() => ({ ...state, ...data }));
+  const {
+    isShowConfirmModal,
+    isShowFormNewPayment,
+    isShowFormEditPayment,
+    selectedRowData,
+  } = stateControl;
 
+  const updateState = (data) =>
+    setStateControl(() => ({ ...stateControl, ...data }));
+
+  //////////////////////
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  const [stateTable, setStateTable] = useState({
+    totalPage: 0,
+    perPage: 10, //default bo cung duoc
+    dataTable: null,
+  });
+
+  const { perPage, totalPage, dataTable } = stateTable;
+
+  const updateStateTable = (dataTable) =>
+    setStateTable(() => ({ ...stateTable, ...dataTable }));
+
+  const queryParams = useQueryParam();
+
+  const queryConfig = {
+    _page: queryParams?._page || 1,
+    _limit: queryParams?.limit || 10,
+  };
+
   useEffect(() => {
-    console.log(selectedDate);
-  }, [selectedDate]);
+    http.get("/payments", { params: queryConfig }).then((response) => {
+      const totalCount = response.headers.get("X-Total-Count") | 0;
+      const totalPages = Math.ceil(totalCount / perPage);
+
+      updateStateTable({
+        dataTable: response.data,
+        totalPage: totalPages,
+      });
+    });
+  }, [selectedDate, queryConfig._page]);
 
   return (
     <div className={`grid grid-cols-12  bg-main-theme`}>
       {isShowAsideFilter && (
-        <div className="col-span-2  bg-red p-3	">
+        <div className="col-span-2 bg-red p-3">
           <button>Toggle modal</button>
         </div>
       )}
@@ -64,7 +109,6 @@ export default function InvoiceDetails() {
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
           <div className="grid grid-cols-12 gap-2 items-center w-full overflow-auto ">
-            {/* <div className="col-span-12 lg:col-span-2"></div> */}
             <MonthYearPicker
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
@@ -146,12 +190,12 @@ export default function InvoiceDetails() {
           </div>
 
           {/* table data */}
-          <table id="invoiceTable" className=" w-full ">
+          <table id="invoiceTable" className=" table-fixed">
             <thead>
               <tr>
                 <th className=" w-[1%]"></th>
-                <th className=" w-[10%]">No</th>
-                <th className=" w-[10%]">Date</th>
+                <th className=" w-[4%]">No</th>
+                <th className=" w-[16%]">Date</th>
                 <th className=" w-[10%]">Name</th>
                 <th className=" w-[10%]">JPY</th>
                 <th className=" w-[10%]">VND</th>
@@ -169,52 +213,37 @@ export default function InvoiceDetails() {
                 <td colSpan={100}></td>
               </tr>
 
-              {Array(10)
-                .fill(0)
-                .map((_, index) => (
+              {dataTable &&
+                dataTable.map((invoicePayment, index) => (
                   <tr key={index}>
                     {/* First column of each row is like padding-left */}
-                    <td className=" w-[1%]"></td>
+                    <td></td>
 
                     {/* DATA MAIN*/}
-                    <td className=" w-[10%]" name="tb_no">
-                      dsfs
+                    <td name="tb_no"> </td>
+                    <td name="tb_date"> {invoicePayment?.payment_date}</td>
+                    <td name="tb_name">{invoicePayment?.name}</td>
+                    <td name="tb_jyp">{invoicePayment?.cost}</td>
+                    <td name="tb_vnd">{invoicePayment?.cost}</td>
+                    <td name="tb_usd">{invoicePayment?.cost}</td>
+                    <td name="tb_journal">
+                      {invoicePayment?.category?.categoryName}
                     </td>
-                    <td className=" w-[10%]" name="tb_date">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_name">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_jyp">
-                      9
-                    </td>
-                    <td className=" w-[10%] overflow-x-hidden" name="tb_vnd">
-                      sdf
-                    </td>
-                    <td
-                      className=" max-w-[10%]  min-w-[10%] w-[10%] overflow-x-hidden overflow-scroll"
-                      name="tb_usd"
-                    >
-                      1 1
-                    </td>
-                    <td className=" w-[10%]" name="tb_journal">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_invoice">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_pay">
-                      PAY
-                    </td>
-                    <td className=" w-[8%]" name="tb_action">
+                    <td name="tb_invoice">{invoicePayment?.invoice}</td>
+                    <td name="tb_pay">{invoicePayment?.pay}</td>
+                    <td name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                        {/* Icon Edit */}
                         <svg
+                          onClick={() => {
+                            updateState({ isShowFormEditPayment: true });
+                          }}
                           width="19"
                           height="19"
                           viewBox="0 0 19 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
+                          className=" cursor-pointer"
                         >
                           <path
                             d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
@@ -229,6 +258,10 @@ export default function InvoiceDetails() {
                         <div className=" border border-gray-400 mx-2 "></div>
 
                         <svg
+                          onClick={() => {
+                            updateState({ isShowConfirmModal: true });
+                          }}
+                          className=" cursor-pointer"
                           width="19"
                           height="19"
                           viewBox="0 0 16 18"
@@ -253,7 +286,6 @@ export default function InvoiceDetails() {
                   </tr>
                 ))}
 
-              {/* Last row is like padding-bottom */}
               <tr className=" bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
               </tr>
@@ -261,11 +293,14 @@ export default function InvoiceDetails() {
           </table>
 
           {/* InvoiceDetailFooter */}
-          <InvoiceDetailFooter />
+          <InvoiceDetailFooter
+            queryConfig={queryConfig}
+            totalPage={totalPage}
+          />
         </div>
 
-        <Modal visible={isShowConfirmModal}>
-          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
+        <Modal visible={isShowConfirmModal} classNameContainer="mt-[300px]">
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
               delete Invoice detail
             </span>
@@ -296,6 +331,16 @@ export default function InvoiceDetails() {
           visible={isShowFormNewPayment}
           cancel={() => {
             updateState({ isShowFormNewPayment: false });
+          }}
+        />
+
+        <EditPaymentForm
+          visible={isShowFormEditPayment}
+          cancel={() => {
+            updateState({
+              isShowFormEditPayment: false,
+              selectedRowData: null,
+            });
           }}
         />
       </div>

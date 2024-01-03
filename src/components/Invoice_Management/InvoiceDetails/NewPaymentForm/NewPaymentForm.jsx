@@ -20,15 +20,20 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
   });
 
   return (
-    <Modal visible={visible}>
-      <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
-        <span className=" uppercase  py-1 mx-auto my-3 px-12 text-center bg-white-500/80    font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+    <Modal visible={visible} classNameContainer={"mt-[40px]"}>
+      <div className="flex flex-col bg-white m-2 pt-5 pb-3 px-12 rounded-2xl">
+        <span className=" uppercase py-1 mx-auto px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
           new payment
         </span>
 
-        <form className="px-4 mt-5 overflow-hidden block" onSubmit={onSubmit}>
+        <form
+          className="px-4 mt-10 overflow-hidden block"
+          noValidate
+          onSubmit={onSubmit}
+        >
           <InputCustomComponent
             label={"Date (dd/mm/yyyy)"}
+            placeholder={new Date()}
             name={"payment_date"}
             type="date"
             register={register}
@@ -45,6 +50,7 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
           <InputCustomComponent
             label={"VND"}
             name={"cost"}
+            placeholder={0}
             type="number"
             register={register}
             errorMessage={errors?.cost?.message}
@@ -107,27 +113,32 @@ const InputCustomComponent = ({
   label,
   name,
   register,
-  className,
+  placeholder,
   errorMessage,
   as: Element = "input",
   type = "text",
   classNameInput = "w-full py-1 rounded-sm px-2 bg-main-theme",
-  classNameError = " text-red-600 min-h-[1rem] text-sm overflow-x-hidden ",
+  classNameError,
+  defaultValue = "",
 }) => {
   return (
-    <>
-      <div className={` grid lg:grid-cols-12 gap-y-2 mb-3 block`}>
-        <label className="lg:col-span-3">{label}</label>
-        <div className=" lg:col-span-9 ml-3">
-          <Element
-            {...register(name)}
-            className={classNameInput}
-            type={type}
-            rows={3}
-          />
-          <div className={classNameError}>{errorMessage}</div>
+    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2`}>
+      <label className="lg:col-span-3">{label}</label>
+      <div className=" lg:col-span-9 ml-3">
+        <Element
+          {...register(name)}
+          placeholder={placeholder}
+          className={classNameInput}
+          type={type}
+          defaultValue={defaultValue}
+          rows={3}
+        />
+        <div
+          className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden ${classNameError}`}
+        >
+          {errorMessage}
         </div>
       </div>
-    </>
+    </div>
   );
 };

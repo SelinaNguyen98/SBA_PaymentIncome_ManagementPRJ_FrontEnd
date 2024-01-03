@@ -4,7 +4,7 @@ import { locales } from "../../Utils/i18n/i18n";
 
 import "../../Utils/style.css";
 import Popover from "../Popover";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useContext } from "react";
 import { AppContext } from "../../Utils/contexts/app.context.jsx";

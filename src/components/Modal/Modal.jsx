@@ -2,7 +2,18 @@ import "./styles.css";
 const root = document.getElementById("root");
 // const root = document.getElementById("contentInvoiceDetail");
 
-export default function Modal({ visible = false, ok, cancel, children }) {
+/**
+ *
+ *   <Modal>  {children} </Modal>
+ *   Tu css style cho classNameContainer
+ */
+export default function Modal({
+  visible = false,
+  ok,
+  cancel,
+  children,
+  classNameContainer,
+}) {
   const handleOk = () => {
     ok();
   };
@@ -10,24 +21,6 @@ export default function Modal({ visible = false, ok, cancel, children }) {
   const handleCancel = () => {
     cancel();
   };
-  // createPortal
-
-  // return (
-  //   <div
-  //     className="modalRoot "
-  //     style={{ visibility: visible ? "visible" : "hidden" }}
-  //   >
-  //     <div className="container">
-  //       <div className="confirm">
-  //         <p className="title">Are you sure?</p>
-  //         <button onClick={handleOk}>OK</button>
-  //         <button onClick={handleCancel}>Cancel</button>
-  //       </div>
-  //     </div>
-
-  //     <div className="overlay bg-slate-500/10"></div>
-  //   </div>
-  // );
 
   return (
     <div
@@ -35,7 +28,7 @@ export default function Modal({ visible = false, ok, cancel, children }) {
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
       <div className="overlay bg-slate-500/10"></div>
-      <div className="container">
+      <div className={` containerModal  ${classNameContainer}  mt-[100px]`}>
         {children ? (
           children
         ) : (

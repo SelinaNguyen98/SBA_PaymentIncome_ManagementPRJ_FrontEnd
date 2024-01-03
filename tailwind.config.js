@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  // content: ["./src/**/*.{html,js}"],
-  content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
+  content: ["./src/**/*.{html,js,jsx}"],
   theme: {
     extend: {
       screens: {
-        "2xl-plus": "1537px", // Tạo một breakpoint mới cho màn hình lớn hơn 1536px
+        "3xl": "1537px", // Tạo một breakpoint mới cho màn hình lớn hơn 1536px
       },
       colors: {
         orange: "#ee4d2d",
