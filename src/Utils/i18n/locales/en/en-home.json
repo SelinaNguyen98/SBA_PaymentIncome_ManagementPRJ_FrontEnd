@@ -1,0 +1,18 @@
+{
+  "navHeader": {
+    "invoiceDetails": "Invoice Details",
+    "accountAnalytics": "Account Analytics",
+    "orders": "Orders",
+    "no": "NO"
+  },
+  "titlePage": {
+    "groupDetail" : "Account Category Group",
+    "thNO": "NO",
+    "thReport" : "Report Type",
+    "thGroup" : "Group Category",
+    "allCandidates": "All Candidates",
+    "accountCategoryGroup" : "Account Category Group",
+    "reportType" : "Report Type",
+    "searchPlaceholder": "Search.."
+  }
+}

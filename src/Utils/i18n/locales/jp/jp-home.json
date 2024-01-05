@@ -1,0 +1,18 @@
+{
+  "navHeader": {
+    "invoiceDetails": "インボイス管理",
+    "accountAnalytics": "勘定科目毎の合計",
+    "orders": "受注管理",
+    "no": "ポートの"
+  },
+  "titlePage": {
+    "groupDetail" : "勘定科目合計グループ",
+    "thNO" : "NO",
+    "thReport" : "レポート種",
+    "thGroup" : "勘定科目合計グループ",
+    "allCandidates": "検索条件",
+    "accountCategoryGroup" : "勘定科目合計グループ",
+    "reportType" : "レポート種",
+    "searchPlaceholder": "検索"
+  }
+}
