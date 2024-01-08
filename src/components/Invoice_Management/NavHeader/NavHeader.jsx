@@ -1,13 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { PiTranslateFill } from "react-icons/pi";
-import { locales } from "../../Utils/i18n/i18n";
+import { locales } from "../../../Utils/i18n/i18n";
 import "../../Utils/style.css";
 import Popover from "../Popover";
+// eslint-disable-next-line no-unused-vars
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
 import { useContext } from "react";
-import { AppContext } from "../../Utils/contexts/app.context.jsx";
+import { AppContext } from "../../../Utils/contexts/app.context.jsx";
 
+// eslint-disable-next-line react/prop-types
 export default function NavHeader({ isHiddenMainButton = false }) {
   // Chuyển đổi ngôn ngữ
   const { i18n, t } = useTranslation();

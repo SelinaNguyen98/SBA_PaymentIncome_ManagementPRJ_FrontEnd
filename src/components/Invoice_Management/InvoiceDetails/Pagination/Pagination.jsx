@@ -1,27 +1,20 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
+// Pagination
+// 30
+// [1] 2 3 ... 29 30
+// 1 [2] 3 ... 29 30
+// 1  2 [3] 4 ... 30
+// 1 ... 3 [4] 5 ... 30
 
-/**
- * voi Range -2 ap dung cho khoang cach dau va cuoi
- *  [1] 2 3 ... 19 20
- *  1 [2] 3 4 ... 19 20
- *  1 2 [3] 4 5 ... 19 20
- *  1 2 3 [4] 5 6 ... 19 20
- *  1 2 3 4 [5] 6 7 ... 10 20
- *
- *
- *  1 2 ... 4 5 [6] 7 8 ... 19 20
- *  1 2 ... 13 14 [15] 16 17 ... 19 20
- *
- *  1 2 ... 14 15 [16] 17 18 19 20
- *  1 2 ... 15 16 [17] 18 19 20
- *  1 2 ... 16 17 [18] 19 20
- *  1 2 ... 17 18 [19] 20
- *  1 2 ... 18 19 [20]
- *
- */
+// 1 2 ... 28 [29] 30
+// 1 ...  27 [28] 29 30
+// 1 ...  26 [27] 28 ... 30
+ 
 
-const RANGE = 2;
-export default function Pagination({ pageSize = 30 }) {
+const RANGE = 1;
+// eslint-disable-next-line react/prop-types
+export default function Pagination({ pageSize = 5 }) {
   const [page, setPage] = useState(1);
 
   const renderPsgination = () => {

@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
 import ReactDatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { IoMdArrowDropleftCircle, IoMdArrowDroprightCircle } from "react-icons/io";
+
+
 import {
   checkRegexMonthDatePattern,
   formatStringMonthYearToDate,
 } from "../../Utils/utils/maths";
 
 export default function MonthYearPicker({
+  // eslint-disable-next-line react/prop-types
   className,
+  // eslint-disable-next-line react/prop-types
   selectedDate,
+  // eslint-disable-next-line react/prop-types
   setSelectedDate,
 }) {
   const [tmp, setTmp] = useState("");
 
   useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     const valueString = selectedDate.toLocaleDateString("en-US", {
       month: "2-digit",
       year: "numeric",
@@ -42,6 +49,7 @@ export default function MonthYearPicker({
       const date = formatStringMonthYearToDate(sMonth, sYear);
       setSelectedDate(date);
     } else {
+      // eslint-disable-next-line react/prop-types
       const valueString = selectedDate.toLocaleDateString("en-US", {
         month: "2-digit",
         year: "numeric",
@@ -58,11 +66,11 @@ export default function MonthYearPicker({
   };
 
   return (
-    <div className={`flex flex-1 items-center px-2 rounded-full ${className}`}>
-      <div onClick={handleDecrementMonth}>⬅️</div>
+    <div className={`flex flex-1 items-center px-2  border border-gray-500 rounded-full focus:border-black focus:outline ${className}`}>
+      <div onClick={handleDecrementMonth}><IoMdArrowDropleftCircle className="text-xl hover:text-2xl cursor-pointer transition-transform transform-gpu hover:scale-110"/></div>
 
       <div
-        className={`flex flex-1 items-center px-2 rounded-full border border-gray-500 focus:border-2 focus:border-black focus:outline `}
+        className={`flex flex-1 items-center px-2 rounded-full focus:border-2 focus:border-black focus:outline `}
       >
         <ReactDatePicker
           selected={selectedDate}
@@ -93,7 +101,7 @@ export default function MonthYearPicker({
         ></input>
       </div>
       {/* </div> */}
-      <div onClick={handleIncrementMonth}>➡️</div>
+      <div onClick={handleIncrementMonth}><IoMdArrowDroprightCircle className="text-xl hover:text-2xl cursor-pointer transition-transform transform-gpu hover:scale-110"/></div>
     </div>
   );
 }
@@ -123,6 +131,7 @@ const CustomCelendarsIcon = ({ onClick }) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types, no-unused-vars
 function CustomCalendarContainer({ className }) {
   return <CalendarContainer className={className}></CalendarContainer>;
 }

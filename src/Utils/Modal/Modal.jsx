@@ -1,7 +1,9 @@
 import "./styles.css";
+// eslint-disable-next-line no-unused-vars
 const root = document.getElementById("root");
 // const root = document.getElementById("contentInvoiceDetail");
 
+// eslint-disable-next-line react/prop-types
 export default function Modal({ visible = false, ok, cancel, children }) {
   const handleOk = () => {
     ok();
@@ -31,11 +33,11 @@ export default function Modal({ visible = false, ok, cancel, children }) {
 
   return (
     <div
-      className="modalRoot "
+      className="modalRoot"
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
       <div className="overlay bg-slate-500/10"></div>
-      <div className="container">
+      <div className="fixed top-0 w-full h-full flex items-center justify-center translate-x-[-4vw]">
         {children ? (
           children
         ) : (

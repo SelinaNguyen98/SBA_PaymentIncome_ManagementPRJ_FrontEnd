@@ -1,41 +1,29 @@
 import React from "react";
-import Button from "../../../../Utils/Button";
-import Modal from "../../../../Utils/Modal";
+import Button from "../../../../../Utils/Button";
+import Modal from "../../../../../Utils/Modal";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export default function NewPaymentForm({ visible, cancel, ok }) {
+export default function AddOutsourcingForm({ visible, cancel, t }) {
+  const t_add_outsourcing = t;
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
         <span className=" uppercase  py-1 mx-auto my-3 px-12 text-center bg-white-500/80    font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-          new payment
+          {t_add_outsourcing("add_edit_order.new_outsourcing_cost")}
         </span>
 
         <form className="px-4 mt-5">
-          <InputCustomComponent label={"Date (dd/mm/yyyy)"}>
+          <InputCustomComponent
+            label={t_add_outsourcing("add_edit_order.Outsourced_project")}
+          >
             <input type="text" className=" bg-main-theme w-full"></input>
           </InputCustomComponent>
-          <InputCustomComponent label={"Name)"}>
+          <InputCustomComponent
+            label={t_add_outsourcing("add_edit_order.Company_name")}
+          >
             <input type="text" className=" bg-main-theme w-full"></input>
           </InputCustomComponent>
           <InputCustomComponent label={"VND"}>
-            <input type="text" className=" bg-main-theme w-full"></input>
-          </InputCustomComponent>
-          <InputCustomComponent label={"Note"}>
-            <textarea
-              type="text"
-              rows={4}
-              className=" bg-main-theme w-full overflow-y-scroll resize-none"
-            ></textarea>
-            {/* <input type="text"  className=" bg-main-theme w-full"></input> */}
-          </InputCustomComponent>
-          <InputCustomComponent label={"Journal"}>
-            <input type="text" className=" bg-main-theme w-full"></input>
-          </InputCustomComponent>
-          <InputCustomComponent label={"Invoice"}>
-            <input type="text" className=" bg-main-theme w-full"></input>
-          </InputCustomComponent>
-          <InputCustomComponent label={"Pay"}>
             <input type="text" className=" bg-main-theme w-full"></input>
           </InputCustomComponent>
         </form>
@@ -48,13 +36,15 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
             }}
             className={" py-2 border-2 border-gray min-w-[150px]"}
           >
-            save
+            {t_add_outsourcing("button.save")}
           </Button>
           <Button
             onClick={cancel}
             className={" border-red-500 bg-white border-2 py-2 min-w-[150px] "}
           >
-            <span className=" text-red-500  uppercase ">Cancel</span>
+            <span className=" text-red-500  uppercase ">
+              {t_add_outsourcing("button.cancel")}
+            </span>
           </Button>
         </div>
       </div>
