@@ -62,7 +62,7 @@ export default function InvoiceDetails() {
             value={searchTerm}
             onChange={handleSearchChange}
             style={{
-              width: '800px',
+              width: '300px',
               height: '40px',
               backgroundColor: 'white',
               color: 'black',
@@ -85,10 +85,10 @@ export default function InvoiceDetails() {
             placeholder={t('titlePage.searchPlaceholder')}
             style={{
               padding: '8px 30px 8px 10px',
-              width: '800px',
+              width: '300px',
               height: '40px',
               borderRadius: '15px',
-              border: '1px solid #ccc',
+              border: '1px solid #ccc'
             }}
           />
         );
