@@ -8,14 +8,19 @@
     "orders": "受注管理",
     "Payment_management": "精算管理",
     "Outsourcing_cost": "外注管理",
-    "total_of_month":"合計:"
+    "total_of_month":"合計:",
+    "BS_report":"貸借対照表(BS)",
+    "PL_report":"損益計算書(PL)"
   },
   "button": {
     "add": "新規追加",
     "delete": "削除",
     "save":"保存",
     "cancel":"キャンセル",
-    "confirm":"削除"
+    "confirm":"削除",
+    "export":"出力",
+    "input_monthly_data":"月毎野データ入力",
+    "input_balance_from_previous_year":"前年度繰越入力"
   },
   "header_table_order": {
     "order_date": "受注日",
@@ -44,5 +49,17 @@
   "accountAnalytics": {
     "account_category": "勘定科目",
     "total":"集計 (JPY)"
-  }
+  },
+  "header_table_PL_BS": {
+    "name": "勘 定 科 目",
+    "total":"集計 (JPY)"
+  },
+  "form_input_monthly_data_BS": {
+    "title_form": "月毎野データ入力",
+    "title_table_name":"勘 定 科 目",
+    "title_table_amount":"金額（JPY)",
+    "year":"年",
+    "month":"月",
+    "title_form_balance_previous_year": "年度繰越入力"
+ }
 }
