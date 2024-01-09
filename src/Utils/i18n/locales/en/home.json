@@ -8,14 +8,19 @@
     "orders": "Orders",
     "Payment_management": "Payment Management",
     "Outsourcing_cost": "Outsourcing cost",
-    "total_of_month":"Total of month:"
+    "total_of_month":"Total of month:",
+    "BS_report":"Balance Sheet Report",
+    "PL_report":"Profit and Loss Report"
   },
   "button": {
     "add": "ADD NEW",
     "delete": "DELETE",
     "save":"SAVE",
     "cancel":"CANCEL",
-    "confirm":"CONFIRM"
+    "confirm":"CONFIRM",
+    "export":"EXPORT",
+    "input_monthly_data":"INPUT MONTHLY DATA",
+    "input_balance_from_previous_year":"INPUT BALANCE FROM PREVIOUS YEAR"
   },
   "header_table_order": {
     "order_date": "Order date",
@@ -45,5 +50,17 @@
     "account_category": "ACCOUNT CATEGORY",
     "total":"TOTAL (JPY)",
     "total_of_month":"Total of month:"
-  }
+  },
+   "header_table_PL_BS": {
+    "name": "NAME",
+    "total":"TOTAL (JPY)"
+  },
+  "form_input_monthly_data_BS": {
+   "title_form": "INPUT MONTHLY DATA FOR",
+   "title_table_name":"ACCOUNT CATEGORY NAME",
+   "title_table_amount":"AMOUNT (JPY)",
+   "year":"",
+   "month":"",
+   "title_form_balance_previous_year": "INPUT BALANCE FROM PREVIOUS YEAR"
+ }
 }

@@ -33,7 +33,7 @@ export default function Modal({ visible = false, ok, cancel, children }) {
 
   return (
     <div
-      className="modalRoot"
+      className=" modalRoot"
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
       <div className="overlay bg-slate-500/10"></div>

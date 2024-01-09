@@ -2,16 +2,19 @@
 import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../Utils/Button";
 import "../../../Utils/style.css";
+import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
 import "../../Invoice_Management/InvoiceDetails/styles.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 import { PiTranslateFill } from "react-icons/pi";
+import { IoMdArrowDropdownCircle } from "react-icons/io";
 import { locales } from "../../../Utils/i18n/i18n";
 import "../../../Utils/style.css";
 import Popover from "../../../Utils/Popover";
-import classNames from "classnames";
-const PL_Report = () => {
+import Form_InputMonthlyData from "./Dialog/Input_monthly_data";
+import Form_InputBalanceYeatData from "./Dialog/Input_balance_from_previous_year";
+const BS_Report = () => {
   const { isShowAsideFilter } = useContext(AppContext);
   // Chuyển đổi ngôn ngữ
   const { i18n, t } = useTranslation();
@@ -43,6 +46,7 @@ const PL_Report = () => {
       No: 1,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -55,12 +59,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 2,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -73,12 +78,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 3,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -91,12 +97,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 4,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -109,12 +116,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 5,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -127,12 +135,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 6,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -145,12 +154,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 7,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -163,12 +173,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 8,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -181,12 +192,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 9,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -199,12 +211,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 10,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -217,12 +230,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 11,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -235,12 +249,13 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
     {
       No: 12,
       Account_category_name: "John Doe",
       Company_Name: "John Doe",
+      2022: 100,
       "04/2023": 100,
       "05/2023": 100,
       "06/2023": 100,
@@ -253,9 +268,30 @@ const PL_Report = () => {
       "01/2024": 100,
       "02/2024": 100,
       "03/2024": 100,
-      Total: 1200,
+      Total: 1300,
     },
   ]);
+
+  // eslint-disable-next-line no-unused-vars
+  const [state, setState] = useState({
+    isShowForm_InputMonthlyData: false,
+    isShowForm_InputBalanceFromPreviousYear: false,
+  });
+  // eslint-disable-next-line no-unused-vars
+  const {
+    isShowForm_InputMonthlyData,
+    isShowForm_InputBalanceFromPreviousYear,
+  } = state;
+  const updateState = (data) => setState(() => ({ ...state, ...data }));
+  const handleInputMonthlyDataButtonClick = () => {
+    // Custom logic for the input data button click
+    updateState({isShowForm_InputMonthlyData: true });
+  };
+
+  const handleInputBalanceYearDataButtonClick = () => {
+    // Custom logic for the input data button click
+    updateState({isShowForm_InputBalanceFromPreviousYear: true });
+  };
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
       {isShowAsideFilter && (
@@ -376,7 +412,7 @@ const PL_Report = () => {
                 </svg>
                 <span className="font-bold text-xl">
                   {" "}
-                  {t("title.PL_report")}
+                  {t("title.BS_report")}
                 </span>
               </div>
               {/* control area */}
@@ -404,21 +440,44 @@ const PL_Report = () => {
                             alt="microsoft-excel-2019"
                           />
                           <span className="max-[650px]:text-[10px]  max-[1600px]:text-[10px]">
-                          {t("button.export")}
+                            {t("button.export")}
                           </span>
                         </Button>
                       </div>
                     </div>
+                    <div className="flex flex-row gap-2 items-center justify-center max-[1200px]:flex-col">
+                      <MonthYearPicker
+                        selectedDate={selectedDate}
+                        setSelectedDate={setSelectedDate}
+                        className="col-span-12 lg:col-span-2 max-[1000px]:w-full max-w-sm max-[1600px]:max-w-[320px]"
+                        showInputDataButton={true}
+                        t={t}
+                        inputDataButtonClick={handleInputMonthlyDataButtonClick}
+                      />
+                      <YearPicker_Button
+                        selectedYear={selectedYear}
+                        setSelectedYear={setSelectedYear}
+                        className="col-span-12 lg:col-span-2 max-[1000px]:w-full max-w-[465px] max-[1600px]:max-w-[380px]"
+                        showInputBalanceButton={true}
+                        t={t}
+                        inputDataButtonClick={handleInputBalanceYearDataButtonClick}
+                      />
+                    </div>
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+                <div className="max-h-[700px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
                   <table id="invoiceTable" className="text-sm">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
-                        <th className="w-[3px]">No</th>
-                        <th className="w-[100px]">{t("header_table_PL_BS.name")}</th>
+                        <th className="w-[2px]">No</th>
+                        <th className="w-[100px]">
+                          {t("header_table_PL_BS.name")}
+                        </th>
+                        <th className="w-[10px]">
+                          {selectedYearExport.getFullYear() - 1}
+                        </th>
                         {Array.from({ length: 12 }).map((_, monthIndex) => {
                           const displayMonth = ((monthIndex + 3) % 12) + 1;
                           const displayYear =
@@ -432,18 +491,22 @@ const PL_Report = () => {
                           );
                         })}
 
-                        <th className="w-[10px]">{t("header_table_PL_BS.total")}</th>
+                        <th className="w-[10px]">
+                          {t("header_table_PL_BS.total")}
+                        </th>
                         <th className="w-[1px]"></th>
                       </tr>
                     </thead>
+
                     <tbody className="">
                       <tr className="">
                         <td colSpan={100}></td>
                       </tr>
+
                       {dataBS.map((rowData_BS, index) => (
                         <tr key={index}>
                           <td className="w-[1px]"></td>
-                          <td className="w-[3px]" name="tb_no">
+                          <td className="w-[2px]" name="tb_no">
                             {rowData_BS.No}
                           </td>
                           <td
@@ -453,6 +516,9 @@ const PL_Report = () => {
                             {rowData_BS.Account_category_name}
                           </td>
 
+                          <td className="w-[10px]" name="tb_pevious_year">
+                            {rowData_BS["2022"]}
+                          </td>
                           <td className="w-[10px]" name="tb_04">
                             {rowData_BS["04/2023"]}
                           </td>
@@ -506,9 +572,28 @@ const PL_Report = () => {
             </div>
           </div>
         </div>
+        <Form_InputMonthlyData
+        // eslint-disable-next-line no-undef
+        visible={isShowForm_InputMonthlyData}
+        t={t}
+        cancel={() => {
+          updateState({ isShowForm_InputMonthlyData: false });
+        }}
+        selectedTime={selectedDate}
+      />
+      <Form_InputBalanceYeatData
+        // eslint-disable-next-line no-undef
+        visible={isShowForm_InputBalanceFromPreviousYear}
+        t={t}
+        cancel={() => {
+          updateState({isShowForm_InputBalanceFromPreviousYear: false });
+        }}
+        selectedTime={selectedYear}
+      />
       </div>
+      
     </div>
   );
 };
 
-export default PL_Report;
+export default BS_Report;
