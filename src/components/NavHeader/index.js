@@ -1,3 +1,3 @@
-import NavHeader from "./NavHeader";
+import NavHeader2 from "./NavHeader2";
 
-export default NavHeader;
+export default NavHeader2;
