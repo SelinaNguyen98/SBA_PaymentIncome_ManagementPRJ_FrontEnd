@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.top-box {
+  box-shadow: inset 0 7px 9px -7px rgba(0, 0, 0, 0.4);
+}
+
+/* .react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container {
+  height: 100%;
+}
+
+.react-datepicker-wrapper {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+} */

@@ -1,0 +1,94 @@
+#invoiceTable {
+  width: 100%;
+  background-color: white;
+  margin-top: 0.7rem;
+  overflow: scroll;
+  /* max-width: 100%; */
+  /* flex: content; */
+  /* display: flex; */
+  /* display: block; */
+}
+
+/* #invoiceTable table thead {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+} */
+
+#invoiceTable thead th {
+  background-color: #e3edf9;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* border-radius = top left, top right, bottom right, bottom left */
+/* curves the top left */
+/* curves the top right */
+#invoiceTable th:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+#invoiceTable th:last-child {
+  border-radius: 0 10px 10px 0;
+}
+/* //////////////////////////////////// */
+
+#invoiceTable thead::after {
+  background-color: white;
+  line-height: 0.5rem;
+  content: ".";
+  color: white; /* bacground color */
+  display: block;
+}
+
+#invoiceTable tbody tr,
+#invoiceTable tbody td {
+  background-color: #e3edf9;
+  font-size: 15px;
+  align-items: center;
+  text-align: center;
+  border: 1px solid gray;
+  padding: 6px;
+  overflow: hidden;
+}
+
+@media (min-width: 1537px) {
+  #invoiceTable tbody tr,
+  #invoiceTable tbody td {
+    font-size: 20px;
+    padding: 10px;
+  }
+
+  #invoiceTable thead th {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    font-size: 16px;
+  }
+}
+
+/** border body doc trai tren, phai tren
+  xoa border row dau tien
+  */
+#invoiceTable tr:nth-child(1) td:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px !important;
+}
+
+/** border body doc trai duoi, phai duoi
+  xoa border row dau cuoi
+  */
+#invoiceTable tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 5px !important;
+}
+
+/* xoa di border o dau va cuoi moi hanmh */
+#invoiceTable tr td:first-child,
+#invoiceTable tr td:last-child {
+  border-style: hidden;
+  padding-left: 0.25rem /* 4px */;
+  padding-right: 0.25rem /* 4px */;
+}
