@@ -281,6 +281,7 @@ export default function SideBar() {
                                 )}
                                 onClick={(e) => {
                                   selectOption(e);
+                                  setActiveButton(buttonName);
                                 }}
                               >
                                 {t(`navHeader.${buttonName}`)}
@@ -310,7 +311,10 @@ export default function SideBar() {
                         }`,
                         { "bg-yellow-bold": activeButton === buttonName }
                       )}
-                      onClick={() => setActiveButton(buttonName)}
+                      onClick={(e) => {
+                        selectOption(e);
+                        setActiveButton(buttonName);
+                      }}
                     >
                       {t(`navHeader.${buttonName}`)}
                     </button>
@@ -320,7 +324,7 @@ export default function SideBar() {
             </div>
           </div>
         </div>
-        <div className="bg-white w-full ">
+        <div className="bg-main-theme w-full ">
           <Outlet className="z-0 h-full" />
         </div>
       </div>

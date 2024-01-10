@@ -15,8 +15,10 @@ import DeleteOrder from "./Dialog/DeleteOrder";
 import DeleteOutsourcing from "./Dialog/DeleteOutsourcing";
 // eslint-disable-next-line no-unused-vars
 import DeletePaymentManagement from "./Dialog/DeletePaymentManagement";
+import { useTranslation } from "react-i18next";
 // eslint-disable-next-line react/prop-types
-const Order = ({ t }) => {
+const Order = () => {
+  const {t } = useTranslation();
   const t_order = t;
   const { isShowAsideFilter } = useContext(AppContext);
 
