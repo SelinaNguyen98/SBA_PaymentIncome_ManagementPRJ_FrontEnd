@@ -62,7 +62,7 @@ export default function SideBar() {
         break;
       case "Account Category Group":
         setIsHiddenInvoiceManagement(true);
-        navigate("");
+        navigate("/sidebar/Account_Category_Group");
         break;
       case "Invoice Management":
         // Navigate to the appropriate route
