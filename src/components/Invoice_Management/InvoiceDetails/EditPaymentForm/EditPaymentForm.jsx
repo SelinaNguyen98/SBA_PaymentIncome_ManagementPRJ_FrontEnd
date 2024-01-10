@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import Button from "../../../Button";
 import Modal from "../../../Modal";
@@ -6,14 +7,39 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
 
-export default function EditPaymentForm({ visible, cancel, ok }) {
+export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
   const {
     register,
     handleSubmit,
-    watch,
+    setValue,
     setError,
+    watch,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createPaymentSchema) });
+
+  console.log(getValues("payment_date"));
+
+  const convertedDate = new Date(invoicePayment?.payment_date);
+  const formattedDate = convertedDate.toISOString().split("T")[0];
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const existingData = {
+    payment_date: formattedDate,
+    name: invoicePayment?.name,
+    curency_type: invoicePayment?.curency_type,
+    note: invoicePayment?.note,
+    invoice: invoicePayment?.invoice,
+    pay: invoicePayment?.pay,
+    category_: invoicePayment?.category,
+    cost: invoicePayment?.cost,
+  };
+
+  useEffect(() => {
+    Object.keys(existingData).forEach((key) => {
+      setValue(key, existingData[key]);
+    });
+  }, [setValue, existingData]);
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -39,7 +65,7 @@ export default function EditPaymentForm({ visible, cancel, ok }) {
             register={register}
             errorMessage={errors?.payment_date?.message}
           />
-
+          
           <InputCustomComponent
             label={"Name"}
             name={"name"}
@@ -51,7 +77,7 @@ export default function EditPaymentForm({ visible, cancel, ok }) {
             label={"VND"}
             name={"cost"}
             placeholder={0}
-            type="number"
+            // type="number"
             register={register}
             errorMessage={errors?.cost?.message}
           />
@@ -67,9 +93,9 @@ export default function EditPaymentForm({ visible, cancel, ok }) {
 
           <InputCustomComponent
             label={"Journal"}
-            name={"category_id"}
+            name={"category"}
             register={register}
-            errorMessage={errors?.category_id?.message}
+            errorMessage={errors?.category?.message}
           />
 
           <InputCustomComponent
@@ -113,7 +139,6 @@ const InputCustomComponent = ({
   label,
   name,
   register,
-  className,
   errorMessage,
   as: Element = "input",
   type = "text",

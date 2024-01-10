@@ -1,7 +1,7 @@
 import "../../../Utils/style.css";
 import "./styles.css";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 
@@ -13,14 +13,14 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 import http from "../../../Utils/utils/https";
-import { useSearchParams } from "react-router-dom";
-
-function useQueryParam() {
-  const [searchParams] = useSearchParams();
-  return Object.fromEntries([...searchParams]);
-}
+import { useSearchParams, useLocation } from "react-router-dom";
+import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+import useQueryParam from "../../../Utils/hooks/useQueryParam";
 
 export default function InvoiceDetails() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+
   const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
 
@@ -28,50 +28,88 @@ export default function InvoiceDetails() {
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
     isShowFormEditPayment: false,
-    selectedRowData: null,
   });
 
-  const {
-    isShowConfirmModal,
-    isShowFormNewPayment,
-    isShowFormEditPayment,
-    selectedRowData,
-  } = stateControl;
+  const { isShowConfirmModal, isShowFormNewPayment, isShowFormEditPayment } =
+    stateControl;
 
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
 
   //////////////////////
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const queryParams = useQueryParam();
 
   const [stateTable, setStateTable] = useState({
     totalPage: 0,
     perPage: 10, //default bo cung duoc
     dataTable: null,
+    selectedRowData: null,
   });
 
-  const { perPage, totalPage, dataTable } = stateTable;
+  const { totalPage, perPage, dataTable, selectedRowData } = stateTable;
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    const month = queryParams?.month_like || today.getMonth() + 1;
+    const year = queryParams?.year_like || today.getFullYear();
+    return formatStringMonthYearToDate(month, year);
+  }); //
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
 
-  const queryParams = useQueryParam();
-
   const queryConfig = {
+    month_like: selectedDate.getMonth() + 1,
+    year_like: selectedDate.getFullYear(),
     _page: queryParams?._page || 1,
-    _limit: queryParams?.limit || 10,
   };
 
-  useEffect(() => {
-    http.get("/payments", { params: queryConfig }).then((response) => {
-      const totalCount = response.headers.get("X-Total-Count") | 0;
-      const totalPages = Math.ceil(totalCount / perPage);
+  // const prevPage = useRef(queryConfig?._page);
 
-      updateStateTable({
-        dataTable: response.data,
-        totalPage: totalPages,
+  /**
+   * 1/ Khi thay đổi ngày thì chuyển trang và page = 1
+   * 2/ Khi chuyển trang thì cập nhật page trên thanh url
+   * 3/ Cập nhật ngày tháng năm lên url
+   * 4/ Khi thya đổi ngày tháng trên url thì cũng cập nhật lại
+   */
+  const prevDate = useRef(selectedDate);
+
+  useEffect(() => {
+    let pageToFetch = queryParams._page || 1;
+
+    if (selectedDate !== prevDate.current) {
+      pageToFetch = 1;
+    }
+
+    // Update URL with the new parameters
+    const newSearchParams = {
+      ...queryConfig,
+      _page: pageToFetch,
+    };
+
+    http
+      .get("/payments", {
+        params: newSearchParams,
+      })
+      .then((response) => {
+        const totalCount = response.headers.get("X-Total-Count") | 0;
+        const totalPages = Math.ceil(totalCount / perPage);
+
+        updateStateTable({
+          dataTable: response.data,
+          totalPage: totalPages,
+        });
+
+        const queryString = new URLSearchParams(newSearchParams).toString();
+
+        // Manually update the URL without triggering a page reload
+        const newUrl = `${window.location.pathname}?${queryString}`;
+        window.history.pushState({}, "", newUrl);
+        console.log(newSearchParams);
+
+        prevDate.current = selectedDate;
       });
-    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate, queryConfig._page]);
 
   return (
@@ -105,7 +143,6 @@ export default function InvoiceDetails() {
           </svg>
           {t("titlePage.invoiceDetail")}
         </div>
-
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
           <div className="grid grid-cols-12 gap-2 items-center w-full overflow-auto ">
@@ -209,7 +246,7 @@ export default function InvoiceDetails() {
             </thead>
             <tbody>
               {/* Firsh row is like padding-top */}
-              <tr className="">
+              <tr>
                 <td colSpan={100}></td>
               </tr>
 
@@ -220,7 +257,7 @@ export default function InvoiceDetails() {
                     <td></td>
 
                     {/* DATA MAIN*/}
-                    <td name="tb_no"> </td>
+                    <td name="tb_no"> {index + 1} </td>
                     <td name="tb_date"> {invoicePayment?.payment_date}</td>
                     <td name="tb_name">{invoicePayment?.name}</td>
                     <td name="tb_jyp">{invoicePayment?.cost}</td>
@@ -237,6 +274,9 @@ export default function InvoiceDetails() {
                         <svg
                           onClick={() => {
                             updateState({ isShowFormEditPayment: true });
+                            updateStateTable({
+                              selectedRowData: invoicePayment,
+                            });
                           }}
                           width="19"
                           height="19"
@@ -298,51 +338,56 @@ export default function InvoiceDetails() {
             totalPage={totalPage}
           />
         </div>
+        {isShowConfirmModal && (
+          <Modal visible={isShowConfirmModal} classNameContainer="mt-[300px]">
+            <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
+              <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+                delete Invoice detail
+              </span>
 
-        <Modal visible={isShowConfirmModal} classNameContainer="mt-[300px]">
-          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
-            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              delete Invoice detail
-            </span>
+              <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+                Are you sure you want to delete this payment ?
+              </div>
 
-            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
-              Are you sure you want to delete this payment ?
+              <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+                <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
+                  Confirm
+                </Button>
+                <Button
+                  onClick={() => {
+                    updateState({ isShowConfirmModal: false });
+                  }}
+                  className={" border-red-500 bg-white border-2   py-2 px-6"}
+                >
+                  <span className=" text-red-500  ml-1 font-medium uppercase">
+                    Cancel
+                  </span>
+                </Button>
+              </div>
             </div>
+          </Modal>
+        )}
+        {isShowFormNewPayment && (
+          <NewPaymentForm
+            visible={isShowFormNewPayment}
+            cancel={() => {
+              updateState({ isShowFormNewPayment: false });
+            }}
+          />
+        )}
 
-            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-              <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
-                Confirm
-              </Button>
-              <Button
-                onClick={() => {
-                  updateState({ isShowConfirmModal: false });
-                }}
-                className={" border-red-500 bg-white border-2   py-2 px-6"}
-              >
-                <span className=" text-red-500  ml-1 font-medium uppercase">
-                  Cancel
-                </span>
-              </Button>
-            </div>
-          </div>
-        </Modal>
-
-        <NewPaymentForm
-          visible={isShowFormNewPayment}
-          cancel={() => {
-            updateState({ isShowFormNewPayment: false });
-          }}
-        />
-
-        <EditPaymentForm
-          visible={isShowFormEditPayment}
-          cancel={() => {
-            updateState({
-              isShowFormEditPayment: false,
-              selectedRowData: null,
-            });
-          }}
-        />
+        {isShowFormEditPayment && (
+          <EditPaymentForm
+            invoicePayment={selectedRowData}
+            visible={isShowFormEditPayment}
+            cancel={() => {
+              updateState({
+                isShowFormEditPayment: false,
+                selectedRowData: null,
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );

@@ -82,7 +82,7 @@ export default function MonthYearPicker({
             calendarContainer={CustomCalendarContainer}
           /> */}
         <input
-          className=" flex-1 text-center  focus:outline-none font-medium w-full h-full"
+          className=" flex-1 text-center focus:outline-none font-medium w-full h-full"
           value={tmp}
           onChange={(event) => {
             const value = event.target.value;
