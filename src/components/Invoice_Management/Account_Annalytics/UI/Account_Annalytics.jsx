@@ -1,9 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
-
+import { useTranslation } from "react-i18next";
 // eslint-disable-next-line react/prop-types
-const AccountAnnalytics = ({ t }) => {
+const AccountAnnalytics = () => {
+  const {t } = useTranslation();
   const t_account = t;
   const { isShowAsideFilter } = useContext(AppContext);
   const [selectedDate, setSelectedDate] = useState(new Date());

@@ -2,17 +2,16 @@
 import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
-
+import { useTranslation } from "react-i18next";
 export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   visible,
   // eslint-disable-next-line react/prop-types
   cancel,
   // eslint-disable-next-line react/prop-types
-  t,
-  // eslint-disable-next-line react/prop-types
   selectedTime,
 }) {
+  const {t } = useTranslation();
   const t_translate = t;
   // eslint-disable-next-line no-unused-vars
   const [data_month, setData_month] = useState([
@@ -94,7 +93,7 @@ export default function InputMonthlyData({
 
   return (
     <Modal visible={visible}>
-      <div className="flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto">
+      <div className="flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto">
         {isInputMonthlyData ? (
           // Display if the translation contains "INPUT MONTHLY DATA FOR"
           <span className="uppercase py-1 mx-auto my-3 px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">

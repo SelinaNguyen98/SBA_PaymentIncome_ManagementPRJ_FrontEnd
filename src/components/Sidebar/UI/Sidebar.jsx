@@ -1,19 +1,16 @@
-// eslint-disable-next-line no-undef, no-unused-vars
-import { React, useContext, useEffect, useState } from "react";
-import "../../Utils/style.css";
-import "../Invoice_Management/InvoiceDetails/styles.css";
-import { useTranslation } from "react-i18next";
-import { PiTranslateFill } from "react-icons/pi";
+// eslint-disable-next-line no-unused-vars
+import { React, useRef, useContext, useEffect, useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import logo from "../../../assets/Images/Logo_SBA.png";
+import comName from "../../../assets/Images/Frame 17.png";
 import { IoMdArrowDropdownCircle } from "react-icons/io";
-import { locales } from "../../Utils/i18n/i18n";
-import "../../Utils/style.css";
-import Popover from "../../Utils/Popover";
+import { useTranslation } from "react-i18next";
+import { locales } from "../../../Utils/i18n/i18n";
+import Popover from "../../../Utils/Popover";
+import { PiTranslateFill } from "react-icons/pi";
 import classNames from "classnames";
-import InvoiceDetails from "./InvoiceDetails";
-import Order from "./Orders/UI/Order";
-import Account_Annalytics from "./Account_Annalytics/UI/Account_Annalytics";
-
-const Invoice_Managment = () => {
+export default function SideBar() {
   var isHiddenMainButton = false;
   // Chuyển đổi ngôn ngữ
   const { i18n, t } = useTranslation();
@@ -43,20 +40,133 @@ const Invoice_Managment = () => {
 
   const isMobile = screenWidth <= 850;
 
+  const refUl = useRef(null);
+  const navigate = useNavigate();
+  const [isHiddenInvoiceManagement, setIsHiddenInvoiceManagement] =
+    useState(false);
+  const selectOption = (e) => {
+    for (let el of refUl.current.children) {
+      el.classList =
+        "bg-[#121C3E] mb-3 min-h-9 rounded-md p-1 min-w-56 text-white";
+    }
+    e.currentTarget.classList =
+      "bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56";
+
+    // Add logic to navigate based on the selected option if needed
+    const selectedOption = e.currentTarget.innerText.trim();
+    switch (selectedOption) {
+      case "Account Category":
+        setIsHiddenInvoiceManagement(true);
+        // Navigate to the appropriate route
+        navigate("");
+        break;
+      case "Account Category Group":
+        setIsHiddenInvoiceManagement(true);
+        navigate("");
+        break;
+      case "Invoice Management":
+        // Navigate to the appropriate route
+        setIsHiddenInvoiceManagement(false);
+        navigate("/sidebar/InvoiceDetails");
+        break;
+      case t(`navHeader.invoiceDetails`):
+        // Navigate to the appropriate route
+        setIsHiddenInvoiceManagement(false);
+        navigate("/sidebar/InvoiceDetails");
+        break;
+      case t(`navHeader.accountAnalytics`):
+        // Navigate to the appropriate route
+        setIsHiddenInvoiceManagement(false);
+        navigate("/sidebar/Account_Annalytics");
+        break;
+      case t(`navHeader.orders`):
+        // Navigate to the appropriate route
+        setIsHiddenInvoiceManagement(false);
+        navigate("/sidebar/Order");
+        break;
+      case "Profit and Loss Report":
+        setIsHiddenInvoiceManagement(true);
+        navigate("/sidebar/PL_Report");
+        break;
+      case "Balance Sheet Report":
+        setIsHiddenInvoiceManagement(true);
+        navigate("/sidebar/BS_Report");
+        break;
+      // Add more cases for other options
+      default:
+        break;
+    }
+  };
+
+  const handleLogout = () => {
+    // Add logic for logout
+    // Example: clear local storage, perform API request, etc.
+    navigate("");
+  };
+
   return (
-    
-    <div className="grid grid-cols-12 bg-main-theme h-full">
-      <div
-        id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5
-         col-span-full
-        `}
-      >
+    <div className="flex flex-row bg-main-theme h-full">
+      <div className="px-4 pt-7 flex flex-col gap-24 bg-[#121C3E]">
+        <div className="px-4 relative mb-8 min-h-fit">
+          <img src={logo} alt="" className="h-20 w-44" />
+          <img className="absolute top-[65px]" src={comName} alt="" />
+        </div>
+        <ul className="flex flex-col gap-4" ref={refUl}>
+          <li
+            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            onClick={(e) => selectOption(e)}
+          >
+            <i className="fa-solid fa-file-lines "></i>
+            <span className="w-3 inline-block"></span>
+            Account Category
+          </li>
+          <li
+            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            onClick={(e) => selectOption(e)}
+          >
+            <i className="fa-solid fa-table-cells-large"></i>
+            <span className="w-3 inline-block"></span>
+            Account Category Group
+          </li>
+          <li
+            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            onClick={(e) => selectOption(e)}
+          >
+            <i className="fa-regular fa-credit-card"></i>
+            <span className="w-3 inline-block"></span>
+            Invoice Management
+          </li>
+          <li
+            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            onClick={(e) => selectOption(e)}
+          >
+            <i className="fa-solid fa-book-open"></i>
+            <span className="w-3 inline-block"></span>
+            Profit and Loss Report
+          </li>
+          <li
+            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            onClick={(e) => selectOption(e)}
+          >
+            <i className="fa-solid fa-book-open"></i>
+            <span className="w-3 inline-block"></span>
+            Balance Sheet Report
+          </li>
+        </ul>
+        <div className="relative items-center">
+          <button
+            className="text-white bg-red-900 rounded-lg h-7 w-28 text-lg absolute bottom-3 left-16 "
+            onClick={handleLogout}
+          >
+            <i className="fa-solid fa-power-off"></i>Log out
+          </button>
+        </div>
+      </div>
+      <div id="contentInvoiceDetail" className="w-full">
         <div className="flex flex-row gap-4 items-center mt-2 px-5 py-2 bg-main-theme">
           <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
             {/* TO DO icon swich sidebar */}
             <svg
-             
               className="w-9 h-9 cursor-pointer flex-shrink-0"
               viewBox="0 0 49 37"
               fill="none"
@@ -138,7 +248,9 @@ const Invoice_Managment = () => {
           <div
             className={`${
               isMobile ? "col-span-12" : "col-span-9"
-            } px-5 items-center w-full ${isHiddenMainButton ? "hidden" : ""}`}
+            } px-5 items-center w-full ${isHiddenMainButton ? "hidden" : ""} ${
+              isHiddenInvoiceManagement ? "hidden" : ""
+            }`}
           >
             <div className="grid grid-cols-12 gap-4 items-center mt-2 px-5 py-2 bg-main-theme">
               {isMobile ? (
@@ -167,8 +279,8 @@ const Invoice_Managment = () => {
                                       activeButton === buttonName,
                                   }
                                 )}
-                                onClick={() => {
-                                  setActiveButton(buttonName);
+                                onClick={(e) => {
+                                  selectOption(e);
                                 }}
                               >
                                 {t(`navHeader.${buttonName}`)}
@@ -179,17 +291,12 @@ const Invoice_Managment = () => {
                       </div>
                     }
                   >
-                  <IoMdArrowDropdownCircle className="mt-1"/>
-                      {activeButton === "invoiceDetails" && (
-                        t(`navHeader.invoiceDetails`)
-                      )}
-                      {activeButton === "accountAnalytics" && (
-                       t(`navHeader.accountAnalytics`)
-                      )}
-                      {activeButton === "orders" && (
-                        t(`navHeader.orders`)
-                      )}
-            
+                    <IoMdArrowDropdownCircle className="mt-1" />
+                    {activeButton === "invoiceDetails" &&
+                      t(`navHeader.invoiceDetails`)}
+                    {activeButton === "accountAnalytics" &&
+                      t(`navHeader.accountAnalytics`)}
+                    {activeButton === "orders" && t(`navHeader.orders`)}
                   </Popover>
                 </button>
               ) : (
@@ -213,14 +320,10 @@ const Invoice_Managment = () => {
             </div>
           </div>
         </div>
-        <div className="">
-          {activeButton === "invoiceDetails" && <InvoiceDetails t={t} />}
-          {activeButton === "accountAnalytics" && <Account_Annalytics t={t} />}
-          {activeButton === "orders" && <Order t={t} />}
+        <div className="bg-white w-full ">
+          <Outlet className="z-0 h-full" />
         </div>
       </div>
     </div>
   );
-};
-
-export default Invoice_Managment;
+}

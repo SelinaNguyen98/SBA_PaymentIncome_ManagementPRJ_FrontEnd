@@ -8,9 +8,10 @@ import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../../Utils/Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
-
+import { useTranslation } from "react-i18next";
 // eslint-disable-next-line react/prop-types
-const InvoiceDetails = ({ t }) => {
+const InvoiceDetails = () => {
+  const {t } = useTranslation();
   const t_invoicedetails = t;
   const { isShowAsideFilter } = useContext(AppContext);
 
