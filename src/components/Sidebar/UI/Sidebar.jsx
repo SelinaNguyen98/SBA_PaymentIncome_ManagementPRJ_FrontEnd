@@ -307,7 +307,7 @@ export default function SideBar() {
                       key={buttonName}
                       className={classNames(
                         `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm ${
-                          activeButton === buttonName ? "bg-yellow" : "bg-white"
+                          activeButton === buttonName ? "bg-yellow " : "bg-white"
                         }`,
                         { "bg-yellow-bold": activeButton === buttonName }
                       )}
