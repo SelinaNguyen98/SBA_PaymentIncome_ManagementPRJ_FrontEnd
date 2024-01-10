@@ -4,6 +4,9 @@ export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      inset: {
+        '65px': '65px',
+      },
       screens: {
         "2xl-plus": "1537px", // Tạo một breakpoint mới cho màn hình lớn hơn 1536px
       },
