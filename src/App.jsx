@@ -7,13 +7,14 @@ import BS_Report from "./components/BS_Report/UI/BS_Report.jsx";
 import Account_Annalytics from "./components/Invoice_Management/Account_Annalytics/UI/Account_Annalytics";
 import Order from "./components/Invoice_Management/Orders/UI/Order";
 import InvoiceDetails from "./components/Invoice_Management/InvoiceDetails";
-
+import Account_Category_Group from "./components/Account_Category_Group/UI/GroupDetails";
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route />
         <Route path="/sidebar/*" element={<SideBar />}>
+         <Route path="Account_Category_Group" element={<Account_Category_Group/>} />
           <Route path="InvoiceDetails" element={<InvoiceDetails/>} />
           <Route path="Account_Annalytics" element={<Account_Annalytics />} />
           <Route path="Order" element={<Order />} />
