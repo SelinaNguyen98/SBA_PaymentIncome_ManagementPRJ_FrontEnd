@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { Link, createSearchParams } from "react-router-dom";
 
@@ -16,7 +17,7 @@ import { Link, createSearchParams } from "react-router-dom";
  */
 
 const RANGE = 1;
-export default function Pagination({ totalPage = 0, queryConfig }) {
+export default function Pagination({ path, totalPage = 0, queryConfig }) {
   // const [page, setPage] = useState(1);
 
   const page = Number(queryConfig?._page);

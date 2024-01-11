@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Button from "../../../Button";
-import Modal from "../../../Modal";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
+import Button from "../../../../Utils/Button";
+import Modal from "../../../../Utils/Modal";
 
 export default function NewPaymentForm({ visible, cancel, ok }) {
   const {

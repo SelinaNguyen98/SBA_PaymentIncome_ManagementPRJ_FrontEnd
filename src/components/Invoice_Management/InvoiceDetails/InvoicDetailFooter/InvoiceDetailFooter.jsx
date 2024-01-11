@@ -1,13 +1,20 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import Pagination from "../Pagination";
+import { useTranslation } from "react-i18next";
 
 export default function InvoiceDetailFooter({ queryConfig, totalPage }) {
+  // eslint-disable-next-line react/prop-types
+  // export default function InvoiceDetailFooter({t}) {
+  const { t } = useTranslation();
+
+  const t_invoice = t;
   return (
     <div className=" mt-3">
       <div className=" flex flex-wrap gap-4 items-center">
-        <span className="font-bold">Total of month</span>
+        <span className="font-bold">{t_invoice("title.total_of_month")}</span>
         {/*  max-lg:space-y-2  */}
-        <div className=" items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2 ">
+        <div className="flex items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
           <div className=" inline-flex mx-3 ">
             JPY
             <input

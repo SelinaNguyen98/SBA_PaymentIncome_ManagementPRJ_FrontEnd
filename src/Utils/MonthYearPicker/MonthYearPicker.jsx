@@ -1,19 +1,33 @@
 import { useEffect, useState } from "react";
 import ReactDatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { IoMdArrowDropleftCircle, IoMdArrowDroprightCircle } from "react-icons/io";
+import Button from "../Button";
+
 import {
   checkRegexMonthDatePattern,
   formatStringMonthYearToDate,
 } from "../../Utils/utils/maths";
 
 export default function MonthYearPicker({
+  // eslint-disable-next-line react/prop-types
   className,
+  // eslint-disable-next-line react/prop-types
   selectedDate,
+  // eslint-disable-next-line react/prop-types
   setSelectedDate,
+   // eslint-disable-next-line react/prop-types
+  showInputDataButton = false, 
+  // eslint-disable-next-line react/prop-types
+  t,
+  // eslint-disable-next-line react/prop-types
+  inputDataButtonClick = () => {},
 }) {
   const [tmp, setTmp] = useState("");
-
+  // eslint-disable-next-line no-unused-vars
+  const t_translate =t;
   useEffect(() => {
+    // eslint-disable-next-line react/prop-types
     const valueString = selectedDate.toLocaleDateString("en-US", {
       month: "2-digit",
       year: "numeric",
@@ -42,6 +56,7 @@ export default function MonthYearPicker({
       const date = formatStringMonthYearToDate(sMonth, sYear);
       setSelectedDate(date);
     } else {
+      // eslint-disable-next-line react/prop-types
       const valueString = selectedDate.toLocaleDateString("en-US", {
         month: "2-digit",
         year: "numeric",
@@ -58,11 +73,11 @@ export default function MonthYearPicker({
   };
 
   return (
-    <div className={`flex flex-1 items-center px-2 rounded-full ${className}`}>
-      <div onClick={handleDecrementMonth}>⬅️</div>
+    <div className={`flex flex-1 items-center px-2  border border-gray-500 rounded-full focus:border-black focus:outline ${className}`}>
+      <div onClick={handleDecrementMonth}><IoMdArrowDropleftCircle className="text-xl max-[1600px]:text-[15px] hover:text-2xl cursor-pointer transition-transform transform-gpu hover:scale-110"/></div>
 
       <div
-        className={`flex flex-1 items-center px-2 rounded-full border border-gray-500 focus:border-2 focus:border-black focus:outline `}
+        className={`flex flex-1 items-center px-2 rounded-full focus:border-2 focus:border-black focus:outline `}
       >
         <ReactDatePicker
           selected={selectedDate}
@@ -82,7 +97,7 @@ export default function MonthYearPicker({
             calendarContainer={CustomCalendarContainer}
           /> */}
         <input
-          className=" flex-1 text-center focus:outline-none font-medium w-full h-full"
+          className=" flex-1 text-center  focus:outline-none font-medium w-full h-full max-[1600px]:text-[10px]"
           value={tmp}
           onChange={(event) => {
             const value = event.target.value;
@@ -93,7 +108,16 @@ export default function MonthYearPicker({
         ></input>
       </div>
       {/* </div> */}
-      <div onClick={handleIncrementMonth}>➡️</div>
+      <div onClick={handleIncrementMonth}><IoMdArrowDroprightCircle className="text-xl max-[1600px]:text-[15px] hover:text-2xl cursor-pointer transition-transform transform-gpu hover:scale-110"/></div>
+      {showInputDataButton && (
+        <Button
+          className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
+          onClick={inputDataButtonClick}
+          data-modal-target="crud-modal"
+          data-modal-toggle="crud-modal"
+        >
+          <span className="max-[1600px]:text-[10px]">{t("button.input_monthly_data")}</span>
+        </Button>)}
     </div>
   );
 }
@@ -123,6 +147,7 @@ const CustomCelendarsIcon = ({ onClick }) => {
   );
 };
 
+// eslint-disable-next-line react/prop-types, no-unused-vars
 function CustomCalendarContainer({ className }) {
   return <CalendarContainer className={className}></CalendarContainer>;
 }

@@ -1,4 +1,5 @@
 import "./styles.css";
+// eslint-disable-next-line no-unused-vars
 const root = document.getElementById("root");
 // const root = document.getElementById("contentInvoiceDetail");
 
@@ -24,11 +25,11 @@ export default function Modal({
 
   return (
     <div
-      className="modalRoot "
+      className=" modalRoot"
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
       <div className="overlay bg-slate-500/10"></div>
-      <div className={` containerModal  ${classNameContainer}  mt-[100px]`}>
+      <div className={` containerModal  ${classNameContainer}  `}>
         {children ? (
           children
         ) : (

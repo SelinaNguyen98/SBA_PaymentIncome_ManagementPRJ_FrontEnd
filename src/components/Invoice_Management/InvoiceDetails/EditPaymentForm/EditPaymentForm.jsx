@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
-import Button from "../../../Button";
-import Modal from "../../../Modal";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
+import Modal from "../../../../Utils/Modal";
+import Button from "../../../../Utils/Button";
 
 export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
   const {
@@ -65,7 +65,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
             register={register}
             errorMessage={errors?.payment_date?.message}
           />
-          
+
           <InputCustomComponent
             label={"Name"}
             name={"name"}

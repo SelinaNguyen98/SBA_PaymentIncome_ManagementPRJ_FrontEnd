@@ -5,24 +5,42 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 
-import NavHeader from "../../NavHeader";
-import Button from "../../Button";
+// import NavHeader from "../../NavHeader";
+import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
-import Modal from "../../Modal/Modal";
+import "./styles.css";
+import Modal from "../../../Utils/Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
-import MonthYearPicker from "../../MonthYearPicker";
+import MonthYearPicker from "../../../Utils/MonthYearPicker";
+
 import EditPaymentForm from "./EditPaymentForm";
 import http from "../../../Utils/utils/https";
-import { useSearchParams, useLocation } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
 import useQueryParam from "../../../Utils/hooks/useQueryParam";
+// import { toast } from "react-toastify";
+import useToast from "../../../Utils/hooks/useToast";
 
 export default function InvoiceDetails() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const location = useLocation();
+  // const [searchParams, setSearchParams] = useSearchParams();
+  const { t } = useTranslation();
+  const t_invoicedetails = t;
+  // import InvoiceTable from "./InvoiceTable";
+  // import Button from "../../../Utils/Button";
+  // import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
+  // import "./styles.css";
+  // import { useContext, useEffect, useState } from "react";
+  // import { AppContext } from "../../../Utils/contexts/app.context";
+  // import Modal from "../../../Utils/Modal/Modal";
+  // import NewPaymentForm from "./NewPaymentForm";
+  // import MonthYearPicker from "../../../Utils/MonthYearPicker";
+
+  // // eslint-disable-next-line react/prop-types
+  // const InvoiceDetails = ({ t }) => {
+  //   const t_invoicedetails = t;
 
   const { isShowAsideFilter } = useContext(AppContext);
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const [stateControl, setStateControl] = useState({
     isShowConfirmModal: false,
@@ -113,21 +131,11 @@ export default function InvoiceDetails() {
   }, [selectedDate, queryConfig._page]);
 
   return (
-    <div className={`grid grid-cols-12  bg-main-theme`}>
-      {isShowAsideFilter && (
-        <div className="col-span-2 bg-red p-3">
-          <button>Toggle modal</button>
-        </div>
-      )}
+    <div className="h-screen">
       <div
         id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5     ${
-          isShowAsideFilter ? "col-span-10" : "col-span-full"
-        }`}
+        className={` relative bg-main-theme pb-5 h-full `}
       >
-        {/* heder */}
-        <NavHeader />
-
         {/* Lable */}
         <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
           <svg
@@ -141,88 +149,91 @@ export default function InvoiceDetails() {
               fill="black"
             />
           </svg>
-          {t("titlePage.invoiceDetail")}
+          {t_invoicedetails("navHeader.invoiceDetails")}
         </div>
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
-          <div className="grid grid-cols-12 gap-2 items-center w-full overflow-auto ">
-            <MonthYearPicker
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              className="col-span-12 lg:col-span-2"
-            />
+          <div className="grid  gap-2 items-center w-full ">
+            <div className="flex items-center justify-between gap-2 flex-row max-[1390px]:flex-col">
+              <div className="mt-1 px-6 flex flex-row items-center">
+                <div className="gap-2 items-center flex flex-row max-[1000px]:flex-col">
+                  <MonthYearPicker
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
+                  />
+                  <div className="flex flex-row bg-main-theme items-center py-1 rounded-md ">
+                    <div className="items-center px-5 flex flex-row ">
+                      <div className="font-medium ">
+                        JPY
+                        <input
+                          type="number "
+                          className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                        />
+                      </div>
+                      <div className="font-medium">
+                        USD
+                        <input
+                          type="number"
+                          className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                        />
+                      </div>
 
-            <div className=" col-span-12 lg:col-span-7 bg-main-theme items-center py-1 rounded-md ">
-              <div className="grid grid-cols-9 items-center px-5 ">
-                <div className="font-medium lg:col-span-4 col-span-12 ">
-                  JPY
-                  <input
-                    type="number "
-                    className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
-                  />
+                      <Button
+                        className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
+                        onClick={() => {}}
+                        data-modal-target="crud-modal"
+                        data-modal-toggle="crud-modal"
+                      >
+                        {t_invoicedetails("button.save")}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="font-medium lg:col-span-4 col-span-12">
-                  USD
-                  <input
-                    type="number"
-                    className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
-                  />
-                </div>
+              </div>
+
+              <div className="flex flex-row ">
+                <Button
+                  onClick={() => updateState({ isShowFormNewPayment: true })}
+                  icon={
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 21 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M15.75 9.9H11.55V13.5H9.45V9.9H5.25V8.1H9.45V4.5H11.55V8.1H15.75M10.5 0C9.12112 0 7.75574 0.232792 6.48182 0.685084C5.2079 1.13738 4.05039 1.80031 3.07538 2.63604C1.10625 4.32387 0 6.61305 0 9C0 11.3869 1.10625 13.6761 3.07538 15.364C4.05039 16.1997 5.2079 16.8626 6.48182 17.3149C7.75574 17.7672 9.12112 18 10.5 18C13.2848 18 15.9555 17.0518 17.9246 15.364C19.8938 13.6761 21 11.3869 21 9C21 7.8181 20.7284 6.64778 20.2007 5.55585C19.6731 4.46392 18.8996 3.47177 17.9246 2.63604C16.9496 1.80031 15.7921 1.13738 14.5182 0.685084C13.2443 0.232792 11.8789 0 10.5 0Z"
+                        fill="white"
+                      />
+                    </svg>
+                  }
+                >
+                  {t_invoicedetails("button.add")}
+                </Button>
 
                 <Button
-                  className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-                  onClick={() => {}}
-                  data-modal-target="crud-modal"
-                  data-modal-toggle="crud-modal"
+                  onClick={() => updateState({ isShowFormNewPayment: true })}
+                  className="bg-red ml-2"
+                  icon={
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 19 18"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M9.5 18C6.98044 18 4.56408 17.0518 2.78249 15.364C1.00089 13.6761 0 11.3869 0 9C0 6.61305 1.00089 4.32387 2.78249 2.63604C4.56408 0.948212 6.98044 0 9.5 0C12.0196 0 14.4359 0.948212 16.2175 2.63604C17.9991 4.32387 19 6.61305 19 9C19 11.3869 17.9991 13.6761 16.2175 15.364C14.4359 17.0518 12.0196 18 9.5 18ZM14.25 8.1H4.75V9.9H14.25V8.1Z"
+                        fill="white"
+                      />
+                    </svg>
+                  }
                 >
-                  SAVE
+                  {t_invoicedetails("button.delete")}
                 </Button>
               </div>
-            </div>
-
-            <div className="flex col-span-12 lg:col-span-3 items-center justify-end">
-              <Button
-                onClick={() => updateState({ isShowFormNewPayment: true })}
-                icon={
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 21 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15.75 9.9H11.55V13.5H9.45V9.9H5.25V8.1H9.45V4.5H11.55V8.1H15.75M10.5 0C9.12112 0 7.75574 0.232792 6.48182 0.685084C5.2079 1.13738 4.05039 1.80031 3.07538 2.63604C1.10625 4.32387 0 6.61305 0 9C0 11.3869 1.10625 13.6761 3.07538 15.364C4.05039 16.1997 5.2079 16.8626 6.48182 17.3149C7.75574 17.7672 9.12112 18 10.5 18C13.2848 18 15.9555 17.0518 17.9246 15.364C19.8938 13.6761 21 11.3869 21 9C21 7.8181 20.7284 6.64778 20.2007 5.55585C19.6731 4.46392 18.8996 3.47177 17.9246 2.63604C16.9496 1.80031 15.7921 1.13738 14.5182 0.685084C13.2443 0.232792 11.8789 0 10.5 0Z"
-                      fill="white"
-                    />
-                  </svg>
-                }
-              >
-                ADD NEW
-              </Button>
-
-              <Button
-                onClick={() => {
-                  updateState({ isShowConfirmModal: true });
-                }}
-                className="bg-red ml-2 "
-                icon={
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 19 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M9.5 18C6.98044 18 4.56408 17.0518 2.78249 15.364C1.00089 13.6761 0 11.3869 0 9C0 6.61305 1.00089 4.32387 2.78249 2.63604C4.56408 0.948212 6.98044 0 9.5 0C12.0196 0 14.4359 0.948212 16.2175 2.63604C17.9991 4.32387 19 6.61305 19 9C19 11.3869 17.9991 13.6761 16.2175 15.364C14.4359 17.0518 12.0196 18 9.5 18ZM14.25 8.1H4.75V9.9H14.25V8.1Z"
-                      fill="white"
-                    />
-                  </svg>
-                }
-              >
-                DELETE
-              </Button>
             </div>
           </div>
 
@@ -231,15 +242,15 @@ export default function InvoiceDetails() {
             <thead>
               <tr>
                 <th className=" w-[1%]"></th>
-                <th className=" w-[4%]">No</th>
-                <th className=" w-[16%]">Date</th>
-                <th className=" w-[10%]">Name</th>
+                <th className=" w-[5%]">No</th>
+                <th className=" w-[15%]">Date</th>
+                <th className=" w-[15%]">Name</th>
                 <th className=" w-[10%]">JPY</th>
                 <th className=" w-[10%]">VND</th>
                 <th className=" w-[10%]">USD</th>
-                <th className=" w-[10%]">JOURNAL</th>
+                <th className=" w-[15%]">JOURNAL</th>
                 <th className=" w-[10%]">INVOICE</th>
-                <th className=" w-[10%]">PAY</th>
+                <th className=" w-[5%]">PAY</th>
                 <th className=" w-[8%]">ACTION</th>
                 <th className=" w-[1%]"></th>
               </tr>
@@ -350,7 +361,13 @@ export default function InvoiceDetails() {
               </div>
 
               <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-                <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
+                <Button
+                  onClick={() => {
+                    // toast.success("da xoa thanh cong");
+                    useToast.success("sadsasd", "");
+                  }}
+                  className={" bg-red py-2 px-6"}
+                >
                   Confirm
                 </Button>
                 <Button
@@ -392,3 +409,5 @@ export default function InvoiceDetails() {
     </div>
   );
 }
+
+// export default InvoiceDetails

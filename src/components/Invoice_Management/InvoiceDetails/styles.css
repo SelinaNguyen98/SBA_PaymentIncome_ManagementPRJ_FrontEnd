@@ -51,8 +51,10 @@
   text-align: center;
   border: 1px solid gray;
   padding: 6px;
-  overflow-wrap: break-word;
-  overflow: hidden;
+  overflow-x: hidden;
+  
+  /* overflow-wrap: break-word; */
+  /* overflow: hidden; */
 }
 
 @media (min-width: 1537px) {

@@ -4,7 +4,62 @@
     "accountAnalytics": "勘定科目毎の合計",
     "orders": "受注管理"
   },
-  "titlePage": {
-    "invoiceDetail" : "インボイス管理"
-  }
+  "title": {
+    "orders": "受注管理",
+    "Payment_management": "精算管理",
+    "Outsourcing_cost": "外注管理",
+    "total_of_month":"合計:",
+    "BS_report":"貸借対照表(BS)",
+    "PL_report":"損益計算書(PL)"
+  },
+  "button": {
+    "add": "新規追加",
+    "delete": "削除",
+    "save":"保存",
+    "cancel":"キャンセル",
+    "confirm":"削除",
+    "export":"出力",
+    "input_monthly_data":"月毎野データ入力",
+    "input_balance_from_previous_year":"前年度繰越入力"
+  },
+  "header_table_order": {
+    "order_date": "受注日",
+    "Date_of_payment":"精算日付",
+    "Outsourced_project":"外注プロジェクト",
+    "Company_name": "会社名",
+    "Action": "アクション"
+  },
+  "add_edit_order": {
+    "new_order": "受注登録",
+    "new_payment_management":"精算情報登録",
+    "new_outsourcing_cost":"外注情報登録",
+    "edit_order": "受注編集",
+    "edit_payment_management":"精算情報編集",
+    "edit_outsourcing_cost":"外注情報編集",
+    "day": "日付 (dd/mm/yyyy)",
+    "Company_name": "会社名",
+    "Outsourced_project": "外注プロジェクト"
+  },
+  "delete_order": {
+    "delete_order": "受注削除",
+    "delete_payment_management":"精算情報削除",
+    "delete_outsourcing_cost":"外注情報削除",
+    "content_delete": "選択された情報を削除してよろしいでしょうか。"
+  },
+  "accountAnalytics": {
+    "account_category": "勘定科目",
+    "total":"集計 (JPY)"
+  },
+  "header_table_PL_BS": {
+    "name": "勘 定 科 目",
+    "total":"集計 (JPY)"
+  },
+  "form_input_monthly_data_BS": {
+    "title_form": "月毎野データ入力",
+    "title_table_name":"勘 定 科 目",
+    "title_table_amount":"金額（JPY)",
+    "year":"年",
+    "month":"月",
+    "title_form_balance_previous_year": "年度繰越入力"
+ }
 }

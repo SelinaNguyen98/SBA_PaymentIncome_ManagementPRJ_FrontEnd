@@ -15,15 +15,20 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Popover({
+  // eslint-disable-next-line react/prop-types
   children,
+  // eslint-disable-next-line react/prop-types
   renderPopover,
+  // eslint-disable-next-line react/prop-types
   className,
+  // eslint-disable-next-line react/prop-types
   initialOpen,
 }) {
   const [open, setOpen] = useState(initialOpen || false);
 
   const id = useId();
 
+  // eslint-disable-next-line no-unused-vars
   const { refs, floatingStyles, middlewareData, context } = useFloating({
     open,
     onOpenChange: setOpen,
