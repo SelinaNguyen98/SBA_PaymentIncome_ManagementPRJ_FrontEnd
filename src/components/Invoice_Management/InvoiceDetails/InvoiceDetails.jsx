@@ -20,28 +20,195 @@ import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
 import useQueryParam from "../../../Utils/hooks/useQueryParam";
 // import { toast } from "react-toastify";
 import useToast from "../../../Utils/hooks/useToast";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 export default function InvoiceDetails() {
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
   const t_invoicedetails = t;
-  // import InvoiceTable from "./InvoiceTable";
-  // import Button from "../../../Utils/Button";
-  // import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
-  // import "./styles.css";
-  // import { useContext, useEffect, useState } from "react";
-  // import { AppContext } from "../../../Utils/contexts/app.context";
-  // import Modal from "../../../Utils/Modal/Modal";
-  // import NewPaymentForm from "./NewPaymentForm";
-  // import MonthYearPicker from "../../../Utils/MonthYearPicker";
 
-  // // eslint-disable-next-line react/prop-types
-  // const InvoiceDetails = ({ t }) => {
-  //   const t_invoicedetails = t;
+  // TODO fake data
+  const dataInvoices = {
+    success: true,
+    message: "Get all payments successfully",
+    data: [
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+    ],
+    page: 1,
+    per_page: 10,
+    total: 10, // BE tra ve
+  };
 
-  const { isShowAsideFilter } = useContext(AppContext);
-  // const { t } = useTranslation();
-
+  // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
@@ -54,81 +221,173 @@ export default function InvoiceDetails() {
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
 
-  //////////////////////
+  // Bao gom tong so trang, page, du lieu table dang duoc chon
+
   const queryParams = useQueryParam();
-
-  const [stateTable, setStateTable] = useState({
-    totalPage: 0,
-    perPage: 10, //default bo cung duoc
-    dataTable: null,
-    selectedRowData: null,
-  });
-
-  const { totalPage, perPage, dataTable, selectedRowData } = stateTable;
 
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
-    const month = queryParams?.month_like || today.getMonth() + 1;
-    const year = queryParams?.year_like || today.getFullYear();
+    const month = queryParams?.month || today.getMonth() + 1;
+    const year = queryParams?.year || today.getFullYear();
     return formatStringMonthYearToDate(month, year);
   }); //
+
+  const [stateTable, setStateTable] = useState({
+    totalPage: 0,
+    dataTables: null,
+    selectedRowData: null,
+  });
+  const prevDate = useRef(selectedDate);
+  const queryConfig = {
+    month: selectedDate.getMonth() + 1,
+    year: selectedDate.getFullYear(),
+    page: queryParams?.page || 1,
+  };
+
+  const { totalPage, dataTables, selectedRowData } = stateTable;
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
 
-  const queryConfig = {
-    month_like: selectedDate.getMonth() + 1,
-    year_like: selectedDate.getFullYear(),
-    _page: queryParams?._page || 1,
+  const fetchInvoices = async () => {
+    // Đây có thể là logic thực hiện gọi API hoặc trả về dữ liệu trực tiếp
+    // Trong trường hợp này, chúng ta trả về dữ liệu mẫu dataInvoices
+
+    // let pageToFetch = queryParams._page || 1;
+
+    // if (selectedDate !== prevDate.current) {
+    //   pageToFetch = 1;
+    //   queryConfig = {
+    //     month: selectedDate.getMonth() + 1,
+    //     year: selectedDate.getFullYear(),
+    //     page: 1,
+    //   };
+    // }
+
+    const totalCount = dataInvoices.data.length;
+    const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
+    updateStateTable({
+      dataTables: dataInvoices.data,
+      totalPage: totalPages,
+    });
+    console.log(queryConfig);
+
+    let queryString = new URLSearchParams(queryConfig).toString();
+    const newUrl = `${window.location.pathname}?${queryString}`;
+    window.history.pushState({}, "", newUrl);
+    prevDate.current = selectedDate;
+    return dataInvoices;
   };
 
-  // const prevPage = useRef(queryConfig?._page);
+  const {
+    data: dataTable,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["payment", { ...queryConfig, page: 1 }],
+    queryFn: () => {
+      return fetchInvoices(queryConfig);
+    },
+    placeholderData: (previousData, previousQuery) => previousData, // identity function with the same behaviour as `keepPreviousData`,
+  });
 
-  /**
-   * 1/ Khi thay đổi ngày thì chuyển trang và page = 1
-   * 2/ Khi chuyển trang thì cập nhật page trên thanh url
-   * 3/ Cập nhật ngày tháng năm lên url
-   * 4/ Khi thya đổi ngày tháng trên url thì cũng cập nhật lại
-   */
-  const prevDate = useRef(selectedDate);
+  // Bao gồm cac gia tri search
 
-  useEffect(() => {
-    let pageToFetch = queryParams._page || 1;
+  // const [queryConfig, setqueryConfig] = useState({
+  //   month: selectedDate.getMonth() + 1,
+  //   year: selectedDate.getFullYear(),
+  //   page: queryParams?.page || 1,
+  // });
 
-    if (selectedDate !== prevDate.current) {
-      pageToFetch = 1;
-    }
+  // if (
+  //   queryParams?.month === null ||
+  //   queryParams?.year === null ||
+  //   queryParams?.page === null
+  // ) {
+  //   let queryString = new URLSearchParams(queryConfig).toString();
+  //   const newUrl = `${window.location.pathname}?${queryString}`;
+  //   window.history.pushState({}, "", newUrl);
+  // }
 
-    // Update URL with the new parameters
-    const newSearchParams = {
-      ...queryConfig,
-      _page: pageToFetch,
-    };
+  // useEffect(() => {
+  //   let pageToFetch = queryParams?.page || 1;
 
-    http
-      .get("/payments", {
-        params: newSearchParams,
-      })
-      .then((response) => {
-        const totalCount = response.headers.get("X-Total-Count") | 0;
-        const totalPages = Math.ceil(totalCount / perPage);
+  //   if (selectedDate !== prevDate.current) {
+  //     pageToFetch = 1;
+  //     queryConfig = {
+  //       month: selectedDate.getMonth() + 1,
+  //       year: selectedDate.getFullYear(),
+  //       page: pageToFetch,
+  //     };
+  //   }
+  //   const queryString = new URLSearchParams(queryConfig).toString();
+  //   const newUrl = `${window.location.pathname}?${queryString}`;
+  //   // window.history.pushState({}, "", newUrl);
+  //   if (window.location.search !== `?${queryString}`) {
+  //     navigate(newUrl);
+  //   }
 
-        updateStateTable({
-          dataTable: response.data,
-          totalPage: totalPages,
-        });
+  //   const totalCount = dataInvoices.data.length; // from respnose
+  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
+  //   updateStateTable({
+  //     dataTable: dataInvoices.data,
+  //     totalPage: totalPages,
+  //   });
 
-        const queryString = new URLSearchParams(newSearchParams).toString();
+  //   prevDate.current = selectedDate;
+  //   // console.log(newqueryString);
+  //   console.log(queryConfig);
+  // }, [queryConfig.page]);
 
-        // Manually update the URL without triggering a page reload
-        const newUrl = `${window.location.pathname}?${queryString}`;
-        window.history.pushState({}, "", newUrl);
-        console.log(newSearchParams);
+  // useEffect(() => {
+  //   let queryConfig = {
+  //     month: selectedDate.getMonth() + 1,
+  //     year: selectedDate.getFullYear(),
+  //     page: 1,
+  //   };
+  //   const queryString = new URLSearchParams(queryConfig).toString();
+  //   const newUrl = `${window.location.pathname}?${queryString}`;
+  //   // window.history.pushState({}, "", newUrl);
+  //   if (window.location.search !== `?${queryString}`) {
+  //     navigate(newUrl);
+  //   }
 
-        prevDate.current = selectedDate;
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDate, queryConfig._page]);
+  //   const totalCount = dataInvoices.data.length; // from respnose
+  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
+  //   updateStateTable({
+  //     dataTable: dataInvoices.data,
+  //     totalPage: totalPages,
+  //   });
+
+  //   prevDate.current = selectedDate;
+  //   console.log(page, month, year);
+  //   // console.log(queryConfig);
+  // }, []);
+
+  // useEffect(() => {
+  //   queryConfig = {
+  //     month: selectedDate.getMonth() + 1,
+  //     year: selectedDate.getFullYear(),
+  //     page: 1,
+  //   };
+  //   const queryString = new URLSearchParams(queryConfig).toString();
+  //   const newUrl = `${window.location.pathname}?${queryString}`;
+  //   // window.history.pushState({}, "", newUrl);
+  //   if (window.location.search !== `?${queryString}`) {
+  //     navigate(newUrl);
+  //   }
+
+  //   const totalCount = dataInvoices.data.length; // from respnose
+  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
+  //   updateStateTable({
+  //     dataTable: dataInvoices.data,
+  //     totalPage: totalPages,
+  //   });
+
+  //   prevDate.current = selectedDate;
+  //   // console.log(newqueryString);
+  //   console.log(queryConfig);
+  // }, [queryConfig.page]);
 
   return (
     <div className="h-screen">
@@ -192,7 +451,7 @@ export default function InvoiceDetails() {
                 </div>
               </div>
 
-              <div className="flex flex-row ">
+              <div className="flex flex-row">
                 <Button
                   onClick={() => updateState({ isShowFormNewPayment: true })}
                   icon={
@@ -261,8 +520,8 @@ export default function InvoiceDetails() {
                 <td colSpan={100}></td>
               </tr>
 
-              {dataTable &&
-                dataTable.map((invoicePayment, index) => (
+              {dataTable?.data &&
+                dataTable?.data.map((invoicePayment, index) => (
                   <tr key={index}>
                     {/* First column of each row is like padding-left */}
                     <td></td>
@@ -345,6 +604,7 @@ export default function InvoiceDetails() {
 
           {/* InvoiceDetailFooter */}
           <InvoiceDetailFooter
+            path="/payment"
             queryConfig={queryConfig}
             totalPage={totalPage}
           />

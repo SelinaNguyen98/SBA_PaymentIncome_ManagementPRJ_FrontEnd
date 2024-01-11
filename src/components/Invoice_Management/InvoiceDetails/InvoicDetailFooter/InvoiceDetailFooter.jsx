@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Pagination from "../Pagination";
 import { useTranslation } from "react-i18next";
 
-export default function InvoiceDetailFooter({ queryConfig, totalPage }) {
+export default function InvoiceDetailFooter({ path, queryConfig, totalPage }) {
   // eslint-disable-next-line react/prop-types
   // export default function InvoiceDetailFooter({t}) {
   const { t } = useTranslation();
@@ -39,7 +39,11 @@ export default function InvoiceDetailFooter({ queryConfig, totalPage }) {
         </div>
         <div className=" flex-1  flex justify-end">
           {/* flex-shrink-0 */}
-          <Pagination totalPage={totalPage} queryConfig={queryConfig} />
+          <Pagination
+            path={path}
+            totalPage={totalPage}
+            queryConfig={queryConfig}
+          />
         </div>
       </div>
     </div>

@@ -1,6 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
-import { Link, createSearchParams } from "react-router-dom";
+import {
+  Link,
+  createSearchParams,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
+import useQueryParam from "../../../../Utils/hooks/useQueryParam";
 
 /**
  * voi Range -2 ap dung cho khoang cach dau va cuoi
@@ -17,10 +23,25 @@ import { Link, createSearchParams } from "react-router-dom";
  */
 
 const RANGE = 1;
-export default function Pagination({ path, totalPage = 0, queryConfig }) {
+export default function Pagination({ path = "/", totalPage = 0, queryConfig }) {
   // const [page, setPage] = useState(1);
+  // const page = Number(queryConfig?.page);
 
-  const page = Number(queryConfig?._page);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const page = Number(queryParams.get("page")) || 1;
+
+  // function handlePageChange(newPage) {
+  //   // update query parameters with new page number
+  //   // queryParams.set("page", newPage);
+  //   navigate({
+  //     search: createSearchParams({
+  //       ...queryConfig,
+  //       page: newPage.toString(),
+  //     }).toString(),
+  //   });
+  // }
 
   const renderPsgination = () => {
     let dotAfter = false;
@@ -98,10 +119,10 @@ export default function Pagination({ path, totalPage = 0, queryConfig }) {
           return (
             <Link
               to={{
-                pathname: "/payment",
+                pathname: path,
                 search: createSearchParams({
                   ...queryConfig,
-                  _page: pageNumber.toString(),
+                  page: pageNumber.toString(),
                 }).toString(),
               }}
               key={index}
@@ -118,10 +139,10 @@ export default function Pagination({ path, totalPage = 0, queryConfig }) {
         return (
           <Link
             to={{
-              pathname: "/payment",
+              pathname: path,
               search: createSearchParams({
                 ...queryConfig,
-                _page: pageNumber.toString(),
+                page: pageNumber.toString(),
               }).toString(),
             }}
             key={index}
@@ -129,6 +150,13 @@ export default function Pagination({ path, totalPage = 0, queryConfig }) {
           >
             {pageNumber}
           </Link>
+          // <button
+          //   key={index}
+          //   onClick={() => handlePageChange(pageNumber)}
+          //   className="m-2 cursor-pointer "
+          // >
+          //   {pageNumber}
+          // </button>
         );
       });
   };
@@ -153,10 +181,10 @@ export default function Pagination({ path, totalPage = 0, queryConfig }) {
       ) : (
         <Link
           to={{
-            pathname: "/payment",
+            pathname: path,
             search: createSearchParams({
               ...queryConfig,
-              _page: (page - 1).toString(),
+              page: (page - 1).toString(),
             }).toString(),
           }}
         >
@@ -195,10 +223,10 @@ export default function Pagination({ path, totalPage = 0, queryConfig }) {
       ) : (
         <Link
           to={{
-            pathname: "/payment",
+            pathname: path,
             search: createSearchParams({
               ...queryConfig,
-              _page: (page + 1).toString(),
+              page: (page + 1).toString(),
             }).toString(),
           }}
         >
