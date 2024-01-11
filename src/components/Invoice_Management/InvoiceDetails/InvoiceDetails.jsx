@@ -1,7 +1,7 @@
 import "../../../Utils/style.css";
 import "./styles.css";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 
@@ -17,14 +17,11 @@ import EditPaymentForm from "./EditPaymentForm";
 import http from "../../../Utils/utils/https";
 // import { useSearchParams } from "react-router-dom";
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
-import useQueryParam from "../../../Utils/hooks/useQueryParam";
 // import { toast } from "react-toastify";
 import useToast from "../../../Utils/hooks/useToast";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 
 export default function InvoiceDetails() {
-  const [searchParams, setSearchParams] = useSearchParams();
   const { t } = useTranslation();
   const t_invoicedetails = t;
 
@@ -223,172 +220,58 @@ export default function InvoiceDetails() {
 
   // Bao gom tong so trang, page, du lieu table dang duoc chon
 
-  const queryParams = useQueryParam();
-
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
-    const month = queryParams?.month || today.getMonth() + 1;
-    const year = queryParams?.year || today.getFullYear();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
     return formatStringMonthYearToDate(month, year);
   }); //
 
   const [stateTable, setStateTable] = useState({
     totalPage: 0,
-    dataTables: null,
+    dataTable: null,
     selectedRowData: null,
   });
-  const prevDate = useRef(selectedDate);
-  const queryConfig = {
-    month: selectedDate.getMonth() + 1,
-    year: selectedDate.getFullYear(),
-    page: queryParams?.page || 1,
-  };
 
-  const { totalPage, dataTables, selectedRowData } = stateTable;
+  const { totalPage, dataTable, selectedRowData } = stateTable;
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
 
+  const [page, setPage] = useState(1);
+  const isFilterApplied = useRef(false);
+
   const fetchInvoices = async () => {
-    // Đây có thể là logic thực hiện gọi API hoặc trả về dữ liệu trực tiếp
-    // Trong trường hợp này, chúng ta trả về dữ liệu mẫu dataInvoices
-
-    // let pageToFetch = queryParams._page || 1;
-
-    // if (selectedDate !== prevDate.current) {
-    //   pageToFetch = 1;
-    //   queryConfig = {
-    //     month: selectedDate.getMonth() + 1,
-    //     year: selectedDate.getFullYear(),
-    //     page: 1,
-    //   };
-    // }
-
     const totalCount = dataInvoices.data.length;
     const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
     updateStateTable({
-      dataTables: dataInvoices.data,
+      dataTable: dataInvoices,
       totalPage: totalPages,
     });
-    console.log(queryConfig);
-
-    let queryString = new URLSearchParams(queryConfig).toString();
-    const newUrl = `${window.location.pathname}?${queryString}`;
-    window.history.pushState({}, "", newUrl);
-    prevDate.current = selectedDate;
-    return dataInvoices;
+    console.log(selectedDate, page);
+    // return dataInvoices;
   };
 
-  const {
-    data: dataTable,
-    isLoading,
-    isError,
-  } = useQuery({
-    queryKey: ["payment", { ...queryConfig, page: 1 }],
-    queryFn: () => {
-      return fetchInvoices(queryConfig);
-    },
-    placeholderData: (previousData, previousQuery) => previousData, // identity function with the same behaviour as `keepPreviousData`,
-  });
+  useEffect(() => {
+    console.log("Filter change effect");
+    isFilterApplied.current = true;
+    setPage(1);
+  }, [selectedDate]);
 
-  // Bao gồm cac gia tri search
+  useEffect(() => {
+    if (isFilterApplied.current && page !== 1) {
+      return;
+    }
 
-  // const [queryConfig, setqueryConfig] = useState({
-  //   month: selectedDate.getMonth() + 1,
-  //   year: selectedDate.getFullYear(),
-  //   page: queryParams?.page || 1,
-  // });
+    console.log("Main effect");
 
-  // if (
-  //   queryParams?.month === null ||
-  //   queryParams?.year === null ||
-  //   queryParams?.page === null
-  // ) {
-  //   let queryString = new URLSearchParams(queryConfig).toString();
-  //   const newUrl = `${window.location.pathname}?${queryString}`;
-  //   window.history.pushState({}, "", newUrl);
-  // }
+    fetchInvoices();
+  }, [selectedDate, page]);
 
-  // useEffect(() => {
-  //   let pageToFetch = queryParams?.page || 1;
-
-  //   if (selectedDate !== prevDate.current) {
-  //     pageToFetch = 1;
-  //     queryConfig = {
-  //       month: selectedDate.getMonth() + 1,
-  //       year: selectedDate.getFullYear(),
-  //       page: pageToFetch,
-  //     };
-  //   }
-  //   const queryString = new URLSearchParams(queryConfig).toString();
-  //   const newUrl = `${window.location.pathname}?${queryString}`;
-  //   // window.history.pushState({}, "", newUrl);
-  //   if (window.location.search !== `?${queryString}`) {
-  //     navigate(newUrl);
-  //   }
-
-  //   const totalCount = dataInvoices.data.length; // from respnose
-  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
-  //   updateStateTable({
-  //     dataTable: dataInvoices.data,
-  //     totalPage: totalPages,
-  //   });
-
-  //   prevDate.current = selectedDate;
-  //   // console.log(newqueryString);
-  //   console.log(queryConfig);
-  // }, [queryConfig.page]);
-
-  // useEffect(() => {
-  //   let queryConfig = {
-  //     month: selectedDate.getMonth() + 1,
-  //     year: selectedDate.getFullYear(),
-  //     page: 1,
-  //   };
-  //   const queryString = new URLSearchParams(queryConfig).toString();
-  //   const newUrl = `${window.location.pathname}?${queryString}`;
-  //   // window.history.pushState({}, "", newUrl);
-  //   if (window.location.search !== `?${queryString}`) {
-  //     navigate(newUrl);
-  //   }
-
-  //   const totalCount = dataInvoices.data.length; // from respnose
-  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
-  //   updateStateTable({
-  //     dataTable: dataInvoices.data,
-  //     totalPage: totalPages,
-  //   });
-
-  //   prevDate.current = selectedDate;
-  //   console.log(page, month, year);
-  //   // console.log(queryConfig);
-  // }, []);
-
-  // useEffect(() => {
-  //   queryConfig = {
-  //     month: selectedDate.getMonth() + 1,
-  //     year: selectedDate.getFullYear(),
-  //     page: 1,
-  //   };
-  //   const queryString = new URLSearchParams(queryConfig).toString();
-  //   const newUrl = `${window.location.pathname}?${queryString}`;
-  //   // window.history.pushState({}, "", newUrl);
-  //   if (window.location.search !== `?${queryString}`) {
-  //     navigate(newUrl);
-  //   }
-
-  //   const totalCount = dataInvoices.data.length; // from respnose
-  //   const totalPages = Math.ceil(totalCount / dataInvoices.per_page); // from respnose
-  //   updateStateTable({
-  //     dataTable: dataInvoices.data,
-  //     totalPage: totalPages,
-  //   });
-
-  //   prevDate.current = selectedDate;
-  //   // console.log(newqueryString);
-  //   console.log(queryConfig);
-  // }, [queryConfig.page]);
-
+  const changePage = (page) => {
+    isFilterApplied.current = false;
+    setPage(page);
+  };
   return (
     <div className="h-screen">
       <div
@@ -604,9 +487,9 @@ export default function InvoiceDetails() {
 
           {/* InvoiceDetailFooter */}
           <InvoiceDetailFooter
-            path="/payment"
-            queryConfig={queryConfig}
             totalPage={totalPage}
+            page={page}
+            setPage={changePage}
           />
         </div>
         {isShowConfirmModal && (

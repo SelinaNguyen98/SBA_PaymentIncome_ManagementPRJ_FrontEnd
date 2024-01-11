@@ -23,14 +23,18 @@ import useQueryParam from "../../../../Utils/hooks/useQueryParam";
  */
 
 const RANGE = 1;
-export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
+export default function Paginationz({
+  path = "/",
+  totalPage = 0,
+  queryConfig,
+}) {
   // const [page, setPage] = useState(1);
   // const page = Number(queryConfig?.page);
 
-  // const location = useLocation();
-  // const navigate = useNavigate();
-  // const queryParams = new URLSearchParams(location.search);
-  // const page = Number(page) || 1;
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  const page = Number(queryParams.get("page")) || 1;
 
   // function handlePageChange(newPage) {
   //   // update query parameters with new page number
@@ -117,14 +121,14 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
         ///////////////////////////////////////////
         if (page === pageNumber) {
           return (
-            <span
-              // to={{
-              //   pathname: path,
-              //   search: createSearchParams({
-              //     ...queryConfig,
-              //     page: pageNumber.toString(),
-              //   }).toString(),
-              // }}
+            <Link
+              to={{
+                pathname: path,
+                search: createSearchParams({
+                  ...queryConfig,
+                  page: pageNumber.toString(),
+                }).toString(),
+              }}
               key={index}
               className="m-2 cursor-pointer "
               // onClick={() => setPage(pageNumber)}
@@ -132,31 +136,31 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
               </div>
-            </span>
+            </Link>
           );
         }
 
         return (
-          // <span
-          //   // to={{
-          //   //   pathname: path,
-          //   //   search: createSearchParams({
-          //   //     ...queryConfig,
-          //   //     page: pageNumber.toString(),
-          //   //   }).toString(),
-          //   // }}
-          //   key={index}
-          //   className="m-2 cursor-pointer "
-          // >
-          //   {pageNumber}
-          // </span>
-          <button
+          <Link
+            to={{
+              pathname: path,
+              search: createSearchParams({
+                ...queryConfig,
+                page: pageNumber.toString(),
+              }).toString(),
+            }}
             key={index}
-            onClick={() => setPage(pageNumber)}
             className="m-2 cursor-pointer "
           >
             {pageNumber}
-          </button>
+          </Link>
+          // <button
+          //   key={index}
+          //   onClick={() => handlePageChange(pageNumber)}
+          //   className="m-2 cursor-pointer "
+          // >
+          //   {pageNumber}
+          // </button>
         );
       });
   };
@@ -179,14 +183,14 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
-        <span
-        // to={{
-        //   pathname: path,
-        //   search: createSearchParams({
-        //     ...queryConfig,
-        //     page: (page - 1).toString(),
-        //   }).toString(),
-        // }}
+        <Link
+          to={{
+            pathname: path,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page - 1).toString(),
+            }).toString(),
+          }}
         >
           <svg
             className="w-10 h-6"
@@ -200,7 +204,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </span>
+        </Link>
       )}
 
       {renderPsgination()}
@@ -221,14 +225,14 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
-        <span
-        // to={{
-        //   pathname: path,
-        //   search: createSearchParams({
-        //     ...queryConfig,
-        //     page: (page + 1).toString(),
-        //   }).toString(),
-        // }}
+        <Link
+          to={{
+            pathname: path,
+            search: createSearchParams({
+              ...queryConfig,
+              page: (page + 1).toString(),
+            }).toString(),
+          }}
         >
           <svg
             className="w-10 h-6"
@@ -242,7 +246,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </span>
+        </Link>
       )}
     </div>
   );
