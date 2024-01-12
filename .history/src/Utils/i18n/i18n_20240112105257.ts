@@ -4,7 +4,7 @@ import { initReactI18next } from "react-i18next";
 import HOME_EN from "./locales/en/en-home.json";
 import HOME_JP from "./locales/jp/jp-home.json";
 
- const locales = {
+ort const locales = {
   jp: "jp",
   en: "en",
 };

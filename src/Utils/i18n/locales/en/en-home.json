@@ -1,0 +1,38 @@
+{
+  "navHeader": {
+    "invoiceDetails": "Invoice Details",
+    "accountAnalytics": "Account Analytics",
+    "orders": "Orders",
+    "no": "NO"
+  },
+  "titlePage": {
+    "groupDetail" : "Account Category Group",
+    "thNO": "NO",
+    "thReport" : "Report Type",
+    "thGroup" : "Group Category",
+    "allCandidates": "All Candidates",
+    "accountCategoryGroup" : "Account Category Group",
+    "accountCategory" : "Account Category",
+    "thName" : "Account Category Name",
+    "thAction" : "Action",
+    "reportType" : "Report Type",
+    "searchPlaceholder": "Search.."
+  },
+  "notification":{
+    "deleteCategory" : "There exits several categories that have generated data. Cannot be deleted!",
+    "delete1Category" : "This category has generated data Cannot be deleted!",
+    "acptDeleteCategory" : "Are you sure you want to delete?",
+    "editCategory" : "This category has generated data Cannot be edited!",
+    "titleDeleteCategory" : "Delete Category",
+    "titleEditCategory" : "Edit category",
+    "titleAddNew" : "Add New",
+    "name" : "Name"
+  },
+  "button":{
+    "addNew" : "ADD NEW",
+    "delete" : "DELETE",
+    "confirm" : "confirm",
+    "cancel" : "Cancel",
+    "save" : "save"
+  }
+}

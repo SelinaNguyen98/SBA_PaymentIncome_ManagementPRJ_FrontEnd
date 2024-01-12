@@ -1,10 +1,14 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-
+im<<<<<<< HEAD
 import HOME_EN from "./locales/en/en-home.json";
 import HOME_JP from "./locales/jp/jp-home.json";
+=======
+import HOME_EN from "./locales/en/home.json";
+import HOME_JP from "./locales/jp/home.json";
 
- const locales = {
+>>>>>>> origin/Develop
+ort const locales = {
   jp: "jp",
   en: "en",
 };
