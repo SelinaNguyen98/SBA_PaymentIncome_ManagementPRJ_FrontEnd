@@ -7,6 +7,7 @@ import InvoiceDetails from "./components/Account_Category/UI/InvoiceDetails.jsx"
 import GroupDetails from "./components/Account_Category/UI/GroupDetails.jsx";
 
 
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   //   <App />
