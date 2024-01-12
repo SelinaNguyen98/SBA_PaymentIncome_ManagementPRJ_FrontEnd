@@ -1,12 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
-import {
-  Link,
-  createSearchParams,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
-import useQueryParam from "../../../../Utils/hooks/useQueryParam";
 
 /**
  * voi Range -2 ap dung cho khoang cach dau va cuoi
@@ -23,26 +16,7 @@ import useQueryParam from "../../../../Utils/hooks/useQueryParam";
  */
 
 const RANGE = 1;
-export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
-  // const [page, setPage] = useState(1);
-  // const page = Number(queryConfig?.page);
-
-  // const location = useLocation();
-  // const navigate = useNavigate();
-  // const queryParams = new URLSearchParams(location.search);
-  // const page = Number(page) || 1;
-
-  // function handlePageChange(newPage) {
-  //   // update query parameters with new page number
-  //   // queryParams.set("page", newPage);
-  //   navigate({
-  //     search: createSearchParams({
-  //       ...queryConfig,
-  //       page: newPage.toString(),
-  //     }).toString(),
-  //   });
-  // }
-
+export default function Pagination({ changePage, page = 1, totalPage = 0 }) {
   const renderPsgination = () => {
     let dotAfter = false;
     let dotBefore = false;
@@ -127,7 +101,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               // }}
               key={index}
               className="m-2 cursor-pointer "
-              // onClick={() => setPage(pageNumber)}
+              // onClick={() => changePage(pageNumber)}
             >
               <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
@@ -152,7 +126,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
           // </span>
           <button
             key={index}
-            onClick={() => setPage(pageNumber)}
+            onClick={() => changePage(pageNumber)}
             className="m-2 cursor-pointer "
           >
             {pageNumber}
@@ -179,15 +153,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
-        <span
-        // to={{
-        //   pathname: path,
-        //   search: createSearchParams({
-        //     ...queryConfig,
-        //     page: (page - 1).toString(),
-        //   }).toString(),
-        // }}
-        >
+        <button onClick={() => changePage(page - 1)}>
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -200,7 +166,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </span>
+        </button>
       )}
 
       {renderPsgination()}
@@ -221,15 +187,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
-        <span
-        // to={{
-        //   pathname: path,
-        //   search: createSearchParams({
-        //     ...queryConfig,
-        //     page: (page + 1).toString(),
-        //   }).toString(),
-        // }}
-        >
+        <button onClick={() => changePage(page + 1)}>
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -242,7 +200,7 @@ export default function Pagination({ setPage, page = 1, totalPage = 0 }) {
               fillOpacity="0.73"
             />
           </svg>
-        </span>
+        </button>
       )}
     </div>
   );

@@ -228,19 +228,21 @@ export default function InvoiceDetails() {
   }); //
 
   const [stateTable, setStateTable] = useState({
+    page: 1,
     totalPage: 0,
     dataTable: null,
     selectedRowData: null,
   });
 
-  const { totalPage, dataTable, selectedRowData } = stateTable;
+  const { totalPage, dataTable, selectedRowData, page } = stateTable;
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
 
-  const [page, setPage] = useState(1);
+  // const [page, setPage] = useState(1);
   const isFilterApplied = useRef(false);
 
+  // TODO fake  data here
   const fetchInvoices = async () => {
     const totalCount = dataInvoices.data.length;
     const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
@@ -255,7 +257,7 @@ export default function InvoiceDetails() {
   useEffect(() => {
     console.log("Filter change effect");
     isFilterApplied.current = true;
-    setPage(1);
+    updateStateTable({ page: 1 });
   }, [selectedDate]);
 
   useEffect(() => {
@@ -268,10 +270,11 @@ export default function InvoiceDetails() {
     fetchInvoices();
   }, [selectedDate, page]);
 
-  const changePage = (page) => {
+  function changePage(page) {
     isFilterApplied.current = false;
-    setPage(page);
-  };
+    updateStateTable({ page: page });
+  }
+
   return (
     <div className="h-screen">
       <div
@@ -489,7 +492,7 @@ export default function InvoiceDetails() {
           <InvoiceDetailFooter
             totalPage={totalPage}
             page={page}
-            setPage={changePage}
+            changePage={changePage}
           />
         </div>
         {isShowConfirmModal && (
