@@ -91,18 +91,7 @@ export default function Pagination({ changePage, page = 1, totalPage = 0 }) {
         ///////////////////////////////////////////
         if (page === pageNumber) {
           return (
-            <span
-              // to={{
-              //   pathname: path,
-              //   search: createSearchParams({
-              //     ...queryConfig,
-              //     page: pageNumber.toString(),
-              //   }).toString(),
-              // }}
-              key={index}
-              className="m-2 cursor-pointer "
-              // onClick={() => changePage(pageNumber)}
-            >
+            <span key={index} className="m-2 cursor-pointer ">
               <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
               </div>
@@ -111,19 +100,6 @@ export default function Pagination({ changePage, page = 1, totalPage = 0 }) {
         }
 
         return (
-          // <span
-          //   // to={{
-          //   //   pathname: path,
-          //   //   search: createSearchParams({
-          //   //     ...queryConfig,
-          //   //     page: pageNumber.toString(),
-          //   //   }).toString(),
-          //   // }}
-          //   key={index}
-          //   className="m-2 cursor-pointer "
-          // >
-          //   {pageNumber}
-          // </span>
           <button
             key={index}
             onClick={() => changePage(pageNumber)}

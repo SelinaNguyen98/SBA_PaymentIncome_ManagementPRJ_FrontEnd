@@ -15,6 +15,7 @@ export default {
         "main-theme": "#e3edf9",
         green: "#28a745",
         red: "#e23d31",
+        success: "#3ca745",
       },
     },
   },

@@ -5,7 +5,7 @@ import SideBar from "./components/Sidebar/UI";
 import BS_Report from "./components/BS_Report/UI/BS_Report";
 import InvoiceDetails from "./components/Invoice_Management/InvoiceDetails";
 import Invoice_Managment from "./components/Invoice_Management/Invoice_Managment";
-import { ToastContainer } from "react-toastify";
+import Toast from "./Utils/Toast";
 function App() {
   return (
     <div className="flex flex-row">
@@ -28,7 +28,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </div>
-      <ToastContainer />
+      <Toast />
     </div>
   );
 }

@@ -1,11 +1,10 @@
-.modalRoot {
+/* .modalRoot {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 100%;
-  /* width: 100%; */
+
 
   align-items: center;
   justify-content: center;
@@ -28,13 +27,9 @@
 }
 
 .containerModal {
-  /* height: 100%; */
-  /* margin-top: 50px; */
-  /* outline: 20px; */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin: auto; */
 }
 
 .confirm {
@@ -45,4 +40,4 @@
 .title {
   text-align: center;
   margin-bottom: 2rem;
-}
+} */

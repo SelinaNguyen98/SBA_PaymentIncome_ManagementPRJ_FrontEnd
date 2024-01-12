@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
-import Pagination from "../../InvoiceDetails/Pagination";
 import AddOrderForm from "./Dialog/AddOrderForm";
 import AddOutsourcingForm from "./Dialog/AddOutsourcingForm";
 import AddPaymentManagementForm from "./Dialog/AddPaymentManagementForm";
@@ -15,6 +14,7 @@ import DeleteOrder from "./Dialog/DeleteOrder";
 import DeleteOutsourcing from "./Dialog/DeleteOutsourcing";
 // eslint-disable-next-line no-unused-vars
 import DeletePaymentManagement from "./Dialog/DeletePaymentManagement";
+import Pagination from "../../../../Utils/Pagination";
 // eslint-disable-next-line react/prop-types
 const Order = ({ t }) => {
   const t_order = t;

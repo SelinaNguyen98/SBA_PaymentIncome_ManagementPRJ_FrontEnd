@@ -15,15 +15,12 @@ import MonthYearPicker from "../../../Utils/MonthYearPicker";
 
 import EditPaymentForm from "./EditPaymentForm";
 import http from "../../../Utils/utils/https";
-// import { useSearchParams } from "react-router-dom";
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
-// import { toast } from "react-toastify";
-import useToast from "../../../Utils/hooks/useToast";
-import { useSearchParams } from "react-router-dom";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
   const t_invoicedetails = t;
+  const { showToast } = useContext(AppContext);
 
   // TODO fake data
   const dataInvoices = {
@@ -276,7 +273,7 @@ export default function InvoiceDetails() {
   }
 
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <div
         id="contentInvoiceDetail"
         className={` relative bg-main-theme pb-5 h-full `}
@@ -509,8 +506,8 @@ export default function InvoiceDetails() {
               <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
                 <Button
                   onClick={() => {
-                    // toast.success("da xoa thanh cong");
-                    useToast.success("sadsasd", "");
+                    showToast("Delete  successfully!");
+                    updateState({ isShowConfirmModal: false });
                   }}
                   className={" bg-red py-2 px-6"}
                 >
@@ -556,4 +553,3 @@ export default function InvoiceDetails() {
   );
 }
 
-// export default InvoiceDetails
