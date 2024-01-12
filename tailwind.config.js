@@ -4,6 +4,12 @@ export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+<<<<<<< HEAD
+=======
+      inset: {
+        '65px': '65px',
+      },
+>>>>>>> origin/Develop
       screens: {
         "2xl-plus": "1537px", // Tạo một breakpoint mới cho màn hình lớn hơn 1536px
       },
@@ -17,4 +23,8 @@ export default {
     },
   },
   plugins: [],
+<<<<<<< HEAD
 };
+=======
+};
+>>>>>>> origin/Develop
