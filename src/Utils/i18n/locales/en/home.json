@@ -12,6 +12,9 @@
     "thGroup" : "Group Category",
     "allCandidates": "All Candidates",
     "accountCategoryGroup" : "Account Category Group",
+    "accountCategory" : "Account Category",
+    "thName" : "Account Category Name",
+    "thAction" : "Action",
     "reportType" : "Report Type",
     "searchPlaceholder": "Search.."
   },

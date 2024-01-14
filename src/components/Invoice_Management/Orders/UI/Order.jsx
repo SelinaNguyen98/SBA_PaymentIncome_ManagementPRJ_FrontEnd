@@ -18,7 +18,7 @@ import DeletePaymentManagement from "./Dialog/DeletePaymentManagement";
 import { useTranslation } from "react-i18next";
 // eslint-disable-next-line react/prop-types
 const Order = () => {
-  const {t } = useTranslation();
+  const { t } = useTranslation();
   const t_order = t;
   const { isShowAsideFilter } = useContext(AppContext);
 
@@ -45,7 +45,6 @@ const Order = () => {
     isShowFormEditOrder,
     isShowFormEditPayment,
     isShowFormEditOutsourcing,
-
   } = state;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
   // eslint-disable-next-line no-unused-vars
@@ -238,6 +237,10 @@ const Order = () => {
     );
     setSelectedRows_Outsourcing(newSelectedRows);
   };
+  const handleChangePage = (newPage) => {
+    // Implement your logic for changing the page here
+    console.log(`Changing to page ${newPage}`);
+  };
 
   return (
     <div className="">
@@ -380,7 +383,7 @@ const Order = () => {
                   <td className="w-[8%]" name="tb_action">
                     <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                       <svg
-                       onClick={() =>
+                        onClick={() =>
                           updateState({ isShowFormEditOrder: true })
                         }
                         className="cursor-pointer"
@@ -436,7 +439,11 @@ const Order = () => {
           </table>
           <div className=" flex-1  flex justify-end mt-5">
             {/* flex-shrink-0 */}
-            <Pagination />
+            <Pagination
+              changePage={handleChangePage}
+              page={1} // Pass your current page value
+              totalPage={5} // Pass your total page value
+            />
           </div>
         </div>
       </div>
@@ -579,8 +586,8 @@ const Order = () => {
                   <td className="w-[8%]" name="tb_action">
                     <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                       <svg
-                       onClick={() =>
-                          updateState({  isShowFormEditPayment: true })
+                        onClick={() =>
+                          updateState({ isShowFormEditPayment: true })
                         }
                         className="cursor-pointer"
                         width="19"
@@ -635,7 +642,11 @@ const Order = () => {
           </table>
           <div className=" flex-1  flex justify-end mt-5">
             {/* flex-shrink-0 */}
-            <Pagination />
+            <Pagination
+              changePage={handleChangePage}
+              page={1} // Pass your current page value
+              totalPage={5} // Pass your total page value
+            />
           </div>
         </div>
       </div>
@@ -782,8 +793,8 @@ const Order = () => {
                   <td className="w-[8%]" name="tb_action">
                     <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                       <svg
-                       onClick={() =>
-                          updateState({isShowFormEditOutsourcing: true })
+                        onClick={() =>
+                          updateState({ isShowFormEditOutsourcing: true })
                         }
                         className="cursor-pointer"
                         width="19"
@@ -838,7 +849,11 @@ const Order = () => {
           </table>
           <div className=" flex-1  flex justify-end mt-5">
             {/* flex-shrink-0 */}
-            <Pagination />
+            <Pagination
+              changePage={handleChangePage}
+              page={1} // Pass your current page value
+              totalPage={5} // Pass your total page value
+            />
           </div>
         </div>
       </div>

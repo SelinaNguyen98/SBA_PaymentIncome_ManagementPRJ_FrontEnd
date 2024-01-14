@@ -55,10 +55,10 @@ export default function SideBar() {
     // Add logic to navigate based on the selected option if needed
     const selectedOption = e.currentTarget.innerText.trim();
     switch (selectedOption) {
+      // eslint-disable-next-line no-duplicate-case
       case "Account Category":
         setIsHiddenInvoiceManagement(true);
-        // Navigate to the appropriate route
-        navigate("");
+        navigate("/sidebar/Account_Category");
         break;
       case "Account Category Group":
         setIsHiddenInvoiceManagement(true);
@@ -162,7 +162,10 @@ export default function SideBar() {
           </button>
         </div>
       </div>
-      <div id="contentInvoiceDetail" className="w-full h-full mb-20 max-[1000px]:mb-56 max-[568px]:mb-96">
+      <div
+        id="contentInvoiceDetail"
+        className="w-full h-full mb-20 max-[1000px]:mb-56 max-[568px]:mb-96"
+      >
         <div className="flex flex-row gap-4 items-center mt-2 px-5 py-2 bg-main-theme">
           <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
             {/* TO DO icon swich sidebar */}
@@ -307,7 +310,9 @@ export default function SideBar() {
                       key={buttonName}
                       className={classNames(
                         `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm ${
-                          activeButton === buttonName ? "bg-yellow " : "bg-white"
+                          activeButton === buttonName
+                            ? "bg-yellow "
+                            : "bg-white"
                         }`,
                         { "bg-yellow-bold": activeButton === buttonName }
                       )}

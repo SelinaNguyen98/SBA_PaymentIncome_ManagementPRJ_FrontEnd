@@ -4,7 +4,7 @@ import NavHeader from "../../NavHeader";
 import { useTranslation } from "react-i18next";
 import "./styles.css";
 import {useState } from "react";
-import Pagination2 from "../../../Utils/Pagination/Pagination";
+import Pagination2 from "./Pagination/Pagination";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();

@@ -12,8 +12,11 @@
     "thGroup" : "勘定科目合計グループ",
     "allCandidates": "検索条件",
     "accountCategoryGroup" : "勘定科目合計グループ",
+    "accountCategory" : "勘定科目合計",
+    "thName" : "勘定科目",
     "reportType" : "レポート種",
-    "searchPlaceholder": "検索"
+    "searchPlaceholder": "検索",
+    "thAction" : "アクション"
   },
   "title": {
     "orders": "受注管理",

@@ -8,12 +8,14 @@ import Account_Annalytics from "./components/Invoice_Management/Account_Annalyti
 import Order from "./components/Invoice_Management/Orders/UI/Order";
 import InvoiceDetails from "./components/Invoice_Management/InvoiceDetails";
 import Account_Category_Group from "./components/Account_Category_Group/UI/GroupDetails";
+import Account_Category from "./components/Account_Category/UI/Account_Category"
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route />
         <Route path="/sidebar/*" element={<SideBar />}>
+        <Route path="Account_Category" element={<Account_Category/>} />
          <Route path="Account_Category_Group" element={<Account_Category_Group/>} />
           <Route path="InvoiceDetails" element={<InvoiceDetails/>} />
           <Route path="Account_Annalytics" element={<Account_Annalytics />} />
