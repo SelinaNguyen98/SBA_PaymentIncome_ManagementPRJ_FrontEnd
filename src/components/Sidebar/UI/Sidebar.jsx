@@ -105,9 +105,9 @@ export default function SideBar() {
   };
 
   return (
-    <div className="flex flex-row bg-main-theme h-full">
-      <div className="px-4 pt-7 flex flex-col gap-24 bg-[#121C3E]">
-        <div className="px-4 relative mb-8 min-h-fit">
+    <div className="flex flex-row bg-main-theme h-full overflow-auto">
+      <div className="px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]">
+        <div className="px-4 relative mb-8">
           <img src={logo} alt="" className="h-20 w-44" />
           <img className="absolute top-[65px]" src={comName} alt="" />
         </div>
@@ -162,7 +162,7 @@ export default function SideBar() {
           </button>
         </div>
       </div>
-      <div id="contentInvoiceDetail" className="w-full">
+      <div id="contentInvoiceDetail" className="w-full h-full mb-20 max-[1000px]:mb-56 max-[568px]:mb-96">
         <div className="flex flex-row gap-4 items-center mt-2 px-5 py-2 bg-main-theme">
           <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
             {/* TO DO icon swich sidebar */}

@@ -366,7 +366,7 @@ const BS_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[700px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
+                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
                   <table id="invoiceTable" className="text-sm">
                     <thead>
                       <tr>

@@ -37,7 +37,7 @@ export default function Modal({ visible = false, ok, cancel, children }) {
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
       <div className="overlay bg-slate-500/10"></div>
-      <div className="fixed top-0 w-full h-full flex items-center justify-center translate-x-[-4vw]">
+      <div className="w-full flex items-center justify-center translate-x-[-4vw]">
         {children ? (
           children
         ) : (

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
-import Pagination from "../../InvoiceDetails/Pagination";
+import Pagination from "../../../../Utils/Pagination";
 import AddOrderForm from "./Dialog/AddOrderForm";
 import AddOutsourcingForm from "./Dialog/AddOutsourcingForm";
 import AddPaymentManagementForm from "./Dialog/AddPaymentManagementForm";
@@ -249,9 +249,9 @@ const Order = () => {
       {/* Order */}
       <div
         id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5 h-full ${
-          isShowAsideFilter ? "col-span-10" : "col-span-full"
-        }`}
+        className={` relative bg-main-theme pb-5 h-full 
+        col-span-full
+       `}
       >
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] overflow-x-auto">

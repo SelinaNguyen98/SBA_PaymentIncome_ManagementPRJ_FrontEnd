@@ -1,22 +1,23 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
-// Pagination
-// 30
-// [1] 2 3 ... 29 30
-// 1 [2] 3 ... 29 30
-// 1  2 [3] 4 ... 30
-// 1 ... 3 [4] 5 ... 30
 
-// 1 2 ... 28 [29] 30
-// 1 ...  27 [28] 29 30
-// 1 ...  26 [27] 28 ... 30
- 
+/**
+ * voi Range -2 ap dung cho khoang cach dau va cuoi
+ *  [1] 2 3 ... 20
+ *   1 [2] 3 ... 20
+ *   1 2 [3] 4 ... 20
+ * 
+ *   1 ... 3 [4] 5 ... 20
+ *   1 ... 16 [17] 18 ... 20
+
+ *   1 ... 17 [18] 19 20
+ *   1 ... 18 [19] 20
+ *   1 ... 18 19 [20]
+ */
 
 const RANGE = 1;
 // eslint-disable-next-line react/prop-types
-export default function Pagination({ pageSize = 5 }) {
-  const [page, setPage] = useState(1);
-
+export default function Pagination({ changePage, page = 1, totalPage = 0 }) {
   const renderPsgination = () => {
     let dotAfter = false;
     let dotBefore = false;
@@ -52,7 +53,10 @@ export default function Pagination({ pageSize = 5 }) {
       return null;
     };
 
-    return Array(pageSize)
+    if (totalPage <= 0 || isNaN(totalPage)) {
+      return null;
+    }
+    return Array(totalPage)
       .fill(0)
       .map((_, index) => {
         const pageNumber = index + 1;
@@ -60,45 +64,47 @@ export default function Pagination({ pageSize = 5 }) {
         // Dieu kien return ve ky tu 3 cham
         if (
           page <= RANGE + 1 &&
-          pageNumber > page + RANGE &&
-          pageNumber < pageSize - RANGE + 1
+          pageNumber > 3 &&
+          pageNumber < totalPage - RANGE + 1
         ) {
           return renderDotAfter(index);
-        } else if (page > RANGE + 1 && page < pageSize - RANGE) {
+        } else if (page > RANGE + 1 && page < totalPage - RANGE) {
           if (pageNumber < page - RANGE && pageNumber > RANGE) {
             return renderDotBefore(index);
           } else if (
             pageNumber > page + RANGE &&
-            pageNumber < pageSize - RANGE + 1
+            pageNumber < totalPage - RANGE + 1
           ) {
             return renderDotAfter(index);
           }
         } else if (
-          page >= pageSize - RANGE &&
           pageNumber > RANGE &&
-          pageNumber < page - RANGE
+          pageNumber <= totalPage - 3 &&
+          page >= totalPage - RANGE
         )
           return renderDotBefore(index);
 
+        /**
+         * 18 19 20
+         * nung so nho hon 18 deu phai  ...
+         */
+
+        ///////////////////////////////////////////
         if (page === pageNumber) {
           return (
-            <button
-              key={index}
-              className="m-2 cursor-pointer "
-              onClick={() => setPage(pageNumber)}
-            >
+            <span key={index} className="m-2 cursor-pointer ">
               <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
               </div>
-            </button>
+            </span>
           );
         }
 
         return (
           <button
             key={index}
+            onClick={() => changePage(pageNumber)}
             className="m-2 cursor-pointer "
-            onClick={() => setPage(pageNumber)}
           >
             {pageNumber}
           </button>
@@ -124,7 +130,7 @@ export default function Pagination({ pageSize = 5 }) {
           </svg>
         </span>
       ) : (
-        <button onClick={() => setPage(page - 1)}>
+        <button onClick={() => changePage(page - 1)}>
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -139,9 +145,10 @@ export default function Pagination({ pageSize = 5 }) {
           </svg>
         </button>
       )}
+
       {renderPsgination()}
 
-      {page === pageSize ? (
+      {page === totalPage ? (
         <span className="bg-gray/60 cursor-not-allowed ">
           <svg
             className="w-10 h-6"
@@ -157,7 +164,7 @@ export default function Pagination({ pageSize = 5 }) {
           </svg>
         </span>
       ) : (
-        <button onClick={() => setPage(page + 1)}>
+        <button onClick={() => changePage(page + 1)}>
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"

@@ -1,13 +1,13 @@
 // eslint-disable-next-line no-unused-vars
 import Button from "../../../../Utils/Button/Button";
-
+import "../styles.css"
 export default function InvoiceTable() {
   return (
     <div className="ml-4 mr-3 mt-3 pl-6 pr-3 pt-3 pb-4 bg-white rounded-[16px]">
       <div className="grid grid-cols-12 gap-8 items-center ">
         
       </div>
-      <table className=" w-full h-full bg-white mt-2 pt-2 " style={{}}>
+      <table id="invoiceTable" className=" w-full h-full bg-white mt-2 pt-2 " style={{}}>
         <thead className=" text-sm bg-main-theme ">
           <tr>
             <th></th>

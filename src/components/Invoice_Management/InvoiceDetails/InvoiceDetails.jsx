@@ -1,41 +1,284 @@
 import "../../../Utils/style.css";
-// import InvoiceTable from "./InvoiceTable";
+import "./styles.css";
+
+// eslint-disable-next-line no-unused-vars
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { AppContext } from "../../../Utils/contexts/app.context";
+import { useTranslation } from "react-i18next";
+
+// import NavHeader from "../../NavHeader";
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../../Utils/Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
-import { useTranslation } from "react-i18next";
-// eslint-disable-next-line react/prop-types
-const InvoiceDetails = () => {
-  const {t } = useTranslation();
-  const t_invoicedetails = t;
-  const { isShowAsideFilter } = useContext(AppContext);
 
-  const [state, setState] = useState({
+import EditPaymentForm from "./EditPaymentForm";
+// eslint-disable-next-line no-unused-vars
+import http from "../../../Utils/utils/https";
+import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+
+export default function InvoiceDetails() {
+  const { t } = useTranslation();
+  const t_invoicedetails = t;
+  const { showToast } = useContext(AppContext);
+
+  // TODO fake data
+  const dataInvoices = {
+    success: true,
+    message: "Get all payments successfully",
+    data: [
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+      {
+        payment_date: "2023-12-15 17:18:10",
+        name: "sdasdasd",
+        cost: 10000,
+        curency_type: "jpy",
+        note: "adasdsad",
+        invoice: "daaaa",
+        pay: "aaassssd",
+        category: {
+          categoryId: 1,
+          categoryName: "asdda",
+        },
+      },
+    ],
+    page: 1,
+    per_page: 10,
+    total: 10, // BE tra ve
+  };
+
+  // state theo doi cac modal
+  const [stateControl, setStateControl] = useState({
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
+    isShowFormEditPayment: false,
   });
-  const { isShowConfirmModal, isShowFormNewPayment } = state;
 
-  const updateState = (data) => setState(() => ({ ...state, ...data }));
+  const { isShowConfirmModal, isShowFormNewPayment, isShowFormEditPayment } =
+    stateControl;
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const updateState = (data) =>
+    setStateControl(() => ({ ...stateControl, ...data }));
+
+  // Bao gom tong so trang, page, du lieu table dang duoc chon
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    return formatStringMonthYearToDate(month, year);
+  }); //
+
+  const [stateTable, setStateTable] = useState({
+    page: 1,
+    totalPage: 0,
+    dataTable: null,
+    selectedRowData: null,
+  });
+
+  const { totalPage, dataTable, selectedRowData, page } = stateTable;
+
+  const updateStateTable = (dataTable) =>
+    setStateTable(() => ({ ...stateTable, ...dataTable }));
+
+  // const [page, setPage] = useState(1);
+  const isFilterApplied = useRef(false);
+
+  // TODO fake  data here
+  const fetchInvoices = async () => {
+    const totalCount = dataInvoices.data.length;
+    const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
+    updateStateTable({
+      dataTable: dataInvoices,
+      totalPage: totalPages,
+    });
+    console.log(selectedDate, page);
+    // return dataInvoices;
+  };
 
   useEffect(() => {
-    console.log(selectedDate);
+    console.log("Filter change effect");
+    isFilterApplied.current = true;
+    updateStateTable({ page: 1 });
   }, [selectedDate]);
 
+  useEffect(() => {
+    if (isFilterApplied.current && page !== 1) {
+      return;
+    }
+
+    console.log("Main effect");
+
+    fetchInvoices();
+  }, [selectedDate, page]);
+
+  function changePage(page) {
+    isFilterApplied.current = false;
+    updateStateTable({ page: page });
+  }
+
   return (
-    <div className="h-screen">
+    <div className="h-full">
       <div
         id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5 h-full ${
-          isShowAsideFilter ? "col-span-10" : "col-span-full"
-        }`}
+        className={` relative bg-main-theme pb-5 h-full `}
       >
         {/* Lable */}
         <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
@@ -52,7 +295,6 @@ const InvoiceDetails = () => {
           </svg>
           {t_invoicedetails("navHeader.invoiceDetails")}
         </div>
-
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
           <div className="grid  gap-2 items-center w-full ">
@@ -87,14 +329,14 @@ const InvoiceDetails = () => {
                         data-modal-target="crud-modal"
                         data-modal-toggle="crud-modal"
                       >
-                           {t_invoicedetails("button.save")}
+                        {t_invoicedetails("button.save")}
                       </Button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex flex-row ">
+              <div className="flex flex-row">
                 <Button
                   onClick={() => updateState({ isShowFormNewPayment: true })}
                   icon={
@@ -138,76 +380,65 @@ const InvoiceDetails = () => {
               </div>
             </div>
           </div>
+
           {/* table data */}
-          <table id="invoiceTable" className=" w-full ">
+          <table id="invoiceTable" className=" table-fixed">
             <thead>
               <tr>
                 <th className=" w-[1%]"></th>
-                <th className=" w-[10%]">No</th>
-                <th className=" w-[10%]">Date</th>
-                <th className=" w-[10%]">Name</th>
+                <th className=" w-[5%]">No</th>
+                <th className=" w-[15%]">Date</th>
+                <th className=" w-[15%]">Name</th>
                 <th className=" w-[10%]">JPY</th>
                 <th className=" w-[10%]">VND</th>
                 <th className=" w-[10%]">USD</th>
-                <th className=" w-[10%]">JOURNAL</th>
+                <th className=" w-[15%]">JOURNAL</th>
                 <th className=" w-[10%]">INVOICE</th>
-                <th className=" w-[10%]">PAY</th>
+                <th className=" w-[5%]">PAY</th>
                 <th className=" w-[8%]">ACTION</th>
                 <th className=" w-[1%]"></th>
               </tr>
             </thead>
             <tbody>
               {/* Firsh row is like padding-top */}
-              <tr className="">
+              <tr>
                 <td colSpan={100}></td>
               </tr>
 
-              {Array(10)
-                .fill(0)
-                .map((_, index) => (
+              {dataTable?.data &&
+                dataTable?.data.map((invoicePayment, index) => (
                   <tr key={index}>
                     {/* First column of each row is like padding-left */}
-                    <td className=" w-[1%]"></td>
+                    <td></td>
 
                     {/* DATA MAIN*/}
-                    <td className=" w-[10%]" name="tb_no">
-                      dsfs
+                    <td name="tb_no"> {index + 1} </td>
+                    <td name="tb_date"> {invoicePayment?.payment_date}</td>
+                    <td name="tb_name">{invoicePayment?.name}</td>
+                    <td name="tb_jyp">{invoicePayment?.cost}</td>
+                    <td name="tb_vnd">{invoicePayment?.cost}</td>
+                    <td name="tb_usd">{invoicePayment?.cost}</td>
+                    <td name="tb_journal">
+                      {invoicePayment?.category?.categoryName}
                     </td>
-                    <td className=" w-[10%]" name="tb_date">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_name">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_jyp">
-                      9
-                    </td>
-                    <td className=" w-[10%] overflow-x-hidden" name="tb_vnd">
-                      sdf
-                    </td>
-                    <td
-                      className=" max-w-[10%]  min-w-[10%] w-[10%] overflow-x-hidden overflow-scroll"
-                      name="tb_usd"
-                    >
-                      1 1
-                    </td>
-                    <td className=" w-[10%]" name="tb_journal">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_invoice">
-                      sdf
-                    </td>
-                    <td className=" w-[10%]" name="tb_pay">
-                      PAY
-                    </td>
-                    <td className=" w-[8%]" name="tb_action">
+                    <td name="tb_invoice">{invoicePayment?.invoice}</td>
+                    <td name="tb_pay">{invoicePayment?.pay}</td>
+                    <td name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                        {/* Icon Edit */}
                         <svg
+                          onClick={() => {
+                            updateState({ isShowFormEditPayment: true });
+                            updateStateTable({
+                              selectedRowData: invoicePayment,
+                            });
+                          }}
                           width="19"
                           height="19"
                           viewBox="0 0 19 19"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
+                          className=" cursor-pointer"
                         >
                           <path
                             d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
@@ -222,6 +453,10 @@ const InvoiceDetails = () => {
                         <div className=" border border-gray-400 mx-2 "></div>
 
                         <svg
+                          onClick={() => {
+                            updateState({ isShowConfirmModal: true });
+                          }}
+                          className=" cursor-pointer"
                           width="19"
                           height="19"
                           viewBox="0 0 16 18"
@@ -246,7 +481,6 @@ const InvoiceDetails = () => {
                   </tr>
                 ))}
 
-              {/* Last row is like padding-bottom */}
               <tr className=" bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
               </tr>
@@ -254,45 +488,69 @@ const InvoiceDetails = () => {
           </table>
 
           {/* InvoiceDetailFooter */}
-          <InvoiceDetailFooter t= {t_invoicedetails}/>
+          <InvoiceDetailFooter
+            totalPage={totalPage}
+            page={page}
+            changePage={changePage}
+          />
         </div>
-      </div>
-      <Modal visible={isShowConfirmModal}>
-        <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
-          <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-            delete Invoice detail
-          </span>
-
-          <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
-            Are you sure you want to delete this payment ?
-          </div>
-
-          <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-            <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
-              Confirm
-            </Button>
-            <Button
-              onClick={() => {
-                updateState({ isShowConfirmModal: false });
-              }}
-              className={" border-red-500 bg-white border-2   py-2 px-6"}
-            >
-              <span className=" text-red-500  ml-1 font-medium uppercase">
-                Cancel
+        {isShowConfirmModal && (
+          <Modal visible={isShowConfirmModal} classNameContainer="mt-[300px]">
+            <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
+              <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+                delete Invoice detail
               </span>
-            </Button>
-          </div>
-        </div>
-      </Modal>
 
-      <NewPaymentForm
-        visible={isShowFormNewPayment}
-        cancel={() => {
-          updateState({ isShowFormNewPayment: false });
-        }}
-      />
+              <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+                Are you sure you want to delete this payment ?
+              </div>
+
+              <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+                <Button
+                  onClick={() => {
+                    showToast("Delete  successfully!");
+                    updateState({ isShowConfirmModal: false });
+                  }}
+                  className={" bg-red py-2 px-6"}
+                >
+                  Confirm
+                </Button>
+                <Button
+                  onClick={() => {
+                    updateState({ isShowConfirmModal: false });
+                  }}
+                  className={" border-red-500 bg-white border-2   py-2 px-6"}
+                >
+                  <span className=" text-red-500  ml-1 font-medium uppercase">
+                    Cancel
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+        {isShowFormNewPayment && (
+          <NewPaymentForm
+            visible={isShowFormNewPayment}
+            cancel={() => {
+              updateState({ isShowFormNewPayment: false });
+            }}
+          />
+        )}
+
+        {isShowFormEditPayment && (
+          <EditPaymentForm
+            invoicePayment={selectedRowData}
+            visible={isShowFormEditPayment}
+            cancel={() => {
+              updateState({
+                isShowFormEditPayment: false,
+                selectedRowData: null,
+              });
+            }}
+          />
+        )}
+      </div>
     </div>
   );
-};
-
-export default InvoiceDetails;
+}
