@@ -24,7 +24,10 @@
     "Outsourcing_cost": "外注管理",
     "total_of_month":"合計:",
     "BS_report":"貸借対照表(BS)",
-    "PL_report":"損益計算書(PL)"
+    "PL_report":"損益計算書(PL)",
+    "accountCategoryGroup" : "勘定科目合計グループ",
+    "accountCategory" : "勘定科目合計",
+    "Invoice_Management":"インボイス管理"
   },
   "button": {
     "add": "新規追加",
@@ -34,7 +37,9 @@
     "confirm":"削除",
     "export":"出力",
     "input_monthly_data":"月毎野データ入力",
-    "input_balance_from_previous_year":"前年度繰越入力"
+    "input_balance_from_previous_year":"前年度繰越入力",
+    "Login":"ログイン",
+    "Log_out":"ログアウト"
   },
   "header_table_order": {
     "order_date": "受注日",

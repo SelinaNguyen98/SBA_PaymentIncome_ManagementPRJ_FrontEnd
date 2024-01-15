@@ -321,8 +321,8 @@ const PL_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[500px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-                  <table id="invoiceTable" className="text-sm">
+                <div className="max-h-[500px]  overflow-y-auto overflow-x-auto mt-4 text-sm">
+                  <table id="invoiceTable" className="text-sm w-full">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>

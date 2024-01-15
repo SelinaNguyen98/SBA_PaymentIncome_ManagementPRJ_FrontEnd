@@ -11,6 +11,10 @@ import Popover from "../../../Utils/Popover";
 import { PiTranslateFill } from "react-icons/pi";
 import classNames from "classnames";
 export default function SideBar() {
+  const [isHiddenSidebar, setIsHiddenSidebar] = useState(false);
+  const handleToggleSidebar = () => {
+    setIsHiddenSidebar(!isHiddenSidebar);
+  };
   var isHiddenMainButton = false;
   // Chuyển đổi ngôn ngữ
   const { i18n, t } = useTranslation();
@@ -27,12 +31,12 @@ export default function SideBar() {
   const [activeButton, setActiveButton] = useState("invoiceDetails");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isHiddenInvoiceManagement, setIsHiddenInvoiceManagement] =
-    useState(false);
+    useState(true);
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
   useEffect(() => {
-    setIsHiddenInvoiceManagement(false);
+    setIsHiddenInvoiceManagement(true);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -56,19 +60,37 @@ export default function SideBar() {
     const selectedOption = e.currentTarget.innerText.trim();
     switch (selectedOption) {
       // eslint-disable-next-line no-duplicate-case
-      case "Account Category":
+      case t(`title.accountCategory`):
         setIsHiddenInvoiceManagement(true);
         navigate("/sidebar/Account_Category");
         break;
-      case "Account Category Group":
+      case t(`title.accountCategoryGroup`):
         setIsHiddenInvoiceManagement(true);
         navigate("/sidebar/Account_Category_Group");
         break;
-      case "Invoice Management":
+      case t(`title.Invoice_Management`):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/sidebar/InvoiceDetails");
         break;
+      case t(`title.PL_report`):
+        setIsHiddenInvoiceManagement(true);
+        navigate("/sidebar/PL_Report");
+        break;
+      case t(`title.BS_report`):
+        setIsHiddenInvoiceManagement(true);
+        navigate("/sidebar/BS_Report");
+        break;
+      // Add more cases for other options
+      default:
+        break;
+    }
+  };
+
+  const selectOption_Invoice = (e) => {
+    // Add logic to navigate based on the selected option if needed
+    const selectOption = e.currentTarget.innerText.trim();
+    switch (selectOption) {
       case t(`navHeader.invoiceDetails`):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
@@ -84,15 +106,6 @@ export default function SideBar() {
         setIsHiddenInvoiceManagement(false);
         navigate("/sidebar/Order");
         break;
-      case "Profit and Loss Report":
-        setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/PL_Report");
-        break;
-      case "Balance Sheet Report":
-        setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/BS_Report");
-        break;
-      // Add more cases for other options
       default:
         break;
     }
@@ -106,59 +119,64 @@ export default function SideBar() {
 
   return (
     <div className="flex flex-row bg-main-theme h-full overflow-auto">
-      <div className="px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]">
+      <div
+        className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E] ${
+          isHiddenSidebar ? "hidden" : ""
+        }`}
+      >
         <div className="px-4 relative mb-8">
           <img src={logo} alt="" className="h-20 w-44" />
           <img className="absolute top-[65px]" src={comName} alt="" />
         </div>
-        <ul className="flex flex-col gap-4" ref={refUl}>
+        <ul className="flex flex-col gap-8" ref={refUl}>
           <li
-            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-file-lines "></i>
             <span className="w-3 inline-block"></span>
-            Account Category
+            {t(`title.accountCategory`)}
           </li>
           <li
-            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-table-cells-large"></i>
             <span className="w-3 inline-block"></span>
-            Account Category Group
+            {t(`title.accountCategoryGroup`)}
           </li>
           <li
-            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-regular fa-credit-card"></i>
             <span className="w-3 inline-block"></span>
-            Invoice Management
+            {t(`title.Invoice_Management`)}
           </li>
           <li
-            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-book-open"></i>
             <span className="w-3 inline-block"></span>
-            Profit and Loss Report
+            {t(`title.PL_report`)}
           </li>
           <li
-            className="bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-book-open"></i>
             <span className="w-3 inline-block"></span>
-            Balance Sheet Report
+            {t(`title.BS_report`)}
           </li>
         </ul>
         <div className="relative items-center">
           <button
-            className="text-white bg-red-900 rounded-lg h-7 w-28 text-lg absolute bottom-3 left-16 "
+            className="text-white bg-red-900 rounded-lg h-8 w-32 text-lg absolute bottom-3 left-12 "
             onClick={handleLogout}
           >
-            <i className="fa-solid fa-power-off"></i>Log out
+            <i className="fa-solid text-red fa-power-off"></i>
+            <span className="ml-2">{t("button.Log_out")}</span>
           </button>
         </div>
       </div>
@@ -174,6 +192,7 @@ export default function SideBar() {
               viewBox="0 0 49 37"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              onClick={handleToggleSidebar}
             >
               <rect width="45" height="8" rx="4" fill="black" />
               <rect y="14" width="49" height="9" rx="4.5" fill="black" />
@@ -283,7 +302,7 @@ export default function SideBar() {
                                   }
                                 )}
                                 onClick={(e) => {
-                                  selectOption(e);
+                                  selectOption_Invoice(e);
                                   setActiveButton(buttonName);
                                 }}
                               >
@@ -317,7 +336,7 @@ export default function SideBar() {
                         { "bg-yellow-bold": activeButton === buttonName }
                       )}
                       onClick={(e) => {
-                        selectOption(e);
+                        selectOption_Invoice(e);
                         setActiveButton(buttonName);
                       }}
                     >

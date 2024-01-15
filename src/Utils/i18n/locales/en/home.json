@@ -24,7 +24,10 @@
     "Outsourcing_cost": "Outsourcing cost",
     "total_of_month":"Total of month:",
     "BS_report":"Balance Sheet Report",
-    "PL_report":"Profit and Loss Report"
+    "PL_report":"Profit and Loss Report",
+    "accountCategoryGroup" : "Account Category Group",
+    "accountCategory" : "Account Category",
+    "Invoice_Management":"Invoice_Management"
   },
   "button": {
     "add": "ADD NEW",
@@ -34,7 +37,9 @@
     "confirm":"CONFIRM",
     "export":"EXPORT",
     "input_monthly_data":"INPUT MONTHLY DATA",
-    "input_balance_from_previous_year":"INPUT BALANCE FROM PREVIOUS YEAR"
+    "input_balance_from_previous_year":"INPUT BALANCE FROM PREVIOUS YEAR",
+    "Login":"Login",
+    "Log_out":"Log out"
   },
   "header_table_order": {
     "order_date": "Order date",

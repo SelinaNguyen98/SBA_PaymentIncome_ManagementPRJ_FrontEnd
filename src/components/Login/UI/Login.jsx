@@ -30,7 +30,7 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      // Gọi API đăng nhập bằng axios hoặc phương thức bạn sử dụng
+      // Gọi API đăng nhập bằng axios hoặc phương thức sử dụng
       // const response = await axios.post('/api/login', { email: values.email, password: values.password });
       // Xử lý response và điều hướng nếu cần
       // ...
@@ -38,7 +38,7 @@ function Login() {
       navigate("/sidebar");
     } catch (error) {
       setError(
-        "Đăng nhập không thành công. Vui lòng kiểm tra lại thông tin đăng nhập."
+        "Login failed. Please check your login information again!"
       );
     }
   };
@@ -138,14 +138,14 @@ function Login() {
           {/* Hộp thoại đăng nhập */}
           <div className="absolute w-96 bg-[#16205e] p-4 rounded-3xl z-50 mt-20 shadow-2xl ">
             <h1 className="text-[#e23d31] font-bold text-xl text-center mb-4">
-              WELCOME TO STARBOARD ASIA
+            {t("Login.Welcome")}
             </h1>
             <div className="text-center text-sm font-bold mb-4 text-white animate-pulse">
-              Please Login To Continue
+            {t("Login.Login")}
             </div>
             <div className="mb-4">
               <label htmlFor="email" className="block text-white mb-2">
-                Account
+              {t("Login.Account")}
               </label>
               <input
                 type="text"
@@ -155,12 +155,12 @@ function Login() {
                 onChange={(e) =>
                   setValues({ ...values, email: e.target.value })
                 }
-                placeholder="Your account"
+                placeholder={t("Login.placeHolder_Account")}
               />
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="block text-white mb-2">
-                Password
+              {t("Login.Password")}
               </label>
               <input
                 type="password"
@@ -170,7 +170,7 @@ function Login() {
                 onChange={(e) =>
                   setValues({ ...values, password: e.target.value })
                 }
-                placeholder="Your password"
+                placeholder={t("Login.placeHolder_Password")}
               />
             </div>
             {error && <div className="text-red-500 mb-4">{error}</div>}
@@ -179,7 +179,7 @@ function Login() {
                 className="bg-[#e23d31] text-white rounded-full px-24 py-2"
                 onClick={handleLogin}
               >
-                Login
+                       {t("button.Login")}
               </button>
             </div>
           </div>
