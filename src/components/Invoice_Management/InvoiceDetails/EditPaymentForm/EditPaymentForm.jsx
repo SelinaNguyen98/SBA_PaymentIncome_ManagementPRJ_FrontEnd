@@ -49,7 +49,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
   });
 
   return (
-    <Modal visible={visible} classNameContainer={"mt-[40px]"}>
+    <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 pt-5 pb-3 px-12 rounded-2xl">
         <span className=" uppercase py-1 mx-auto px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
           Edit payment

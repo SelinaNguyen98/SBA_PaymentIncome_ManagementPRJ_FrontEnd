@@ -10,6 +10,7 @@ import Order from "./components/Invoice_Management/Orders/UI/Order";
 import InvoiceDetails from "./components/Invoice_Management/InvoiceDetails";
 import Account_Category_Group from "./components/Account_Category_Group/UI/GroupDetails";
 import Account_Category from "./components/Account_Category/UI/Account_Category";
+import Toast from "./Utils/Toast/Toast.jsx";
 function App() {
   return (
     <BrowserRouter>
@@ -17,7 +18,7 @@ function App() {
         <Route />
         <Route path="/" element={<Login />} />
         <Route path="/sidebar/*" element={<SideBar />}>
-          <Route index element={<Account_Category/>} />
+          <Route index element={<Account_Category />} />
           <Route path="Account_Category" element={<Account_Category />} />
           <Route
             path="Account_Category_Group"
@@ -30,6 +31,7 @@ function App() {
           <Route path="BS_Report" element={<BS_Report />} />
         </Route>
       </Routes>
+      <Toast />
     </BrowserRouter>
   );
 }

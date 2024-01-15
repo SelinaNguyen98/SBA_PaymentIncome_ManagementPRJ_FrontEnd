@@ -12,37 +12,19 @@ export default function Modal({ visible = false, ok, cancel, children }) {
   const handleCancel = () => {
     cancel();
   };
-  // createPortal
-
-  // return (
-  //   <div
-  //     className="modalRoot "
-  //     style={{ visibility: visible ? "visible" : "hidden" }}
-  //   >
-  //     <div className="container">
-  //       <div className="confirm">
-  //         <p className="title">Are you sure?</p>
-  //         <button onClick={handleOk}>OK</button>
-  //         <button onClick={handleCancel}>Cancel</button>
-  //       </div>
-  //     </div>
-
-  //     <div className="overlay bg-slate-500/10"></div>
-  //   </div>
-  // );
 
   return (
     <div
-      className=" modalRoot"
+      className=" fixed top-0 left-0 w-full h-full flex items-center justify-center"
       style={{ visibility: visible ? "visible" : "hidden" }}
     >
-      <div className="overlay bg-slate-500/10"></div>
-      <div className="w-full flex items-center justify-center z-10">
+      <div className="fixed bg-black/50 top-0 left-0 w-full h-full "></div>
+      <div className="w-full flex items-center justify-center z-10 ">
         {children ? (
           children
         ) : (
-          <div className="confirm">
-            <p className="title">Are you sure?</p>
+          <div className="bg-white  p-8 rounded-sm">
+            <p className=" text-center mb-8">Are you sure?</p>
             <button onClick={handleOk}>OK</button>
             <button onClick={handleCancel}>Cancel</button>
           </div>

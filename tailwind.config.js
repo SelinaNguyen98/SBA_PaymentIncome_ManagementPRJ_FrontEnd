@@ -5,7 +5,7 @@ export default {
   theme: {
     extend: {
       inset: {
-        '65px': '65px',
+        "65px": "65px",
       },
       screens: {
         "2xl-plus": "1537px", // Tạo một breakpoint mới cho màn hình lớn hơn 1536px
@@ -16,6 +16,7 @@ export default {
         "main-theme": "#e3edf9",
         green: "#28a745",
         red: "#e23d31",
+        success: "#3ca745",
       },
     },
   },

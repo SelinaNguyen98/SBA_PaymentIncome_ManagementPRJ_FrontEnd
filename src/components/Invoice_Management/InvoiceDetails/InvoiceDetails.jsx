@@ -6,17 +6,13 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 
-// import NavHeader from "../../NavHeader";
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
-import "./styles.css";
 import Modal from "../../../Utils/Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
-
 import EditPaymentForm from "./EditPaymentForm";
-// eslint-disable-next-line no-unused-vars
-import http from "../../../Utils/utils/https";
+
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
 
 export default function InvoiceDetails() {
@@ -230,13 +226,41 @@ export default function InvoiceDetails() {
     page: 1,
     totalPage: 0,
     dataTable: null,
-    selectedRowData: null,
+    selectedRowData: null, // single delete
+    selectedListRowsData: [],
+    isSelectedAllDataInvoice: false,
   });
 
-  const { totalPage, dataTable, selectedRowData, page } = stateTable;
+  const {
+    totalPage,
+    dataTable,
+    selectedRowData,
+    selectedListRowsData,
+    isSelectedAllDataInvoice,
+    page,
+  } = stateTable;
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
+
+  /// Handle Checkbox funtion
+  const handleRowCheckboxChange_Invoice = (index) => {
+    const newSelectedRows = [...selectedListRowsData];
+    newSelectedRows[index] = !newSelectedRows[index];
+    updateStateTable({ selectedListRowsData: newSelectedRows });
+  };
+
+  const handleSelectAllCheckboxChange_Invoice = () => {
+    const tmpIsSelectedAllDataInvoice = !isSelectedAllDataInvoice;
+
+    const newSelectedRows = new Array(dataTable?.data.length).fill(
+      tmpIsSelectedAllDataInvoice
+    );
+    updateStateTable({
+      isSelectedAllDataInvoice: tmpIsSelectedAllDataInvoice,
+      selectedListRowsData: newSelectedRows,
+    });
+  };
 
   // const [page, setPage] = useState(1);
   const isFilterApplied = useRef(false);
@@ -281,7 +305,7 @@ export default function InvoiceDetails() {
         className={` relative bg-main-theme pb-5 h-full `}
       >
         {/* Lable */}
-        <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
+        <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold ">
           <svg
             viewBox="0 0 34 27"
             fill="none"
@@ -358,7 +382,7 @@ export default function InvoiceDetails() {
                 </Button>
 
                 <Button
-                  onClick={() => updateState({ isShowFormNewPayment: true })}
+                  onClick={() => updateState({ isShowConfirmModal: true })}
                   className="bg-red ml-2"
                   icon={
                     <svg
@@ -382,12 +406,18 @@ export default function InvoiceDetails() {
           </div>
 
           {/* table data */}
-          <table id="invoiceTable" className=" table-fixed">
+          <table id="invoiceTable" className="">
             <thead>
               <tr>
-                <th className=" w-[1%]"></th>
-                <th className=" w-[5%]">No</th>
-                <th className=" w-[15%]">Date</th>
+                <th className=" w-[1%] px-2">
+                  <input
+                    type="checkbox"
+                    checked={isSelectedAllDataInvoice}
+                    onChange={handleSelectAllCheckboxChange_Invoice}
+                  />
+                </th>
+                <th className="">No</th>
+                <th className="">Date</th>
                 <th className=" w-[15%]">Name</th>
                 <th className=" w-[10%]">JPY</th>
                 <th className=" w-[10%]">VND</th>
@@ -409,7 +439,14 @@ export default function InvoiceDetails() {
                 dataTable?.data.map((invoicePayment, index) => (
                   <tr key={index}>
                     {/* First column of each row is like padding-left */}
-                    <td></td>
+                    <td>
+                      <input
+                        className=""
+                        type="checkbox"
+                        checked={selectedListRowsData[index]}
+                        onChange={() => handleRowCheckboxChange_Invoice(index)}
+                      />
+                    </td>
 
                     {/* DATA MAIN*/}
                     <td name="tb_no"> {index + 1} </td>
@@ -495,7 +532,7 @@ export default function InvoiceDetails() {
           />
         </div>
         {isShowConfirmModal && (
-          <Modal visible={isShowConfirmModal} classNameContainer="mt-[300px]">
+          <Modal visible={isShowConfirmModal}>
             <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
               <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
                 delete Invoice detail
