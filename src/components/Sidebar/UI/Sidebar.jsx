@@ -90,18 +90,27 @@ export default function SideBar() {
   const selectOption_Invoice = (e) => {
     // Add logic to navigate based on the selected option if needed
     const selectOption = e.currentTarget.innerText.trim();
-    switch (selectOption) {
-      case t(`navHeader.invoiceDetails`):
+    switch (true) {
+      case (
+        selectOption === t(`navHeader.invoiceDetails`) ||
+        selectOption === "INVOICE DETAILS"
+      ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/sidebar/InvoiceDetails");
         break;
-      case t(`navHeader.accountAnalytics`):
+      case (
+        selectOption === t(`navHeader.accountAnalytics`) ||
+        selectOption === "ACCOUNT ANALYTICS"
+      ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/sidebar/Account_Annalytics");
         break;
-      case t(`navHeader.orders`):
+      case (
+        selectOption === t(`navHeader.orders`) ||
+        selectOption === "ORDERS"
+      ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/sidebar/Order");
@@ -109,6 +118,7 @@ export default function SideBar() {
       default:
         break;
     }
+    console.log(e.currentTarget.innerText.trim())
   };
 
   const handleLogout = () => {
