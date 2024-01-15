@@ -76,5 +76,14 @@
    "year":"",
    "month":"",
    "title_form_balance_previous_year": "INPUT BALANCE FROM PREVIOUS YEAR"
- }
+ },
+  "Login":{
+    "Welcome":"WELCOME TO STARBOARD ASIA",
+    "Login":"Please login to Continue",
+    "Account":"Account",
+    "Password":"Password",
+    "placeHolder_Account":"Your Account",
+    "placeHolder_Password":"Your Password"
+  }
+ 
 }

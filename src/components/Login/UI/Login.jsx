@@ -155,7 +155,7 @@ function Login() {
                 onChange={(e) =>
                   setValues({ ...values, email: e.target.value })
                 }
-                placeholder="Enter your account"
+                placeholder="Your account"
               />
             </div>
             <div className="mb-4">
@@ -170,7 +170,7 @@ function Login() {
                 onChange={(e) =>
                   setValues({ ...values, password: e.target.value })
                 }
-                placeholder="Enter your password"
+                placeholder="Your password"
               />
             </div>
             {error && <div className="text-red-500 mb-4">{error}</div>}

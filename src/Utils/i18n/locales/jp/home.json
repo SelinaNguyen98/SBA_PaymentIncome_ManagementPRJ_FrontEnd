@@ -75,5 +75,13 @@
     "year":"年",
     "month":"月",
     "title_form_balance_previous_year": "年度繰越入力"
+ },
+ "Login":{
+   "Welcome":"へようこそ STARBOARD ASIA",
+   "Login":"ログイン画面",
+   "Account":"ID",
+   "Password":"パスワード",
+   "placeHolder_Account":"IDを入力してください。",
+   "placeHolder_Password":"パスワードを入力してください。"
  }
 }
