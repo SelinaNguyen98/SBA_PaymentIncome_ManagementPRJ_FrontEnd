@@ -83,5 +83,15 @@
    "Password":"パスワード",
    "placeHolder_Account":"IDを入力してください。",
    "placeHolder_Password":"パスワードを入力してください。"
+ },
+ "notification_account_category":{
+  "titleAddNew" : "勘定項目登録",
+  "name" : "勘定科目名",
+  "titleDeleteCategory" : "勘定科目削除エラー",
+  "deleteCategory" : "この勘定科目と紐づいているインボイスデータ1が存在している為、削除出来ません。",
+  "titleEditCategory" : "勘定科目編集",
+  "editCategory" : "この勘定科目と紐づいているインボイスデータ1が存在している為、編集出来ません。",
+  "delete1Category" : "この勘定科目と紐づいているインボイスデータ1が存在している為、削除出来ません。",
+  "acptDeleteCategory" : "選択された勘定科目を削除してよろしいでしょか"
  }
 }

@@ -84,6 +84,16 @@
     "Password":"Password",
     "placeHolder_Account":"Your Account",
     "placeHolder_Password":"Your Password"
+  },
+  "notification_account_category":{
+    "titleAddNew" : "New category",
+    "name" : "Name",
+    "titleDeleteCategory" : "Delete category",
+    "deleteCategory" : "There exits several categories that have generated data. 1 Cannot be deleted!",
+    "titleEditCategory" : "Edit category",
+    "editCategory" : "This category has generated data. 1 Cannot be edited!",
+    "delete1Category" : "This category has generated data. 1 Cannot be deleted!",
+    "acptDeleteCategory" : "Are you sure you want to delete?"
   }
  
 }
