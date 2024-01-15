@@ -237,8 +237,10 @@ const Order = () => {
     );
     setSelectedRows_Outsourcing(newSelectedRows);
   };
+  const [page, setPage] = useState(1);
   const handleChangePage = (newPage) => {
     // Implement your logic for changing the page here
+    setPage(newPage);
     console.log(`Changing to page ${newPage}`);
   };
 
@@ -441,7 +443,7 @@ const Order = () => {
             {/* flex-shrink-0 */}
             <Pagination
               changePage={handleChangePage}
-              page={1} // Pass your current page value
+              page={page} // Pass your current page value
               totalPage={5} // Pass your total page value
             />
           </div>

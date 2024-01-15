@@ -1,4 +1,4 @@
-.modalRoot {
+/* .modalRoot {
   position: fixed;
   top: 0;
   left: 0;
@@ -26,19 +26,17 @@
   align-items: center;
   margin: auto;
   opacity: 1;
-  /* transition: opacity 225ms cubic-bezier(0.4, 0, 0.2, 1) 0ms; */
 }
 
 .confirm {
   background: #fff;
   padding: 2rem;
   border-radius: 5px;
-  /* margin: auto; Đảm bảo căn giữa chiều dọc và chiều ngang */
 }
 .title {
   text-align: center;
   margin-bottom: 2rem;
-}
+} */
 
 .modalContainer {
   max-height: 90vh; /* Set a maximum height for the modal container */

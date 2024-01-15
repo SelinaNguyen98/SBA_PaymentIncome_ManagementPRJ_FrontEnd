@@ -6,8 +6,8 @@ import Popover from "../../../Utils/Popover";
 // eslint-disable-next-line no-unused-vars
 import { Link, useLocation } from "react-router-dom";
 import classNames from "classnames";
-import { useContext } from "react";
-import { AppContext } from "../../../Utils/contexts/app.context.jsx";
+// import { useContext } from "react";
+// import { AppContext } from "../../../Utils/contexts/app.context.jsx";
 
 // eslint-disable-next-line react/prop-types
 export default function NavHeader({ isHiddenMainButton = false }) {
@@ -18,7 +18,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
     i18n.changeLanguage(lng);
   };
 
-  const { toggleAsideFilter } = useContext(AppContext);
+  // const { toggleAsideFilter } = useContext(AppContext);
 
   /**
    * TO DO
@@ -33,7 +33,7 @@ export default function NavHeader({ isHiddenMainButton = false }) {
       <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
         {/* TO DO icon swich sidebar */}
         <svg
-          onClick={toggleAsideFilter}
+          // onClick={toggleAsideFilter}
           className="w-9 h-9 cursor-pointer flex-shrink-0"
           viewBox="0 0 49 37"
           fill="none"

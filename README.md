@@ -1,3 +1,7 @@
+# Cau lenh build lai CSS output taiswind
+
+npx tailwindcss build src\Utils\style.css -o src\Utils\output.css
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

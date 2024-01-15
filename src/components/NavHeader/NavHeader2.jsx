@@ -21,7 +21,7 @@ export default function NavHeader2({ isHiddenMainButton = false }) {
     i18n.changeLanguage(lng);
   };
 
-  const { toggleAsideFilter } = useContext(AppContext);
+  // const { toggleAsideFilter } = useContext(AppContext);
 
   /**
    * TO DO
@@ -37,7 +37,7 @@ export default function NavHeader2({ isHiddenMainButton = false }) {
       <div className="col-span-12 lg:col-span-1 lg:justify-center justify-start flex items-center px-1">
         {/* TO DO icon swich sidebar */}
         <svg
-          onClick={toggleAsideFilter}
+          // onClick={toggleAsideFilter}
           className="w-9 h-9 cursor-pointer flex-shrink-0"
           viewBox="0 0 49 37"
           fill="none"
