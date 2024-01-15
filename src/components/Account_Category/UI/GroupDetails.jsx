@@ -152,10 +152,12 @@ export default function InvoiceDetails() {
             cursor: 'pointer',
           }}
         >
-          {selectedOption === 'report' ? '🔽' : '🔍'} {/* Dropdown or magnifying glass icon */}
         </span>
       </div></div>
         </div>
+        <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
+          <div className=" w-full overflow-auto col-span-12 lg:col-span-3 flex  justify-end items-end">
+            </div>
         
         {/* control area */}
         
