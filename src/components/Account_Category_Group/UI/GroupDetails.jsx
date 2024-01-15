@@ -51,11 +51,10 @@ export default function InvoiceDetails() {
           value={searchTerm}
           onChange={handleSearchChange}
           style={{
-            width: "300px",
+            width: "400px",
             height: "40px",
             backgroundColor: "white",
             color: "black",
-            borderRadius: "10px",
           }}
         >
           {filterCategories1.map((category) => (
@@ -65,7 +64,28 @@ export default function InvoiceDetails() {
           ))}
         </select>
       );
-    } else {
+    } 
+    else if (selectedOption === "account") {
+      return (
+        <select
+          value={searchTerm}
+          onChange={handleSearchChange}
+          style={{
+            width: "400px",
+            height: "40px",
+            backgroundColor: "white",
+            color: "black",
+          }}
+        >
+          {filterCategories1.map((category) => (
+            <option key={category.value} value={category.value}>
+              {category.label}
+            </option>
+          ))}
+        </select>
+      );
+    }
+      else {
       return (
         <input
           type="text"
@@ -74,10 +94,9 @@ export default function InvoiceDetails() {
           placeholder={t("titlePage.searchPlaceholder")}
           style={{
             padding: "8px 30px 8px 10px",
-            width: "300px",
+            width: "400px",
             height: "40px",
-            borderRadius: "15px",
-            border: "1px solid #ccc",
+            border: "1px solid transparent",
           }}
         />
       );
@@ -103,59 +122,54 @@ export default function InvoiceDetails() {
               fill="black"
             />
           </svg>
-          <div
-            style={{
-              display: "inline-block",
-              fontWeight: "bold",
-              paddingRight: "200px",
-            }}
-          >
-            {t("titlePage.groupDetail")}
-            &nbsp;
-            <div style={{ display: "inline-block", marginLeft: "30px" }}>
-              <select
-                id="categoryFilter"
-                value={selectedOption}
-                onChange={handleOptionChange}
-                style={{
-                  width: "200px",
-                  height: "40px",
-                  backgroundColor: "midnightblue",
-                  color: "white",
-                  borderRadius: "10px",
-                }}
-              >
-                {filterCategories.map((category) => (
-                  <option
-                    key={category.value}
-                    value={category.value}
-                    style={{
-                      backgroundColor:
-                        selectedOption === category.value ? "white" : "white",
-                      color: "black",
-                    }}
-                  >
-                    {category.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div style={{ position: "relative", display: "inline-block" }}>
-              {renderSearchInput()}
-              <span
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  right: "10px",
-                  transform: "translateY(-50%)",
-                  cursor: "pointer",
-                }}
-              >
-                {selectedOption === "report" ? "🔽" : "🔍"}{" "}
-                {/* Dropdown or magnifying glass icon */}
-              </span>
-            </div>
-          </div>
+          <div style={{ display: "flex", width: "full", border: "1px solid transparent", borderRadius: "15px", overflow: "hidden" }}>
+          <div style={{ fontWeight: 'bold' }}>{t("titlePage.groupDetail")}</div>
+          <div style={{ display: "flex", width: "full", border: "1px solid transparent", borderRadius: "15px", overflow: "hidden" }}>
+          <select
+      id="categoryFilter"
+      value={selectedOption}
+      onChange={handleOptionChange}
+      style={{
+        width: "200px",
+        height: "40px",
+        backgroundColor: "midnightblue",
+        color: "white",
+      }}
+    >
+      {filterCategories.map((category) => (
+        <option
+          key={category.value}
+          value={category.value}
+          style={{
+            backgroundColor:
+              selectedOption === category.value ? "white" : "white",
+            color: "black",
+          }}
+        >
+          {category.label}
+        </option>
+      ))}
+    </select>
+  <div style={{ borderLeft: "1px solid transparent", height: "40px" }}></div>
+  <div style={{ flex: 1, position: "relative" }}>
+    {renderSearchInput()}
+    <span
+      style={{
+        position: "absolute",
+        top: "50%",
+        right: "10px",
+        transform: "translateY(-50%)",
+        cursor: "pointer",
+      }}
+    >
+      {selectedOption === "report"
+                ? ""
+                : selectedOption === "account" ? ""
+                : "🔍"}
+    </span>
+  </div>
+</div>
+</div>
         </div>
 
         {/* control area */}
@@ -164,15 +178,15 @@ export default function InvoiceDetails() {
         <table id="invoiceTable" className=" w-full ">
           <thead>
             <tr>
-              <th className=" w-[1%]"></th>
-              <th className="w-[10%]">{t("titlePage.thNO")}</th>
-              <th className="w-[10%]">{t("titlePage.thReport")}</th>
-              <th className="w-[10%]">{t("titlePage.thGroup")}</th>
-              <th className=" w-[1%]"></th>
+              <th className=" w-[5%]"></th>
+              <th className="w-[30%] ">{t("titlePage.thNO")}</th>
+              <th className="w-[30%]">{t("titlePage.thReport")}</th>
+              <th className="w-[30%]">{t("titlePage.thGroup")}</th>
+              <th className=" w-[5%]"></th>
             </tr>
           </thead>
           <tbody>
-            {/* Firsh row is like padding-top */}
+            {/* First row is like padding-top */}
             <tr className="">
               <td colSpan={100}></td>
             </tr>
@@ -181,20 +195,20 @@ export default function InvoiceDetails() {
               .map((_, index) => (
                 <tr key={index}>
                   {/* First column of each row is like padding-left */}
-                  <td className=" w-[1%]"></td>
+                  <td className=" w-[5%]"></td>
 
                   {/* DATA MAIN*/}
-                  <td className=" w-[10%]" name="tb_no">
+                  <td className=" w-[30%]" name="tb_no">
                     404
                   </td>
-                  <td className=" w-[10%]" name="tb_report">
+                  <td className=" w-[30%]" name="tb_report">
                     not found
                   </td>
-                  <td className=" w-[10%]" name="tb_group">
+                  <td className=" w-[30%]" name="tb_group">
                     404
                   </td>
                   {/* Last column of each row is like padding-right */}
-                  <td className=" w-[1%]"></td>
+                  <td className=" w-[5%]"></td>
                 </tr>
               ))}
             {/* Last row is like padding-bottom */}
