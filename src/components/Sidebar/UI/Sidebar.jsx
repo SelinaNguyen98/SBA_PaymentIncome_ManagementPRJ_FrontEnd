@@ -26,12 +26,13 @@ export default function SideBar() {
   // const customProp = location.state?.customProp || "top1";
   const [activeButton, setActiveButton] = useState("invoiceDetails");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
+  const [isHiddenInvoiceManagement, setIsHiddenInvoiceManagement] =
+    useState(false);
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
-
   useEffect(() => {
+    setIsHiddenInvoiceManagement(false);
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -42,8 +43,7 @@ export default function SideBar() {
 
   const refUl = useRef(null);
   const navigate = useNavigate();
-  const [isHiddenInvoiceManagement, setIsHiddenInvoiceManagement] =
-    useState(false);
+
   const selectOption = (e) => {
     for (let el of refUl.current.children) {
       el.classList =
@@ -101,7 +101,7 @@ export default function SideBar() {
   const handleLogout = () => {
     // Add logic for logout
     // Example: clear local storage, perform API request, etc.
-    navigate("");
+    navigate("/");
   };
 
   return (

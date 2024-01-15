@@ -28,11 +28,9 @@ export default function Popover({
 
   const id = useId();
 
-  // eslint-disable-next-line no-unused-vars
-  const { refs, floatingStyles, middlewareData, context } = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange: setOpen,
-    // middleware: [offset(2), shift(), arrow({ element: arrowRef })],
     middleware: [offset(2), shift()],
     whileElementsMounted: autoUpdate,
     transform: false,
@@ -62,24 +60,14 @@ export default function Popover({
               style={{
                 ...floatingStyles,
                 transformOrigin: `left top`,
-                // transformOrigin: "top",
+                zIndex: 1000, // Set a higher zIndex value
               }}
-              {...getFloatingProps()}
+              {...getFloatingProps({ hover })}
               initial={{ opacity: 0, transform: `scale(0)` }}
               animate={{ opacity: 1, transform: `scale(1)` }}
               exit={{ opacity: 0, transform: `scale(0)` }}
               transition={{ duration: 0.2 }}
             >
-              {/*  Arrow ?. */}
-              {/* <span
-                ref={arrowRef}
-                style={{
-                  // left: `${middlewareData.arrow?.x !== undefined ? middlewareData.arrow.x * 1.55 : 0}px`,
-                  left: middlewareData.arrow?.x,
-                  top: middlewareData.arrow?.y,
-                }}
-                className="absolute z-10 translate-y-[-95%] border-[11px] border-x-transparent border-t-transparent border-b-white"
-              ></span> */}
               {renderPopover}
             </motion.div>
           )}
