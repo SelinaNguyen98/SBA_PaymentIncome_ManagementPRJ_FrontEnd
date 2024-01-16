@@ -82,11 +82,7 @@ export default function Account_Category() {
     { label: t("titlePage.reportType"), value: "report" },
   ];
   const renderSearchInput = () => {
-    if (
-      selectedOption === "report" ||
-      selectedOption === "account" ||
-      selectedOption === "group"
-    ) {
+    if (selectedOption === "report" || selectedOption === "account" || selectedOption === "group") {
       return (
         <select
           value={searchTerm}
@@ -96,7 +92,7 @@ export default function Account_Category() {
             height: "50px",
             backgroundColor: "white",
             color: "black",
-            borderRadius: "10px 0 0 10px",
+            borderRadius: "0px 10px 10px 0px",
             border: "1px solid #ccc",
           }}
         >
@@ -107,7 +103,8 @@ export default function Account_Category() {
           ))}
         </select>
       );
-    } else {
+    } 
+     else {
       return (
         <input
           type="text"
@@ -135,7 +132,7 @@ export default function Account_Category() {
       >
         <div
           id="contentInvoiceDetail"
-          className={`relative bg-main-theme pb-5 col-span-full`}
+          className={`relative bg-main-theme pb-5     ${isShowAsideFilter ? "col-span-10" : "col-span-full"}`}
         ></div>
 
         {/* Lable */}
@@ -152,51 +149,41 @@ export default function Account_Category() {
             />
           </svg>
           <div
-            style={{
-              display: "inline-block",
-              fontWeight: "bold",
-              paddingRight: "20px",
-            }}
+            style={{display: "inline-block",fontWeight: "bold", paddingRight: "20px"}}
           ></div>
           {t("titlePage.accountCategory")}&nbsp;
-          <div style={{ display: "inline-block", marginLeft: "100px" }}></div>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div
-              style={{
-                position: "relative",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <select
-                id="categoryFilter"
-                value={selectedOption}
-                onChange={handleOptionChange}
+          <div style={{ display: "inline-block", marginLeft: "50px",position: "relative" }}></div>
+          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+          <select
+            id="categoryFilter"
+            value={selectedOption}
+            onChange={handleOptionChange}
+            style={{
+              width: "200px",
+              height: "50px",
+              backgroundColor: "midnightblue",
+              color: "white",
+              borderRadius: "10px 0px 0px 10px",
+            }}
+          >
+            {filterCategories.map((category) => (
+              <option
+                key={category.value}
+                value={category.value}
                 style={{
-                  width: "200px",
-                  height: "50px",
-                  backgroundColor: "midnightblue",
-                  color: "white",
-                  borderRadius: "10px 0px 0px 10px",
+                  backgroundColor:
+                    selectedOption === category.value ? "white" : "white",
+                  color: "black",
                 }}
               >
-                {filterCategories.map((category) => (
-                  <option
-                    key={category.value}
-                    value={category.value}
-                    style={{
-                      backgroundColor:
-                        selectedOption === category.value ? "white" : "white",
-                      color: "black",
-                    }}
-                  >
-                    {category.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div style={{ position: "relative", display: "inline-block" }}>
-              {renderSearchInput()}
+                {category.label}
+              </option>
+            ))}
+          </select>
+          {/* </div> */}
+          <div style={{ position: "relative", display: "inline-block" }}>
+            {renderSearchInput()}
             </div>
             <span
               style={{
@@ -204,14 +191,10 @@ export default function Account_Category() {
                 top: "50%",
                 right: "10px",
                 transform: "translateY(-50%)",
-                cursor: "pointer",
+                cursor: "pointer",    
               }}
             >
-              {selectedOption === "report"
-                ? ""
-                : selectedOption === "account" || selectedOption === "group"
-                ? ""
-                : "🔍"}
+              {selectedOption === "report"? "": selectedOption === "account"? "": selectedOption === "group"? "": "🔍"}
             </span>
           </div>
         </div>
@@ -306,9 +289,7 @@ export default function Account_Category() {
                     <td
                       className=" w-[4%] border-none custom-no-border"
                       name="tb_name"
-                    >
-                      {index + 1}
-                    </td>
+                    >{index + 1}</td>
                     <td className=" w-[30%]" name="tb_name">
                       huhu
                     </td>
@@ -395,14 +376,7 @@ export default function Account_Category() {
               {t("notification_account_category.titleDeleteCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              <p
-                className="text-red-600 mb-0"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "notification_account_category.deleteCategory"
-                  ).replace("1", "<br />"),
-                }}
-              />
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.deleteCategory").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -429,14 +403,7 @@ export default function Account_Category() {
               {t("notification_account_category.titleDeleteCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              <p
-                className="text-red-600 mb-0"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "notification_account_category.delete1Category"
-                  ).replace("1", "<br />"),
-                }}
-              />
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.delete1Category").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -503,14 +470,7 @@ export default function Account_Category() {
               {t("notification_account_category.titleEditCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              <p
-                className="text-red-600 mb-0"
-                dangerouslySetInnerHTML={{
-                  __html: t(
-                    "notification_account_category.editCategory"
-                  ).replace("1", "<br />"),
-                }}
-              />
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.editCategory").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
