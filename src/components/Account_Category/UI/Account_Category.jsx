@@ -92,7 +92,7 @@ export default function Account_Category() {
             height: "50px",
             backgroundColor: "white",
             color: "black",
-            borderRadius: "10px 0 0 10px",
+            borderRadius: "0px 10px 10px 0px",
             border: "1px solid #ccc",
           }}
         >
@@ -152,8 +152,8 @@ export default function Account_Category() {
             style={{display: "inline-block",fontWeight: "bold", paddingRight: "20px"}}
           ></div>
           {t("titlePage.accountCategory")}&nbsp;
-          <div style={{ display: "inline-block", marginLeft: "100px" }}></div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "inline-block", marginLeft: "50px",position: "relative" }}></div>
+          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
           <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
           <select
             id="categoryFilter"
@@ -181,7 +181,7 @@ export default function Account_Category() {
               </option>
             ))}
           </select>
-          </div>
+          {/* </div> */}
           <div style={{ position: "relative", display: "inline-block" }}>
             {renderSearchInput()}
             </div>
@@ -191,10 +191,10 @@ export default function Account_Category() {
                 top: "50%",
                 right: "10px",
                 transform: "translateY(-50%)",
-                cursor: "pointer",
+                cursor: "pointer",    
               }}
             >
-              {selectedOption === "report"? "": selectedOption === "account" || selectedOption === "group"? "": "🔍"}
+              {selectedOption === "report"? "": selectedOption === "account"? "": selectedOption === "group"? "": "🔍"}
             </span>
           </div>
         </div>
