@@ -14,7 +14,7 @@ import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
-import axios from "axios";
+import { getPaymentsByYearAndMonths } from "./Controller";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -268,16 +268,18 @@ export default function InvoiceDetails() {
 
   // TODO fake  data here
   const fetchInvoices = async () => {
-
-   axios.get("")
-
-    const totalCount = dataInvoices.data.length;
-    const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
+    const response = await getPaymentsByYearAndMonths(
+      selectedDate.getMonth() + 1,
+      selectedDate.getFullYear(),
+      page
+    );
+    console.log(response);
+    // const totalCount = response?.total_result;
+    // const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
     updateStateTable({
-      dataTable: dataInvoices,
-      totalPage: totalPages,
+      dataTable: response?.payments,
+      totalPage: response?.pagination?.total_pages,
     });
-    console.log(selectedDate, page);
     // return dataInvoices;
   };
 
@@ -439,8 +441,8 @@ export default function InvoiceDetails() {
                 <td colSpan={100}></td>
               </tr>
 
-              {dataTable?.data &&
-                dataTable?.data.map((invoicePayment, index) => (
+              {dataTable &&
+                dataTable.map((invoicePayment, index) => (
                   <tr key={index}>
                     {/* First column of each row is like padding-left */}
                     <td>
