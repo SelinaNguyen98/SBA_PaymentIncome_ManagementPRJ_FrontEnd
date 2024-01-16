@@ -14,6 +14,7 @@ import { PiTranslateFill } from "react-icons/pi";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { locales } from "../../../Utils/i18n/i18n";
+import { loginUser } from "../Controller";
 function Login() {
   // eslint-disable-next-line no-unused-vars
   const { i18n, t } = useTranslation();
@@ -21,27 +22,26 @@ function Login() {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
+  const navigate = useNavigate();
+
   const [values, setValues] = useState({
-    email: "",
+    username: "",
     password: "",
   });
-  const navigate = useNavigate();
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
     try {
-      // Gọi API đăng nhập bằng axios hoặc phương thức sử dụng
-      // const response = await axios.post('/api/login', { email: values.email, password: values.password });
-      // Xử lý response và điều hướng nếu cần
-      // ...
-      // Điều hướng sau khi đăng nhập thành công
+      // eslint-disable-next-line no-unused-vars
+      const response = await loginUser(values.username, values.password);
+
+      // Redirect after successful login
       navigate("/sidebar");
     } catch (error) {
-      setError(
-        "Login failed. Please check your login information again!"
-      );
+      setError("Login failed. Please check your login information again!");
     }
   };
+
 
   return (
     <div>
@@ -148,39 +148,35 @@ function Login() {
               {t("Login.Account")}
               </label>
               <input
-                type="text"
-                id="email"
-                className="w-full border rounded-3xl p-2 bg-white text-[#16205e] placeholder-[#16205e]::placeholder"
-                value={values.email}
-                onChange={(e) =>
-                  setValues({ ...values, email: e.target.value })
-                }
-                placeholder={t("Login.placeHolder_Account")}
-              />
+            type="text"
+            id="username"
+            className="w-full border rounded-3xl p-2 bg-white text-[#16205e] placeholder-[#16205e]::placeholder"
+            value={values.username}
+            onChange={(e) => setValues({ ...values, username: e.target.value })}
+            placeholder={t("Login.placeHolder_Account")}
+          />
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="block text-white mb-2">
               {t("Login.Password")}
               </label>
               <input
-                type="password"
-                id="password"
-                className="w-full border rounded-3xl p-2 bg-white text-[#16205e] placeholder-[#16205e]::placeholder"
-                value={values.password}
-                onChange={(e) =>
-                  setValues({ ...values, password: e.target.value })
-                }
-                placeholder={t("Login.placeHolder_Password")}
-              />
+            type="password"
+            id="password"
+            className="w-full border rounded-3xl p-2 bg-white text-[#16205e] placeholder-[#16205e]::placeholder"
+            value={values.password}
+            onChange={(e) => setValues({ ...values, password: e.target.value })}
+            placeholder={t("Login.placeHolder_Password")}
+          />
             </div>
             {error && <div className="text-red-500 mb-4">{error}</div>}
             <div className="flex justify-center">
-              <button
-                className="bg-[#e23d31] text-white rounded-full px-24 py-2"
-                onClick={handleLogin}
-              >
-                       {t("button.Login")}
-              </button>
+            <button
+            className="bg-[#e23d31] text-white rounded-full px-24 py-2"
+            onClick={handleLogin}
+          >
+            {t("button.Login")}
+          </button>
             </div>
           </div>
         </div>

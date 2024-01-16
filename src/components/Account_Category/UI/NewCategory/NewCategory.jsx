@@ -11,11 +11,11 @@ export default function NewCategory({ visible, cancel, ok }) {
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
         <span className=" uppercase  py-1 mx-auto my-3 px-12 text-center bg-white-500/80    font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-          {t('notification.titleAddNew')}
+          {t('notification_account_category.titleAddNew')}
         </span>
 
         <form className="px-4 mt-5">
-          <InputCustomComponent label={t('notification.name')}>
+          <InputCustomComponent label={t('notification_account_category.name')}>
             <input type="text" className=" bg-main-theme w-full"></input>
           </InputCustomComponent>
           <InputCustomComponent label={t("titlePage.accountCategoryGroup")}>
