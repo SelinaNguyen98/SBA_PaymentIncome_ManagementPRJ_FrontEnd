@@ -82,17 +82,18 @@ export default function Account_Category() {
     { label: t("titlePage.reportType"), value: "report" },
   ];
   const renderSearchInput = () => {
-    if (selectedOption === "report") {
+    if (selectedOption === "report" || selectedOption === "account" || selectedOption === "group") {
       return (
         <select
           value={searchTerm}
           onChange={handleSearchChange}
           style={{
-            width: "800px",
+            width: "35vw",
             height: "50px",
             backgroundColor: "white",
             color: "black",
-            borderRadius: "10px",
+            borderRadius: "10px 0 0 10px",
+            border: "1px solid #ccc",
           }}
         >
           {filterCategories1.map((category) => (
@@ -102,47 +103,8 @@ export default function Account_Category() {
           ))}
         </select>
       );
-    } else if (selectedOption === "account") {
-      return (
-        <select
-          value={searchTerm}
-          onChange={handleSearchChange}
-          style={{
-            width: "800px",
-            height: "50px",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "10px",
-          }}
-        >
-          {filterCategories1.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </select>
-      );
-    } else if (selectedOption === "group") {
-      return (
-        <select
-          value={searchTerm}
-          onChange={handleSearchChange}
-          style={{
-            width: "800px",
-            height: "50px",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "10px",
-          }}
-        >
-          {filterCategories1.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </select>
-      );
-    } else {
+    } 
+     else {
       return (
         <input
           type="text"
@@ -151,69 +113,26 @@ export default function Account_Category() {
           placeholder={t("titlePage.searchPlaceholder")}
           style={{
             padding: "8px 30px 8px 10px",
-            width: "800px",
+            width: "35vw",
             height: "50px",
-            borderRadius: "15px",
+            borderRadius: "0 10px 10px 0",
             border: "1px solid #ccc",
+            display: "block",
           }}
         />
       );
     }
   };
 
-  // const renderGroupInput = () => {
-  //   if (selectedOption === 'group') {
-  //     return (
-  //       <select
-  //         value={searchTerm}
-  //         onChange={handleSearchChange}
-  //         style={{
-  //           width: '800px',
-  //           height: '50px',
-  //           backgroundColor: 'white',
-  //           color: 'black',
-  //           borderRadius: '10px',
-  //         }}
-  //       >
-  //         {filterCategories1.map((category) => (
-  //           <option key={category.value} value={category.value}>
-  //             {category.label}
-  //           </option>
-  //         ))}
-  //       </select>
-  //     );
-  //   } else {
-  //     return (
-  //       <input
-  //         type="text"
-  //         value={searchTerm}
-  //         onChange={handleSearchChange}
-  //         placeholder={t('titlePage.searchPlaceholder')}
-  //         style={{
-  //           padding: '8px 30px 8px 10px',
-  //           width: '800px',
-  //           height: '50px',
-  //           borderRadius: '15px',
-  //           border: '1px solid #ccc'
-  //         }}
-  //       />
-  //     );
-  //   }
-  // }
-
   return (
     <div className={`grid grid-cols-12  bg-main-theme`}>
       <div
         id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5     
-         col-span-full
-        `}
+        className={` relative bg-main-theme pb-5 col-span-full`}
       >
         <div
           id="contentInvoiceDetail"
-          className={` relative bg-main-theme pb-5     ${
-            isShowAsideFilter ? "col-span-10" : "col-span-full"
-          }`}
+          className={`relative bg-main-theme pb-5     ${isShowAsideFilter ? "col-span-10" : "col-span-full"}`}
         ></div>
 
         {/* Lable */}
@@ -230,14 +149,12 @@ export default function Account_Category() {
             />
           </svg>
           <div
-            style={{
-              display: "inline-block",
-              fontWeight: "bold",
-              paddingRight: "20px",
-            }}
+            style={{display: "inline-block",fontWeight: "bold", paddingRight: "20px"}}
           ></div>
           {t("titlePage.accountCategory")}&nbsp;
           <div style={{ display: "inline-block", marginLeft: "100px" }}></div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
           <select
             id="categoryFilter"
             value={selectedOption}
@@ -247,7 +164,7 @@ export default function Account_Category() {
               height: "50px",
               backgroundColor: "midnightblue",
               color: "white",
-              borderRadius: "10px",
+              borderRadius: "10px 0px 0px 10px",
             }}
           >
             {filterCategories.map((category) => (
@@ -264,8 +181,10 @@ export default function Account_Category() {
               </option>
             ))}
           </select>
+          </div>
           <div style={{ position: "relative", display: "inline-block" }}>
             {renderSearchInput()}
+            </div>
             <span
               style={{
                 position: "absolute",
@@ -275,11 +194,7 @@ export default function Account_Category() {
                 cursor: "pointer",
               }}
             >
-              {selectedOption === "report"
-                ? ""
-                : selectedOption === "account" || selectedOption === "group"
-                ? ""
-                : "🔍"}
+              {selectedOption === "report"? "": selectedOption === "account" || selectedOption === "group"? "": "🔍"}
             </span>
           </div>
         </div>
@@ -344,11 +259,11 @@ export default function Account_Category() {
                     onClick={handleSelectAll}
                   />
                 </th>
-                <th className=" w-[5%]">{t("titlePage.thNO")}</th>
-                <th className=" w-[35%]">{t("titlePage.thName")}</th>
-                <th className=" w-[30%]">{t("titlePage.thGroup")}</th>
-                <th className=" w-[30%]">{t("titlePage.thReport")}</th>
-                <th className=" w-[5%]">{t("titlePage.thAction")}</th>
+                <th className=" w-[4%]">{t("titlePage.thNO")}</th>
+                <th className=" w-[30%]">{t("titlePage.thName")}</th>
+                <th className=" w-[28%]">{t("titlePage.thGroup")}</th>
+                <th className=" w-[28%]">{t("titlePage.thReport")}</th>
+                <th className=" w-[16%]">{t("titlePage.thAction")}</th>
                 <th className=" w-[1%]"></th>
               </tr>
             </thead>
@@ -369,22 +284,22 @@ export default function Account_Category() {
                       className="text-left w-[1%] border-r-0 custom-no-border"
                       name="tb_no"
                     >
-                      <input type="checkbox" className="" name="tb_no" />
+                      <input type="checkbox" name="tb_no" />
                     </td>
                     <td
-                      className=" w-[5%] border-none custom-no-border"
+                      className=" w-[4%] border-none custom-no-border"
                       name="tb_name"
-                    ></td>
-                    <td className=" w-[35%]" name="tb_name">
+                    >{index + 1}</td>
+                    <td className=" w-[30%]" name="tb_name">
                       huhu
                     </td>
-                    <td className=" w-[30%]" name="tb_group">
+                    <td className=" w-[28%]" name="tb_group">
                       hihihaha
                     </td>
-                    <td className=" w-[30%]" name="tb_report">
+                    <td className=" w-[28%]" name="tb_report">
                       hehe
                     </td>
-                    <td className=" w-[5%]" name="tb_action">
+                    <td className=" w-[16%]" name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                         <button
                           onClick={() => {
@@ -414,7 +329,6 @@ export default function Account_Category() {
                           </svg>
                         </button>
                         <div className=" border border-gray-400 mx-2 "></div>
-                        {/* flex items-center border bg-white border-gray-300 rounded-md hover:border-blue-500 */}
                         <button
                           className=""
                           onClick={() => {
@@ -453,21 +367,16 @@ export default function Account_Category() {
               </tr>
             </tbody>
           </table>
-
-          {/* InvoiceDetailFooter */}
           <InvoiceDetailFooter />
         </div>
 
         <Modal visible={isShowConfirmModal}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              {t("notification.titleDeleteCategory")}
+              {t("notification_account_category.titleDeleteCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              {/* <p className="text-red-600 mb-3">There exits several categories</p> */}
-              <p className="text-red-600 mb-0">
-                {t("notification.deleteCategory")}
-              </p>
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.deleteCategory").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -491,13 +400,10 @@ export default function Account_Category() {
         <Modal visible={isShowDeleteModal}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              {t("notification.titleDeleteCategory")}
+              {t("notification_account_category.titleDeleteCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              {/* <p className="text-red-600 mb-3">This category has generated data</p> */}
-              <p className="text-red-600 mb-0">
-                {t("notification.delete1Category")}
-              </p>
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.delete1Category").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -518,11 +424,11 @@ export default function Account_Category() {
         <Modal visible={isShowAcptDelete}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              {t("notification.titleDeleteCategory")}
+              {t("notification_account_category.titleDeleteCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
               <p className="text-red-600 mb-0">
-                {t("notification.acptDeleteCategory")}
+                {t("notification_account_category.acptDeleteCategory")}
               </p>
             </div>
 
@@ -561,13 +467,10 @@ export default function Account_Category() {
         <Modal visible={isShowNoAcptEdit}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              {t("notification.titleEditCategory")}
+              {t("notification_account_category.titleEditCategory")}
             </span>
             <div className="text-center pt-5 px-2 font-bold text-sm">
-              <p className="text-red-600 mb-3">
-                {t("notification.editCategory")}
-              </p>
-              {/* <p className="text-red-600 mb-0">Cannot be edited!</p> */}
+              <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.editCategory").replace("1", "<br />") }} />
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
