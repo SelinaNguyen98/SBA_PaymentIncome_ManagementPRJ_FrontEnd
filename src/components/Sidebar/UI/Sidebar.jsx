@@ -41,9 +41,9 @@ export default function SideBar() {
     const currentPath = location.pathname;
 
     if (
-      currentPath.includes("/sidebar/InvoiceDetails") ||
-      currentPath.includes("/sidebar/Account_Annalytics") ||
-      currentPath.includes("/sidebar/Order")
+      currentPath.includes("/home/InvoiceDetails") ||
+      currentPath.includes("/home/Account_Annalytics") ||
+      currentPath.includes("/home/Order")
     ) {
       setIsHiddenInvoiceManagement(false);
     } else {
@@ -74,24 +74,24 @@ export default function SideBar() {
       // eslint-disable-next-line no-duplicate-case
       case t(`title.accountCategory`):
         setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/Account_Category");
+        navigate("/home/Account_Category");
         break;
       case t(`title.accountCategoryGroup`):
         setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/Account_Category_Group");
+        navigate("/home/Account_Category_Group");
         break;
       case t(`title.Invoice_Management`):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
-        navigate("/sidebar/InvoiceDetails");
+        navigate("/home/InvoiceDetails");
         break;
       case t(`title.PL_report`):
         setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/PL_Report");
+        navigate("/home/PL_Report");
         break;
       case t(`title.BS_report`):
         setIsHiddenInvoiceManagement(true);
-        navigate("/sidebar/BS_Report");
+        navigate("/home/BS_Report");
         break;
       // Add more cases for other options
       default:
@@ -109,7 +109,7 @@ export default function SideBar() {
       ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
-        navigate("/sidebar/InvoiceDetails");
+        navigate("/home/InvoiceDetails");
         break;
       case (
         selectOption === t(`navHeader.accountAnalytics`) ||
@@ -117,7 +117,7 @@ export default function SideBar() {
       ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
-        navigate("/sidebar/Account_Annalytics");
+        navigate("/home/Account_Annalytics");
         break;
       case (
         selectOption === t(`navHeader.orders`) ||
@@ -125,7 +125,7 @@ export default function SideBar() {
       ):
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
-        navigate("/sidebar/Order");
+        navigate("/home/Order");
         break;
       default:
         break;

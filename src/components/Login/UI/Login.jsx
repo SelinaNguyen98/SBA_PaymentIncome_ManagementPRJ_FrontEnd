@@ -36,7 +36,7 @@ function Login() {
       const response = await loginUser(values.username, values.password);
 
       // Redirect after successful login
-      navigate("/sidebar");
+      navigate("/home");
     } catch (error) {
       setError("Login failed. Please check your login information again!");
     }
