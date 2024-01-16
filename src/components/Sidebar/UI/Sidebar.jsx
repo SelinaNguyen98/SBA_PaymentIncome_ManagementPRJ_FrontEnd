@@ -10,6 +10,7 @@ import { locales } from "../../../Utils/i18n/i18n";
 import Popover from "../../../Utils/Popover";
 import { PiTranslateFill } from "react-icons/pi";
 import classNames from "classnames";
+import { useLocation } from "react-router-dom";
 export default function SideBar() {
   const [isHiddenSidebar, setIsHiddenSidebar] = useState(false);
   const handleToggleSidebar = () => {
@@ -35,13 +36,24 @@ export default function SideBar() {
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
+  const location = useLocation();
   useEffect(() => {
-    setIsHiddenInvoiceManagement(true);
+    const currentPath = location.pathname;
+
+    if (
+      currentPath.includes("/sidebar/InvoiceDetails") ||
+      currentPath.includes("/sidebar/Account_Annalytics") ||
+      currentPath.includes("/sidebar/Order")
+    ) {
+      setIsHiddenInvoiceManagement(false);
+    } else {
+      setIsHiddenInvoiceManagement(true);
+    }
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [location.pathname]);
 
   const isMobile = screenWidth <= 850;
 
