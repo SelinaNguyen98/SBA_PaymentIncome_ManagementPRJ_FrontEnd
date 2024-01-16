@@ -14,6 +14,7 @@ import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+import axios from "axios";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -21,184 +22,184 @@ export default function InvoiceDetails() {
   const { showToast } = useContext(AppContext);
 
   // TODO fake data
-  const dataInvoices = {
-    success: true,
-    message: "Get all payments successfully",
-    data: [
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-      {
-        payment_date: "2023-12-15 17:18:10",
-        name: "sdasdasd",
-        cost: 10000,
-        curency_type: "jpy",
-        note: "adasdsad",
-        invoice: "daaaa",
-        pay: "aaassssd",
-        category: {
-          categoryId: 1,
-          categoryName: "asdda",
-        },
-      },
-    ],
-    page: 1,
-    per_page: 10,
-    total: 10, // BE tra ve
-  };
+  // const dataInvoices = {
+  //   success: true,
+  //   message: "Get all payments successfully",
+  //   data: [
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //     {
+  //       payment_date: "2023-12-15 17:18:10",
+  //       name: "sdasdasd",
+  //       cost: 10000,
+  //       curency_type: "jpy",
+  //       note: "adasdsad",
+  //       invoice: "daaaa",
+  //       pay: "aaassssd",
+  //       category: {
+  //         categoryId: 1,
+  //         categoryName: "asdda",
+  //       },
+  //     },
+  //   ],
+  //   page: 1,
+  //   per_page: 10,
+  //   total: 10, // BE tra ve
+  // };
 
   // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
@@ -267,6 +268,9 @@ export default function InvoiceDetails() {
 
   // TODO fake  data here
   const fetchInvoices = async () => {
+
+   axios.get("")
+
     const totalCount = dataInvoices.data.length;
     const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
     updateStateTable({

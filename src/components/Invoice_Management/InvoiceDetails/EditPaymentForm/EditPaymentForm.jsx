@@ -61,7 +61,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
           onSubmit={onSubmit}
         >
           <InputCustomComponent
-            label={"Date (dd/mm/yyyy)"}
+            label={"Date"}
             placeholder={new Date()}
             name={"payment_date"}
             type="date"
@@ -150,7 +150,7 @@ const InputCustomComponent = ({
   defaultValue = "",
 }) => {
   return (
-    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2`}>
+    <div className={` grid lg:grid-cols-12 gap-y-2 gap-x-12 mb-2`}>
       <label className="lg:col-span-3">{label}</label>
       <div className=" lg:col-span-9 ml-3">
         <Element

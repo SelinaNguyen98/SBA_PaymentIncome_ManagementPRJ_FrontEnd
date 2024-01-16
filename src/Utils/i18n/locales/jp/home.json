@@ -55,7 +55,7 @@
     "edit_order": "受注編集",
     "edit_payment_management":"精算情報編集",
     "edit_outsourcing_cost":"外注情報編集",
-    "day": "日付 (dd/mm/yyyy)",
+    "day": "日付",
     "Company_name": "会社名",
     "Outsourced_project": "外注プロジェクト"
   },

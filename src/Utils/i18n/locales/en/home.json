@@ -55,7 +55,7 @@
     "edit_order": "EDIT ORDER",
     "edit_payment_management":"EDIT PAYMENT MANAGEMENT",
     "edit_outsourcing_cost":"EDIT OUTSOURCING COST",
-    "day": "Date (dd/mm/yyyy)",
+    "day": "Date",
     "Company_name": "Company name",
     "Outsourced_project": "Outsourced Project"
   },
