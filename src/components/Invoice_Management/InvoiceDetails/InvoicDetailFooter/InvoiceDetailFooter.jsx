@@ -4,7 +4,14 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../../../../Utils/Pagination";
 
 // eslint-disable-next-line react/prop-types
-export default function InvoiceDetailFooter({ changePage, page, totalPage }) {
+export default function InvoiceDetailFooter({
+  changePage,
+  page,
+  totalPage,
+  totalUSD,
+  totalVND,
+  totalJPY,
+}) {
   // eslint-disable-next-line react/prop-types
   const { t } = useTranslation();
 
@@ -16,9 +23,11 @@ export default function InvoiceDetailFooter({ changePage, page, totalPage }) {
         <div className="flex items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
           <div className=" inline-flex mx-3 ">
             JPY
+            {/* <span className=" bg-main-theme max-w-[100px] ml-2  ">{totalUSD}</span> */}
             <input
               type="text"
               className=" bg-main-theme max-w-[100px] ml-2  "
+              defaultValue={totalJPY}
             />
           </div>
           <div className=" inline-flex mx-3 ">
@@ -26,22 +35,26 @@ export default function InvoiceDetailFooter({ changePage, page, totalPage }) {
             <input
               type="text"
               className=" bg-main-theme  max-w-[100px] ml-2 "
+              defaultValue={totalVND}
             />
           </div>
           <div className=" inline-flex mx-3 ">
             USD
             <input
               type="text"
-              className=" bg-main-theme  max-w-[100px] ml-2 "
+              className=" bg-main-theme  max-w-[100px] ml-2"
+              defaultValue={totalUSD}
             />
           </div>
         </div>
         <div className=" flex-1  flex justify-end">
-          <Pagination
-            totalPage={totalPage}
-            page={page}
-            changePage={changePage}
-          />
+          {totalPage && (
+            <Pagination
+              totalPage={totalPage}
+              page={page}
+              changePage={changePage}
+            />
+          )}
         </div>
       </div>
     </div>
