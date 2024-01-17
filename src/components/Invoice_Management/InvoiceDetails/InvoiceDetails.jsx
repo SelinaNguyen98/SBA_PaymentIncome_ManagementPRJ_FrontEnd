@@ -14,11 +14,13 @@ import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
-import { getPaymentsByYearAndMonths } from "./Controller";
+import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
   const t_invoicedetails = t;
+  const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
+
   const { showToast } = useContext(AppContext);
 
   // state theo doi cac modal
@@ -74,7 +76,7 @@ export default function InvoiceDetails() {
   const handleSelectAllCheckboxChange_Invoice = () => {
     const tmpIsSelectedAllDataInvoice = !isSelectedAllDataInvoice;
 
-    const newSelectedRows = new Array(dataTable?.length).fill(
+    const newSelectedRows = new Array(dataTable?.payments.length).fill(
       tmpIsSelectedAllDataInvoice
     );
     updateStateTable({
@@ -88,19 +90,51 @@ export default function InvoiceDetails() {
 
   // TODO fake  data here
   const fetchInvoices = async () => {
-    const response = await getPaymentsByYearAndMonths(
-      selectedDate.getMonth() + 1,
-      selectedDate.getFullYear(),
-      page
-    );
-    console.log(response);
-    // const totalCount = response?.total_result;
-    // const totalPages = Math.ceil(totalCount / dataInvoices.per_page);
-    updateStateTable({
-      dataTable: response,
-      totalPage: response?.pagination?.total_pages,
-    });
-    // return dataInvoices;
+    try {
+      const response = await getPaymentsByYearAndMonths(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear(),
+        page
+      );
+
+      // if (page > response?.pagination?.total_pages)
+      //   changePage(response?.pagination?.total_pages - 1);
+      updateStateTable({
+        dataTable: response,
+        totalPage: response?.pagination?.total_pages,
+      });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      if (selectedRowData?.id == null || selectedRowData?.id == undefined)
+        throw new Error("");
+      const response = await deletePaymentById(selectedRowData?.id);
+
+      // 1. Kiem tra du lieu co phai trang cuoi cung hay khong
+      //    1.1 neu dau tien  cua trang >1 thi  set page ve page - 1
+      //    1.2 nê dau tien cua trang 1 thi set ve 1
+      // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
+
+      // if(dataTable?.payments.length == 1 && page >= totalPage &&  )
+      if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
+        changePage(page - 1);
+        return;
+      }
+      setDataChangeTrigger(!dataChangeTrigger);
+
+      updateState({ isShowConfirmModal: false });
+      showToast("Delete  successfully!");
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      updateState({ isShowConfirmModal: false });
+    }
   };
 
   useEffect(() => {
@@ -117,7 +151,7 @@ export default function InvoiceDetails() {
     console.log("Main effect");
 
     fetchInvoices();
-  }, [selectedDate, page]);
+  }, [selectedDate, page, dataChangeTrigger]);
 
   function changePage(page) {
     isFilterApplied.current = false;
@@ -145,7 +179,7 @@ export default function InvoiceDetails() {
         {t_invoicedetails("navHeader.invoiceDetails")}
       </div>
       {/* control area */}
-      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
+      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px] ">
         <div className="grid  gap-2 items-center w-full ">
           <div className="flex items-center justify-between gap-2 flex-row max-[1390px]:flex-col">
             <div className="mt-1 px-6 flex flex-row items-center">
@@ -231,8 +265,8 @@ export default function InvoiceDetails() {
         </div>
 
         {/* table data */}
-        <div className=" h-[600px]">
-          <table id="invoiceDetailTable" className="table-fixed mt-2">
+        <div className=" h-[430px] 2xl-plus:h-[600px]">
+          <table id="invoiceDetailTable" className="table-fixed mt-1 h-auto">
             <thead>
               <tr>
                 <th className="w-[2%]">
@@ -263,7 +297,10 @@ export default function InvoiceDetails() {
 
               {dataTable?.payments &&
                 dataTable?.payments.map((invoicePayment, index) => (
-                  <tr key={index} className="h-[50px]">
+                  <tr
+                    key={index}
+                    className="h-[35px] 2xl-plus:h-[50px] text-sm  text-[13px] p-2"
+                  >
                     {/* <tr key={index}> */}
                     {/* First column of each row is like padding-left */}
                     <td>
@@ -277,21 +314,40 @@ export default function InvoiceDetails() {
                     {/* DATA MAIN*/}
                     <td name="tb_no">{index + 1}</td>
                     <td name="tb_date">
-                      {(invoicePayment?.payment_date || "").split(" ")[0]}
+                      <input
+                        className="text-center"
+                        readOnly
+                        defaultValue={
+                          (invoicePayment?.payment_date || "").split(" ")[0]
+                        }
+                      />
                     </td>
-                    <td name="tb_name">{invoicePayment?.name}</td>
-                    <td name="tb_jyp">{invoicePayment?.jpy}</td>
-                    <td name="tb_vnd">{invoicePayment?.cost}</td>
-                    <td name="tb_usd">{invoicePayment?.usd}</td>
+                    <td name="tb_name">
+                      <input readOnly defaultValue={invoicePayment?.name} />
+                    </td>
+                    <td name="tb_jyp">
+                      <input readOnly defaultValue={invoicePayment?.jpy} />
+                    </td>
+                    <td name="tb_vnd">
+                      <input readOnly defaultValue={invoicePayment?.cost} />
+                    </td>
+                    <td name="tb_usd">
+                      <input readOnly defaultValue={invoicePayment?.usd} />
+                    </td>
                     <td name="tb_journal">
-                      {invoicePayment?.category?.categoryName}
+                      <input
+                        readOnly
+                        defaultValue={invoicePayment?.category?.name}
+                      />
                     </td>
-                    <td name="tb_invoice">{invoicePayment?.invoice}</td>
-                    <td name="tb_pay" className=" w-[14%] ">
-                      {invoicePayment?.pay}
+                    <td name="tb_invoice">
+                      <input readOnly defaultValue={invoicePayment?.invoice} />
                     </td>
-                    <td className=" w-[6%]" name="tb_action">
-                      <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                    <td name="tb_pay">
+                      <input readOnly defaultValue={invoicePayment?.pay} />
+                    </td>
+                    <td name="tb_action">
+                      <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
                         {/* Icon Edit */}
                         <svg
                           onClick={() => {
@@ -317,11 +373,14 @@ export default function InvoiceDetails() {
                             fillOpacity="0.2"
                           />
                         </svg>
-                        <div className=" border border-gray-400 mx-2 "></div>
+                        <div className=" border border-gray-400 mx-0.5 "></div>
 
                         <svg
                           onClick={() => {
                             updateState({ isShowConfirmModal: true });
+                            updateStateTable({
+                              selectedRowData: invoicePayment,
+                            });
                           }}
                           className=" cursor-pointer"
                           width="19"
@@ -378,10 +437,7 @@ export default function InvoiceDetails() {
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
               <Button
-                onClick={() => {
-                  showToast("Delete  successfully!");
-                  updateState({ isShowConfirmModal: false });
-                }}
+                onClick={() => handleDelete()}
                 className={" bg-red py-2 px-6"}
               >
                 Confirm

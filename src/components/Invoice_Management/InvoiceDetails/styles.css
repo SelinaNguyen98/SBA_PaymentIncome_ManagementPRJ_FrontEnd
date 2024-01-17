@@ -59,17 +59,25 @@
 
 /* #invoiceDetailTable tbody tr, */
 #invoiceDetailTable tbody td {
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-left:   10px ;
+  padding-right: 4px;
+  /* padding-right: 10px; */
   background-color: #e3edf9;
-  font-size: 15px;
+  /* font-size: 15px; */
   text-align: center;
   border: 1px solid gray;
-  
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   /* line-height: 0; */
+}
+#invoiceDetailTable tbody td input {
+  outline: none;
+  background-color: transparent; /* Thay #your-main-theme-color bằng màu chủ đề của bạn */
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @media (min-width: 1537px) {
