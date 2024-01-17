@@ -10,6 +10,7 @@ import { useTranslation } from "react-i18next";
 import "../../../Utils/style.css";
 import Form_InputMonthlyData from "./Dialoag/Input_monthly_data";
 import Form_InputBalanceYeatData from "./Dialoag/Input_balance_from_previous_year";
+import * as API from "../API/index"
 const BS_Report = () => {
   const { isShowAsideFilter } = useContext(AppContext);
   // Chuyển đổi ngôn ngữ
@@ -28,6 +29,9 @@ const BS_Report = () => {
   useEffect(() => {
     console.log(selectedYearExport);
   }, [selectedYearExport]);
+
+  useEffect(() => 
+  API.getalltable(selectedDate.getFullYear(),  selectedDate.getMonth() + 1),[]);
 
   // eslint-disable-next-line no-unused-vars
   const [dataBS, setDataBS] = useState([
