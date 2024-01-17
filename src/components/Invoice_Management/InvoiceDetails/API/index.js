@@ -1,6 +1,6 @@
 // API.js
 import axios from "axios";
-import { paths } from "../../../../Utils/utils/configApi";
+import { paths } from "../../../../Utils/utils/configAxios";
 
 export const callAPI_PaymentsYearAndMonths = async (month, year, page) => {
   try {
