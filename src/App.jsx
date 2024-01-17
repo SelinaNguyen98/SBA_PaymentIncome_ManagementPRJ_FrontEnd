@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route />
         <Route path="/" element={<Login />} />
-        <Route path="/sidebar/*" element={<SideBar />}>
+        <Route path="/home/*" element={<SideBar />}>
           <Route index element={<Account_Category />} />
           <Route path="Account_Category" element={<Account_Category />} />
           <Route

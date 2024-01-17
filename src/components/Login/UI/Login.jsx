@@ -15,6 +15,7 @@ import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 import { locales } from "../../../Utils/i18n/i18n";
 import { loginUser } from "../Controller";
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 function Login() {
   // eslint-disable-next-line no-unused-vars
   const { i18n, t } = useTranslation();
@@ -32,17 +33,48 @@ function Login() {
 
   const handleLogin = async () => {
     try {
+      if(!values.username && !values.password){
+        setError("Please fill in your account information and password!");
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+        return;
+      }
+      if (!values.username) {
+        setError("The Account field cannot be null!");
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+        return;
+      }
+      if (!values.password) {
+        setError("The Password field cannot be null!");
+        setTimeout(() => {
+          setError("");
+        }, 3000);
+        return;
+      }
+
       // eslint-disable-next-line no-unused-vars
       const response = await loginUser(values.username, values.password);
 
       // Redirect after successful login
-      navigate("/sidebar");
+      navigate("/home");
     } catch (error) {
       setError("Login failed. Please check your login information again!");
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    } finally{
+      // setError("");
     }
   };
 
+  const [showPassword, setShowPassword] = useState(false);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
   return (
     <div>
       {/* Thanh header màu xanh */}
@@ -57,7 +89,7 @@ function Login() {
           <div className="fixed top-0 left-0 w-full h-full bg-gray-500 opacity-60 z-50"></div>
           <div className="fixed top-0 w-full z-50">
             {/* Thanh header màu xanh */}
-            <div className="bg-[#16205e] p-4 text-white text-center flex flex-row justify-between">
+            <div className="bg-[#16205e] p-4 text-white text-center flex flex-row justify-between ">
               <div id="header" className="px-4 relative">
                 <img src={logo} alt="" className="h-10 w-20 ml-3" />
                 <img
@@ -160,16 +192,25 @@ function Login() {
               <label htmlFor="password" className="block text-white mb-2">
               {t("Login.Password")}
               </label>
-              <input
-            type="password"
+              <div className="relative">
+          <input
+            type={showPassword ? 'text' : 'password'}
             id="password"
             className="w-full border rounded-3xl p-2 bg-white text-[#16205e] placeholder-[#16205e]::placeholder"
             value={values.password}
             onChange={(e) => setValues({ ...values, password: e.target.value })}
             placeholder={t("Login.placeHolder_Password")}
           />
+          <div
+            className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
+            onClick={togglePasswordVisibility}
+          >
+            {showPassword ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
+          </div>
+        </div>
             </div>
-            {error && <div className="text-red-500 mb-4">{error}</div>}
+            <div className="text-red-500 mb-4 text-[12px] min-h-2 text-center leading-5">{error}</div>
+
             <div className="flex justify-center">
             <button
             className="bg-[#e23d31] text-white rounded-full px-24 py-2"
