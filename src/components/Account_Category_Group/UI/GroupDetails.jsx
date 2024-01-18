@@ -6,6 +6,8 @@ import "./styles.css";
 import { useState } from "react";
 import Pagination2 from "./Pagination/Pagination";
 import InvoiceDetailFooter from "../../Account_Category/UI/InvoicDetailFooter/InvoiceDetailFooter";
+import { getInvoiceData } from "../Controller/index";
+
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -103,6 +105,16 @@ export default function InvoiceDetails() {
           }}
         />
       );
+    }
+  };
+  const fetchData = async () => {
+    try {
+      const invoiceData = await getInvoiceData(selectedOption, searchTerm);
+      // Handle the data as needed in your component
+      console.log('Fetched invoice data:', invoiceData);
+    } catch (error) {
+      // Handle error, e.g., display an error message to the user
+      console.error('Error fetching invoice data:', error);
     }
   };
   return (
