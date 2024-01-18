@@ -20,3 +20,14 @@ export function getalltable(year, month) {
         })
         .then(response => console.log(response.data))
 }
+
+export function getExchangeRate(month, year, setExchangeRate) {
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
+    axios.get(`${API_BASE_URL}/exchangeRate`, {
+        params: {
+            year, month
+        }
+    }).then(response => 
+         setExchangeRate({ JPY: response.data?.data[0].jpy, USD: response.data?.data[0].usd }))
+}

@@ -3,6 +3,7 @@ import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
 import { useTranslation } from "react-i18next";
+import * as API from "../../API/index"
 export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   visible,
@@ -11,7 +12,7 @@ export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   selectedTime,
 }) {
-  const {t } = useTranslation();
+  const { t } = useTranslation();
   const t_translate = t;
   // eslint-disable-next-line no-unused-vars
   const [data_month, setData_month] = useState([
@@ -81,6 +82,10 @@ export default function InputMonthlyData({
       Amount: "100",
     },
   ]);
+  const [exchangeRate, setExchangeRate] = useState({
+    JPY: '',
+    USD: '',
+  })
   // Extract month and year from selectedTime
   // eslint-disable-next-line react/prop-types
   const month = selectedTime.getMonth() + 1; // Months are zero-based
@@ -91,6 +96,14 @@ export default function InputMonthlyData({
     "form_input_monthly_data_BS.title_form"
   ).includes("INPUT MONTHLY DATA FOR");
 
+  useEffect(() => {
+    API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
+  }, [])
+
+  useEffect(() => {
+    console.log(exchangeRate)
+  }, [exchangeRate])
+  
   return (
     <Modal visible={visible}>
       <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
@@ -116,6 +129,8 @@ export default function InputMonthlyData({
               <input
                 type="number"
                 className="ml-4 bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                name="JPY"
+                value={exchangeRate?.JPY}
               />
             </div>
             <div className="font-medium items-center  justify-center">
@@ -123,17 +138,20 @@ export default function InputMonthlyData({
               <input
                 type="number"
                 className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                name="USD"
+                value={exchangeRate?.USD}
+
               />
             </div>
           </div>
           <Button
-              className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-              onClick={() => {}}
-              data-modal-target="crud-modal"
-              data-modal-toggle="crud-modal"
-            >
-              {t_translate("button.save")}
-            </Button>
+            className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
+            onClick={() => { }}
+            data-modal-target="crud-modal"
+            data-modal-toggle="crud-modal"
+          >
+            {t_translate("button.save")}
+          </Button>
         </div>
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
           <table id="invoiceTable" className="text-sm">
