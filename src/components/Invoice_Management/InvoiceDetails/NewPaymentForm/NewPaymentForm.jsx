@@ -1,14 +1,17 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
+import { useTranslation } from "react-i18next";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export default function NewPaymentForm({ visible, cancel, ok }) {
+export default function NewPaymentForm({ visible, cancel, ok, selectedDate }) {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
@@ -23,21 +26,53 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
     console.log(data);
   });
 
+  // const [minDate, setMinDate] = useState("");
+  // const [maxDate, setMaxDate] = useState("");
+
+  // const minDate = "2024-01-01";
+  // const maxDate = "2024-01-31";
+
+  const today = new Date();
+
+  console.log(selectedDate);
+
+  let maxDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth() + 1,
+    1
+  )
+    .toISOString()
+    .split("T")[0]; //max day
+  let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 2)
+    .toISOString()
+    .split("T")[0];
+
+  console.log(minDate, maxDate);
+
+  useEffect(() => {
+    // Set the min and max attributes for the date input
+    const dateInput = document.getElementById("payment_date");
+    dateInput.setAttribute("min", minDate);
+    dateInput.setAttribute("max", maxDate);
+  }, [minDate, maxDate]);
+
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 pt-5 pb-3 px-12 rounded-2xl">
         <span className=" uppercase py-1 mx-auto px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-          new payment
+          {t("page_payment_detail.add_payment")}
         </span>
 
         <form
-          className="px-4 mt-10 overflow-hidden block"
+          className="px-4 pt-1 mt-10 overflow-hidden block"
           noValidate
           onSubmit={onSubmit}
         >
+          <input type="date" min="0001-01" max="2016-12"></input>
           <InputCustomComponent
-            label={"Date (dd/mm/yyyy)"}
+            label={t("page_payment_detail.date")}
             placeholder={new Date()}
+            id={"payment_date"}
             name={"payment_date"}
             type="date"
             register={register}
@@ -45,7 +80,7 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
           />
 
           <InputCustomComponent
-            label={"Name"}
+            label={t("page_payment_detail.name")}
             name={"name"}
             register={register}
             errorMessage={errors?.name?.message}
@@ -62,7 +97,7 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
 
           <InputCustomComponent
             as={"textarea"}
-            label={"Note"}
+            label={t("page_payment_detail.note")}
             name={"note"}
             register={register}
             classNameInput=" w-full bg-main-theme overflow-y-scroll resize-none"
@@ -70,21 +105,21 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
           />
 
           <InputCustomComponent
-            label={"Journal"}
+            label={t("page_payment_detail.journal")}
             name={"category_id"}
             register={register}
             errorMessage={errors?.category_id?.message}
           />
 
           <InputCustomComponent
-            label={"Invoice"}
+            label={t("page_payment_detail.invoice")}
             name={"invoice"}
             register={register}
             errorMessage={errors?.invoice?.message}
           />
 
           <InputCustomComponent
-            label={"Pay"}
+            label={t("page_payment_detail.pay")}
             type="text"
             name={"pay"}
             register={register}
@@ -96,7 +131,7 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
               type="submit"
               className={" py-2 border-2 border-gray min-w-[150px]"}
             >
-              save
+              {t("button.save")}
             </Button>
             <Button
               onClick={cancel}
@@ -104,7 +139,9 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
                 " border-red-500 bg-white border-2 py-2 min-w-[150px] "
               }
             >
-              <span className=" text-red-500  uppercase ">Cancel</span>
+              <span className=" text-red-500  uppercase ">
+                {t("button.cancel")}
+              </span>
             </Button>
           </div>
         </form>
@@ -116,27 +153,28 @@ export default function NewPaymentForm({ visible, cancel, ok }) {
 const InputCustomComponent = ({
   // eslint-disable-next-line react/prop-types
   label,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   name,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   register,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   placeholder,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   errorMessage,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   as: Element = "input",
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   type = "text",
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   classNameInput = "w-full py-1 rounded-sm px-2 bg-main-theme",
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   classNameError,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   defaultValue = "",
+  id,
 }) => {
   return (
-    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2`}>
+    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
       <label className="lg:col-span-3">{label}</label>
       <div className=" lg:col-span-9 ml-3">
         <Element
@@ -146,6 +184,7 @@ const InputCustomComponent = ({
           type={type}
           defaultValue={defaultValue}
           rows={3}
+          id={id}
         />
         <div
           className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden ${classNameError}`}
