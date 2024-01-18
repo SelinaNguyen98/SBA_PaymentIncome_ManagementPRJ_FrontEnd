@@ -17,8 +17,7 @@ export default function InvoiceDetailFooter({
 
   const t_invoice = t;
   return (
-    <div className="">
-      <div className=" flex flex-wrap gap-4 items-center">
+      <div className=" flex flex-wrap gap-4 items-center h-[50px] py-1">
         <span className="font-bold">{t_invoice("title.total_of_month")}</span>
         <div className="flex items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
           <div className=" inline-flex mx-3 ">
@@ -47,7 +46,7 @@ export default function InvoiceDetailFooter({
             />
           </div>
         </div>
-        <div className=" flex-1  flex justify-end">
+        <div className=" flex-1   flex justify-end">
           {totalPage && (
             <Pagination
               totalPage={totalPage}
@@ -57,6 +56,6 @@ export default function InvoiceDetailFooter({
           )}
         </div>
       </div>
-    </div>
+   
   );
 }

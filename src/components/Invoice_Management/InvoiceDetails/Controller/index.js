@@ -22,3 +22,31 @@ export const deletePaymentById = async (id) => {
     throw error;
   }
 };
+
+export const getExChangeRateByMonthYear = async (month, year) => {
+  try {
+    const response = await API.callApi_getExchagerateByMonthAndYear(
+      month,
+      year
+    );
+    return [response.status, response.data];
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createExChangeRate = async (month, year, jpy, usd, idExRate) => {
+  try {
+    // if idExRate is null || trim, ''  => create
+    const response = await API.callApi_createExchagerateByMonthAndYear(
+      month + "-" + year,
+      jpy,
+      usd,
+      idExRate
+    );
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

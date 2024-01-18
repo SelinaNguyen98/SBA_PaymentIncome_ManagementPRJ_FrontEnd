@@ -1,6 +1,6 @@
 # Cau lenh build lai CSS output taiswind
 
-npx tailwindcss build src\Utils\style.css -o src\Utils\output.css
+npx tailwindcss build -i src\Utils\style.css -o src\Utils\output.css
 
 # React + Vite
 

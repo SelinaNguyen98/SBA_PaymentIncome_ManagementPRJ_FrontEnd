@@ -5,6 +5,8 @@ import "./styles.css";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
@@ -14,7 +16,12 @@ import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
 import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
-import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
+import {
+  createExChangeRate,
+  deletePaymentById,
+  getExChangeRateByMonthYear,
+  getPaymentsByYearAndMonths,
+} from "./Controller";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -22,6 +29,18 @@ export default function InvoiceDetails() {
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
 
   const { showToast } = useContext(AppContext);
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    setValue,
+    formState: { errors },
+  } = useForm();
+
+  // const handleSaveRate = handleSubmit((data) => {
+
+  // });
 
   // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
@@ -37,7 +56,6 @@ export default function InvoiceDetails() {
     setStateControl(() => ({ ...stateControl, ...data }));
 
   // Bao gom tong so trang, page, du lieu table dang duoc chon
-
   const [selectedDate, setSelectedDate] = useState(() => {
     const today = new Date();
     const month = today.getMonth() + 1;
@@ -109,6 +127,51 @@ export default function InvoiceDetails() {
     }
   };
 
+  const fetchExchangeRate = async () => {
+    try {
+      const [status, response] = await getExChangeRateByMonthYear(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear()
+      );
+      console.log(response);
+      // Khong co gia tri duoc lay ta
+      if (status == 200 && response.success == false) {
+        setValue("idExRate", null);
+        setValue("jpy", null);
+        setValue("usd", null);
+        console.log("khong co cai chi ca");
+        return;
+      }
+      setValue("idExRate", response?.data[0].id);
+      setValue("jpy", parseFloat(response?.data[0].jpy).toFixed(4));
+      setValue("usd", parseFloat(response?.data[0].usd).toFixed(4));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchSaveRate = async (data) => {
+    console.log(data);
+    try {
+      const response = await createExChangeRate(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear(),
+        data.jpy,
+        data.usd,
+        data.idExRate
+      );
+
+      // setValue("idExRate", response?.data?.id || null);
+      // console.log(response?.message)
+      showToast(response?.message);
+      setDataChangeTrigger(!dataChangeTrigger);
+
+      // fetchExchangeRate();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleDelete = async () => {
     try {
       if (selectedRowData?.id == null || selectedRowData?.id == undefined)
@@ -151,6 +214,7 @@ export default function InvoiceDetails() {
     console.log("Main effect");
 
     fetchInvoices();
+    fetchExchangeRate();
   }, [selectedDate, page, dataChangeTrigger]);
 
   function changePage(page) {
@@ -190,34 +254,51 @@ export default function InvoiceDetails() {
                   className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
                 />
                 <div className="flex flex-row bg-main-theme items-center py-1 rounded-md ">
-                  <div className="items-center px-5 flex flex-row ">
+                  <form
+                    className="items-center px-5 flex flex-row "
+                    onSubmit={handleSubmit(fetchSaveRate)}
+                  >
                     <div className="font-medium ">
                       JPY
                       <input
-                        type="number "
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                        type="number"
+                        step="0.0001"
+                        defaultValue={0}
+                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
+                        {...register("jpy", {
+                          number: "This field is number",
+                          required: "This field is required",
+                        })}
                       />
                     </div>
                     <div className="font-medium">
                       USD
                       <input
                         type="number"
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
+                        step="0.0001"
+                        defaultValue={0}
+                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
+                        {...register("usd", {
+                          number: "This field is number",
+                          required: "This field is required",
+                        })}
                       />
                     </div>
 
                     <Button
                       className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-                      onClick={() => {}}
+                      // type="submit"
                       data-modal-target="crud-modal"
                       data-modal-toggle="crud-modal"
                     >
                       {t_invoicedetails("button.save")}
                     </Button>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
+            {/* <span> {errors?.usd?.message}</span>
+            <span> {errors.usd?.message}</span> */}
 
             <div className="flex flex-row">
               <Button
@@ -265,7 +346,7 @@ export default function InvoiceDetails() {
         </div>
 
         {/* table data */}
-        <div className=" h-[430px] 2xl-plus:h-[600px]">
+        <div className="h-[430px] 2xl-plus:h-[600px]">
           <table id="invoiceDetailTable" className="table-fixed mt-1 h-auto">
             <thead>
               <tr>
@@ -276,15 +357,28 @@ export default function InvoiceDetails() {
                     onChange={handleSelectAllCheckboxChange_Invoice}
                   />
                 </th>
-                <th className=" w-[3%]">No</th>
-                <th className=" w-[10%]">Date</th>
-                <th className=" w-[10%]">Name</th>
+                <th className=" w-[3%]"> NO</th>
+                <th className=" w-[10%]">
+                  {t_invoicedetails("page_payment_detail.date")}
+                </th>
+                <th className=" w-[10%]">
+                  {t_invoicedetails("page_payment_detail.name")}
+                </th>
                 <th className=" w-[8%]"> JPY</th>
                 <th className=" w-[8%]"> VND</th>
                 <th className=" w-[8%]"> USD</th>
-                <th className=" w-[10%]">JOURNAL</th>
-                <th className=" w-[20%]">INVOICE</th>
-                <th className=" w-[14%]">PAY</th>
+                <th className=" w-[10%]">
+                  {t_invoicedetails("page_payment_detail.note")}
+                </th>
+                <th className=" w-[10%]">
+                  {t_invoicedetails("page_payment_detail.journal")}
+                </th>
+                <th className=" w-[16%] ">
+                  {t_invoicedetails("page_payment_detail.invoice")}
+                </th>
+                <th className=" w-[8%]">
+                  {t_invoicedetails("page_payment_detail.pay")}
+                </th>
                 <th className=" w-[6%]">ACTION</th>
                 <th className=" w-[1%]"></th>
               </tr>
@@ -299,7 +393,7 @@ export default function InvoiceDetails() {
                 dataTable?.payments.map((invoicePayment, index) => (
                   <tr
                     key={index}
-                    className="h-[35px] 2xl-plus:h-[50px] text-sm  text-[13px] p-2"
+                    className="h-[35px] 2xl-plus:h-[50px] text-sm text-[13px] p-2"
                   >
                     {/* <tr key={index}> */}
                     {/* First column of each row is like padding-left */}
@@ -312,39 +406,39 @@ export default function InvoiceDetails() {
                     </td>
 
                     {/* DATA MAIN*/}
-                    <td name="tb_no">{index + 1}</td>
+                    <td name="tb_no">{invoicePayment?.id}</td>
                     <td name="tb_date">
                       <input
                         className="text-center"
                         readOnly
-                        defaultValue={
+                        value={
                           (invoicePayment?.payment_date || "").split(" ")[0]
                         }
                       />
                     </td>
                     <td name="tb_name">
-                      <input readOnly defaultValue={invoicePayment?.name} />
+                      <input readOnly value={invoicePayment?.name} />
                     </td>
                     <td name="tb_jyp">
-                      <input readOnly defaultValue={invoicePayment?.jpy} />
+                      <input readOnly value={invoicePayment?.jpy} />
                     </td>
                     <td name="tb_vnd">
-                      <input readOnly defaultValue={invoicePayment?.cost} />
+                      <input readOnly value={invoicePayment?.cost} />
                     </td>
                     <td name="tb_usd">
-                      <input readOnly defaultValue={invoicePayment?.usd} />
+                      <input readOnly value={invoicePayment?.usd} />
+                    </td>
+                    <td name="tb_note">
+                      <input readOnly value={invoicePayment?.note} />
                     </td>
                     <td name="tb_journal">
-                      <input
-                        readOnly
-                        defaultValue={invoicePayment?.category?.name}
-                      />
+                      <input readOnly value={invoicePayment?.category?.name} />
                     </td>
                     <td name="tb_invoice">
-                      <input readOnly defaultValue={invoicePayment?.invoice} />
+                      <input readOnly value={invoicePayment?.invoice} />
                     </td>
                     <td name="tb_pay">
-                      <input readOnly defaultValue={invoicePayment?.pay} />
+                      <input readOnly value={invoicePayment?.pay}  className="text-center" />
                     </td>
                     <td name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
