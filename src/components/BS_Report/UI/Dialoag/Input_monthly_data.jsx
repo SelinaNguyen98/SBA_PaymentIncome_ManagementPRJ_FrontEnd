@@ -93,7 +93,7 @@ export default function InputMonthlyData({
 
   return (
     <Modal visible={visible}>
-      <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
+      <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[600px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
         {isInputMonthlyData ? (
           // Display if the translation contains "INPUT MONTHLY DATA FOR"
           <span className="uppercase py-1 mx-auto my-3 px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
@@ -136,15 +136,15 @@ export default function InputMonthlyData({
             </Button>
         </div>
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm">
+          <table id="invoiceTable" className="text-sm w-full table-fixed">
             <thead>
               <tr>
                 <th className="w-[1px]"></th>
-                <th className="w-[3px]">No</th>
-                <th className="w-[100px]">
+                <th className="w-16">No</th>
+                <th className="w-72">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
-                <th className="w-[10px]">
+                <th className="w-96">
                   {t_translate("form_input_monthly_data_BS.title_table_amount")}
                 </th>
                 <th className="w-[1px]"></th>
@@ -157,18 +157,18 @@ export default function InputMonthlyData({
               {data_month.map((rowData_month, index) => (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
-                  <td className="w-[3px]" name="tb_no">
+                  <td className="w-16" name="tb_no">
                     {rowData_month.No}
                   </td>
                   <td
-                    className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                    className="w-64 overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
                     {rowData_month.Account_category_name}
                   </td>
 
                   <td
-                    className="w-[10px] editable-cell"
+                    className="w-96 editable-cell"
                     name="tb_Amount"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
