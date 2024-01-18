@@ -101,16 +101,15 @@
     "acptDeleteCategory": "Are you sure you want to delete?"
   },
   "page_payment_detail": {
-    "date": "date",
-    "name": "name",
-    "note": "note",
-    "journal": "journal",
-    "invoice": "invoice",
-    "pay": "pay",
-    "action": "action",
-    "totalMM": "Total of month:",
+    "date": "Date",
+    "name": "Name",
+    "note": "Note",
+    "journal": "Journal",
+    "invoice": "Invoice",
+    "pay": "Pay",
     "edit_payment": "EDIT PAYMENT",
-    "add_pay": "NEW PAYMENT",
-    "del_invoice_detail": "DELETE INVOICE DETAIL"
+    "add_payment": "NEW PAYMENT",
+    "del_invoice_detail": "DELETE INVOICE DETAIL",
+    "del_invoice_content": "Are you sure you want to delete this payment ?"
   }
 }

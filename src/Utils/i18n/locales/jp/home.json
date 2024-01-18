@@ -106,10 +106,9 @@
     "note": "備考",
     "invoice": "インボイス",
     "pay": "支払い",
-    "action": "action",
-    "totalMM": "Total of month:",
-    "edit_payment": "EDIT PAYMENT",
-    "add_pay": "NEW PAYMENT",
-    "del_invoice_detail": "DELETE INVOICE DETAIL"
+    "edit_payment": "インボイス編集",
+    "add_payment": "インボイス登録",
+    "del_invoice_detail": "インボイス削除",
+    "del_invoice_content": "選択されたインボイスを削除してよろしいでしょうか。"
   }
 }

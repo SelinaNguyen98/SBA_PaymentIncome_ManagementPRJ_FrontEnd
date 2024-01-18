@@ -25,7 +25,6 @@ import {
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
-  const t_invoicedetails = t;
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
 
   const { showToast } = useContext(AppContext);
@@ -240,7 +239,7 @@ export default function InvoiceDetails() {
             fill="black"
           />
         </svg>
-        {t_invoicedetails("navHeader.invoiceDetails")}
+        {t("navHeader.invoiceDetails")}
       </div>
       {/* control area */}
       <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px] ">
@@ -291,7 +290,7 @@ export default function InvoiceDetails() {
                       data-modal-target="crud-modal"
                       data-modal-toggle="crud-modal"
                     >
-                      {t_invoicedetails("button.save")}
+                      {t("button.save")}
                     </Button>
                   </form>
                 </div>
@@ -318,7 +317,7 @@ export default function InvoiceDetails() {
                   </svg>
                 }
               >
-                {t_invoicedetails("button.add")}
+                {t("button.add")}
               </Button>
 
               <Button
@@ -339,7 +338,7 @@ export default function InvoiceDetails() {
                   </svg>
                 }
               >
-                {t_invoicedetails("button.delete")}
+                {t("button.delete")}
               </Button>
             </div>
           </div>
@@ -358,27 +357,17 @@ export default function InvoiceDetails() {
                   />
                 </th>
                 <th className=" w-[3%]"> NO</th>
-                <th className=" w-[10%]">
-                  {t_invoicedetails("page_payment_detail.date")}
-                </th>
-                <th className=" w-[10%]">
-                  {t_invoicedetails("page_payment_detail.name")}
-                </th>
+                <th className=" w-[10%]">{t("page_payment_detail.date")}</th>
+                <th className=" w-[10%]">{t("page_payment_detail.name")}</th>
                 <th className=" w-[8%]"> JPY</th>
                 <th className=" w-[8%]"> VND</th>
                 <th className=" w-[8%]"> USD</th>
-                <th className=" w-[10%]">
-                  {t_invoicedetails("page_payment_detail.note")}
-                </th>
-                <th className=" w-[10%]">
-                  {t_invoicedetails("page_payment_detail.journal")}
-                </th>
+                <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
+                <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
                 <th className=" w-[16%] ">
-                  {t_invoicedetails("page_payment_detail.invoice")}
+                  {t("page_payment_detail.invoice")}
                 </th>
-                <th className=" w-[8%]">
-                  {t_invoicedetails("page_payment_detail.pay")}
-                </th>
+                <th className=" w-[8%]">{t("page_payment_detail.pay")}</th>
                 <th className=" w-[6%]">ACTION</th>
                 <th className=" w-[1%]"></th>
               </tr>
@@ -438,7 +427,11 @@ export default function InvoiceDetails() {
                       <input readOnly value={invoicePayment?.invoice} />
                     </td>
                     <td name="tb_pay">
-                      <input readOnly value={invoicePayment?.pay}  className="text-center" />
+                      <input
+                        readOnly
+                        value={invoicePayment?.pay}
+                        className="text-center"
+                      />
                     </td>
                     <td name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
@@ -522,28 +515,30 @@ export default function InvoiceDetails() {
         <Modal visible={isShowConfirmModal}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-              delete Invoice detail
+              {t("page_payment_detail.del_invoice_detail")}
             </span>
 
             <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
-              Are you sure you want to delete this payment ?
+              {t("page_payment_detail.del_invoice_content")}
             </div>
 
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
               <Button
                 onClick={() => handleDelete()}
-                className={" bg-red py-2 px-6"}
+                className={" bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"}
               >
-                Confirm
+                {t("button.confirm")}
               </Button>
               <Button
                 onClick={() => {
                   updateState({ isShowConfirmModal: false });
                 }}
-                className={" border-red-500 bg-white border-2   py-2 px-6"}
+                className={
+                  " border-red-500 bg-white border-2 py-2 px-6 min-w-[12px] "
+                }
               >
                 <span className=" text-red-500  ml-1 font-medium uppercase">
-                  Cancel
+                  {t("button.cancel")}
                 </span>
               </Button>
             </div>
@@ -556,6 +551,7 @@ export default function InvoiceDetails() {
           cancel={() => {
             updateState({ isShowFormNewPayment: false });
           }}
+          selectedDate={selectedDate}
         />
       )}
 
