@@ -68,7 +68,6 @@ export default function NewPaymentForm({ visible, cancel, ok, selectedDate }) {
           noValidate
           onSubmit={onSubmit}
         >
-          <input type="date" min="0001-01" max="2016-12"></input>
           <InputCustomComponent
             label={t("page_payment_detail.date")}
             placeholder={new Date()}

@@ -22,6 +22,7 @@ import {
   getExChangeRateByMonthYear,
   getPaymentsByYearAndMonths,
 } from "./Controller";
+import InputNumber from "../../../Utils/InputNumber";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -29,15 +30,13 @@ export default function InvoiceDetails() {
 
   const { showToast } = useContext(AppContext);
 
-  const {
-    register,
-    handleSubmit,
-    setError,
-    setValue,
-    formState: { errors },
-  } = useForm();
-
-  // const handleSaveRate = handleSubmit((data) => {
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   setError,
+  //   setValue,
+  //   formState: { errors },
+  // } = useForm();
 
   // });
 
@@ -82,6 +81,18 @@ export default function InvoiceDetails() {
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
+
+  // state Form ExRate
+  const [dataFormExRate, setFormExRate] = useState({
+    idExRate: null,
+    jpy: null,
+    usd: null,
+  });
+
+  const { idExRate, jpy, usd } = dataFormExRate;
+
+  const updateFormRate = (dataTable) =>
+    setFormExRate(() => ({ ...dataFormExRate, ...dataTable }));
 
   /// Handle Checkbox funtion
   const handleRowCheckboxChange_Invoice = (index) => {
@@ -135,15 +146,27 @@ export default function InvoiceDetails() {
       console.log(response);
       // Khong co gia tri duoc lay ta
       if (status == 200 && response.success == false) {
-        setValue("idExRate", null);
-        setValue("jpy", null);
-        setValue("usd", null);
+        // setValue("idExRate", null);
+        // setValue("jpy", null);
+        // setValue("usd", null);
+
+        updateFormRate({
+          idExRate: null,
+          jpy: null,
+          usd: null,
+        });
         console.log("khong co cai chi ca");
         return;
       }
-      setValue("idExRate", response?.data[0].id);
-      setValue("jpy", parseFloat(response?.data[0].jpy).toFixed(4));
-      setValue("usd", parseFloat(response?.data[0].usd).toFixed(4));
+
+      updateFormRate({
+        idExRate: response?.data[0].id,
+        jpy: parseInt(response?.data[0].jpy),
+        usd: parseInt(response?.data[0].usd),
+      });
+      // setValue("idExRate", response?.data[0].id);
+      // setValue("jpy", parseInt(response?.data[0].jpy));
+      // setValue("usd", parseInt(response?.data[0].usd));
     } catch (error) {
       console.log(error);
     }
@@ -151,24 +174,24 @@ export default function InvoiceDetails() {
 
   const fetchSaveRate = async (data) => {
     console.log(data);
-    try {
-      const response = await createExChangeRate(
-        selectedDate.getMonth() + 1,
-        selectedDate.getFullYear(),
-        data.jpy,
-        data.usd,
-        data.idExRate
-      );
+    // try {
+    //   const response = await createExChangeRate(
+    //     selectedDate.getMonth() + 1,
+    //     selectedDate.getFullYear(),
+    //     data.jpy,
+    //     data.usd,
+    //     data.idExRate
+    //   );
 
-      // setValue("idExRate", response?.data?.id || null);
-      // console.log(response?.message)
-      showToast(response?.message);
-      setDataChangeTrigger(!dataChangeTrigger);
+    //   // setValue("idExRate", response?.data?.id || null);
+    //   // console.log(response?.message)
+    //   showToast(response?.message);
+    //   setDataChangeTrigger(!dataChangeTrigger);
 
-      // fetchExchangeRate();
-    } catch (error) {
-      console.log(error);
-    }
+    //   // fetchExchangeRate();
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const handleDelete = async () => {
@@ -253,46 +276,32 @@ export default function InvoiceDetails() {
                   className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
                 />
                 <div className="flex flex-row bg-main-theme items-center py-1 rounded-md ">
-                  <form
+                  <div
                     className="items-center px-5 flex flex-row "
-                    onSubmit={handleSubmit(fetchSaveRate)}
+                    // onSubmit={fetchSaveRate}
                   >
                     <div className="font-medium ">
                       JPY
-                      <input
-                        type="number"
-                        step="0.0001"
-                        defaultValue={0}
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
-                        {...register("jpy", {
-                          number: "This field is number",
-                          required: "This field is required",
-                        })}
+                      <InputNumber
+                        number={jpy}
+                        setNumber={(value) => updateFormRate({ jpy: value })}
                       />
-                    </div>
-                    <div className="font-medium">
-                      USD
-                      <input
-                        type="number"
-                        step="0.0001"
-                        defaultValue={0}
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
-                        {...register("usd", {
-                          number: "This field is number",
-                          required: "This field is required",
-                        })}
+                      <InputNumber
+                        number={usd}
+                        setNumber={(value) => updateFormRate({ usd: value })}
                       />
                     </div>
 
                     <Button
                       className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
                       // type="submit"
-                      data-modal-target="crud-modal"
-                      data-modal-toggle="crud-modal"
+                      // data-modal-target="crud-modal"
+                      // data-modal-toggle="crud-modal"
+                      onClick={fetchSaveRate}
                     >
                       {t("button.save")}
                     </Button>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -525,7 +534,9 @@ export default function InvoiceDetails() {
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
               <Button
                 onClick={() => handleDelete()}
-                className={" bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
               >
                 {t("button.confirm")}
               </Button>
