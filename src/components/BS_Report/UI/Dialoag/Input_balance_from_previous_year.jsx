@@ -19,67 +19,67 @@ export default function Input_balance_from_previous_year({
     {
       No: 1,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 2,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 3,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 4,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 5,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 6,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 7,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 8,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 9,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 10,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 11,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 12,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
     {
       No: 13,
       Account_category_name: "John Doe",
-      Amount: "100",
+      Amount: 100,
     },
   ]);
   // eslint-disable-next-line react/prop-types
@@ -88,7 +88,10 @@ export default function Input_balance_from_previous_year({
   const isInputMonthlyData = t_translate(
     "form_input_monthly_data_BS.title_form_balance_previous_year"
   ).includes("INPUT BALANCE FROM PREVIOUS YEAR");
-
+  
+  const formatNumberWithComma = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white max-h-[600px] m-2 py-5 px-12 rounded-2xl w-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[600px] overflow-y-auto">
@@ -104,15 +107,15 @@ export default function Input_balance_from_previous_year({
           </span>
         )}
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm">
+          <table id="invoiceTable" className="text-sm w-full table-fixed">
             <thead>
               <tr>
                 <th className="w-[1px]"></th>
-                <th className="w-[3px]">No</th>
-                <th className="w-[100px]">
+                <th className="w-16">No</th>
+                <th className="w-72">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
-                <th className="w-[10px]">
+                <th className="w-96">
                   {t_translate("form_input_monthly_data_BS.title_table_amount")}
                 </th>
                 <th className="w-[1px]"></th>
@@ -125,18 +128,18 @@ export default function Input_balance_from_previous_year({
               {data_year.map((rowData_year, index) => (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
-                  <td className="w-[3px]" name="tb_no">
+                  <td className="w-16" name="tb_no">
                     {rowData_year.No}
                   </td>
                   <td
-                    className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                    className="w-72 overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
                     {rowData_year.Account_category_name}
                   </td>
 
                   <td
-                    className="w-[10px] editable-cell"
+                    className="w-96 editable-cell"
                     name="tb_Amount"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
@@ -146,7 +149,7 @@ export default function Input_balance_from_previous_year({
                       setData_year(newData);
                     }}
                   >
-                    {rowData_year.Amount}
+                     {formatNumberWithComma(rowData_year.Amount)}
                   </td>
 
                   <td className="w-[1px]"></td>

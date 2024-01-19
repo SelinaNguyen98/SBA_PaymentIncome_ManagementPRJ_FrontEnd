@@ -48,6 +48,7 @@ export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
   }
 };
 
+// eslint-disable-next-line no-unused-vars
 export const callApi_ExchagerateByMonthAndYear = async (month, year) => {
   // eslint-disable-next-line no-useless-catch
   try {

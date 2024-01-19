@@ -6,6 +6,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
+// eslint-disable-next-line no-unused-vars
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import Button from "../../../Utils/Button";
@@ -32,8 +33,10 @@ export default function InvoiceDetails() {
   const {
     register,
     handleSubmit,
+    // eslint-disable-next-line no-unused-vars
     setError,
     setValue,
+    // eslint-disable-next-line no-unused-vars
     formState: { errors },
   } = useForm();
 

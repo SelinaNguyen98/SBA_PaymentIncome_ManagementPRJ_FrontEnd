@@ -366,16 +366,16 @@ const BS_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
-                  <table id="invoiceTable" className="text-sm">
+                <div className="max-h-[600px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
+                  <table id="invoiceTable" className="ttext-sm w-full table-fixed">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
-                        <th className="w-[2px]">No</th>
-                        <th className="w-[100px]">
+                        <th className="w-16">No</th>
+                        <th className="w-64">
                           {t("header_table_PL_BS.name")}
                         </th>
-                        <th className="w-[10px]">
+                        <th className="w-32">
                           {selectedYearExport.getFullYear() - 1}
                         </th>
                         {Array.from({ length: 12 }).map((_, monthIndex) => {
@@ -385,13 +385,13 @@ const BS_Report = () => {
                             Math.floor((monthIndex + 3) / 12);
 
                           return (
-                            <th key={monthIndex} className="w-[10px]">
+                            <th key={monthIndex} className="w-32">
                               {`${displayMonth}/${displayYear}`}
                             </th>
                           );
                         })}
 
-                        <th className="w-[10px]">
+                        <th className="w-24">
                           {t("header_table_PL_BS.total")}
                         </th>
                         <th className="w-[1px]"></th>
@@ -406,56 +406,56 @@ const BS_Report = () => {
                       {dataBS.map((rowData_BS, index) => (
                         <tr key={index}>
                           <td className="w-[1px]"></td>
-                          <td className="w-[2px]" name="tb_no">
+                          <td className="w-16" name="tb_no">
                             {rowData_BS.No}
                           </td>
                           <td
-                            className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                            className="w-64 overflow-x-auto overflow-scroll"
                             name="tb_account_category"
                           >
                             {rowData_BS.Account_category_name}
                           </td>
 
-                          <td className="w-[10px]" name="tb_pevious_year">
+                          <td className="w-32" name="tb_pevious_year">
                             {rowData_BS["2022"]}
                           </td>
-                          <td className="w-[10px]" name="tb_04">
+                          <td className="w-32" name="tb_04">
                             {rowData_BS["04/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_05">
+                          <td className="w-32" name="tb_05">
                             {rowData_BS["05/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_06">
+                          <td className="w-32" name="tb_06">
                             {rowData_BS["06/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_07">
+                          <td className="w-32" name="tb_07">
                             {rowData_BS["07/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_08">
+                          <td className="w-32" name="tb_08">
                             {rowData_BS["08/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_09">
+                          <td className="w-32" name="tb_09">
                             {rowData_BS["09/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_10">
+                          <td className="w-32" name="tb_10">
                             {rowData_BS["10/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_11">
+                          <td className="w-32" name="tb_11">
                             {rowData_BS["11/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_12">
+                          <td className="w-32" name="tb_12">
                             {rowData_BS["12/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_01_Next_Year">
+                          <td className="w-32" name="tb_01_Next_Year">
                             {rowData_BS["01/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_02_Next_Year">
+                          <td className="w-32" name="tb_02_Next_Year">
                             {rowData_BS["02/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_03_Next_Year">
+                          <td className="w-32" name="tb_03_Next_Year">
                             {rowData_BS["03/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_total">
+                          <td className="w-32" name="tb_total">
                             {rowData_BS.Total}
                           </td>
                           <td className="w-[1px]"></td>

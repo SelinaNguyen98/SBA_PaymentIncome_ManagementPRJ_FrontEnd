@@ -14,21 +14,7 @@ import classNames from "classnames";
 const PL_Report = () => {
   const { isShowAsideFilter } = useContext(AppContext);
   // Chuyển đổi ngôn ngữ
-  const {t } = useTranslation();
-
- 
-
-  // const { toggleAsideFilter } = useContext(AppContext);
-
-  const [selectedYear, setSelectedYear] = useState(new Date());
-  useEffect(() => {
-    console.log(selectedYear);
-  }, [selectedYear]);
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  useEffect(() => {
-    console.log(selectedDate);
-  }, [selectedDate]);
+  const { t } = useTranslation();
 
   const [selectedYearExport, setSelectedYearExport] = useState(new Date());
   useEffect(() => {
@@ -313,21 +299,23 @@ const PL_Report = () => {
                             alt="microsoft-excel-2019"
                           />
                           <span className="max-[650px]:text-[10px]  max-[1600px]:text-[10px]">
-                          {t("button.export")}
+                            {t("button.export")}
                           </span>
                         </Button>
                       </div>
                     </div>
                   </div>
                 </div>
-                {/* table data */}
-                <div className="max-h-[500px]  overflow-y-auto overflow-x-auto mt-4 text-sm">
-                  <table id="invoiceTable" className="text-sm w-full">
+                <div className="max-h-[600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+                  <table
+                    id="invoiceTable"
+                    className="text-sm w-full table-fixed"
+                  >
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
-                        <th className="w-[3px]">No</th>
-                        <th className="w-[100px]">{t("header_table_PL_BS.name")}</th>
+                        <th className="w-16">No</th>
+                        <th className="w-64">{t("header_table_PL_BS.name")}</th>
                         {Array.from({ length: 12 }).map((_, monthIndex) => {
                           const displayMonth = ((monthIndex + 3) % 12) + 1;
                           const displayYear =
@@ -335,13 +323,15 @@ const PL_Report = () => {
                             Math.floor((monthIndex + 3) / 12);
 
                           return (
-                            <th key={monthIndex} className="w-[10px]">
+                            <th key={monthIndex} className="w-32">
                               {`${displayMonth}/${displayYear}`}
                             </th>
                           );
                         })}
 
-                        <th className="w-[10px]">{t("header_table_PL_BS.total")}</th>
+                        <th className="w-24">
+                          {t("header_table_PL_BS.total")}
+                        </th>
                         <th className="w-[1px]"></th>
                       </tr>
                     </thead>
@@ -352,53 +342,53 @@ const PL_Report = () => {
                       {dataBS.map((rowData_BS, index) => (
                         <tr key={index}>
                           <td className="w-[1px]"></td>
-                          <td className="w-[3px]" name="tb_no">
+                          <td className="w-16" name="tb_no">
                             {rowData_BS.No}
                           </td>
                           <td
-                            className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                            className="w-64 overflow-x-auto overflow-scroll"
                             name="tb_account_category"
                           >
                             {rowData_BS.Account_category_name}
                           </td>
 
-                          <td className="w-[10px]" name="tb_04">
+                          <td className="w-32" name="tb_04">
                             {rowData_BS["04/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_05">
+                          <td className="w-32" name="tb_05">
                             {rowData_BS["05/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_06">
+                          <td className="w-32" name="tb_06">
                             {rowData_BS["06/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_07">
+                          <td className="w-32" name="tb_07">
                             {rowData_BS["07/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_08">
+                          <td className="w-32" name="tb_08">
                             {rowData_BS["08/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_09">
+                          <td className="w-32" name="tb_09">
                             {rowData_BS["09/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_10">
+                          <td className="w-32" name="tb_10">
                             {rowData_BS["10/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_11">
+                          <td className="w-32" name="tb_11">
                             {rowData_BS["11/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_12">
+                          <td className="w-32" name="tb_12">
                             {rowData_BS["12/2023"]}
                           </td>
-                          <td className="w-[10px]" name="tb_01_Next_Year">
+                          <td className="w-32" name="tb_01_Next_Year">
                             {rowData_BS["01/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_02_Next_Year">
+                          <td className="w-32" name="tb_02_Next_Year">
                             {rowData_BS["02/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_03_Next_Year">
+                          <td className="w-32" name="tb_03_Next_Year">
                             {rowData_BS["03/2024"]}
                           </td>
-                          <td className="w-[10px]" name="tb_total">
+                          <td className="w-32" name="tb_total">
                             {rowData_BS.Total}
                           </td>
                           <td className="w-[1px]"></td>

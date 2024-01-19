@@ -2,6 +2,7 @@
 import * as API from "../API";
 
 export const getPaymentsByYearAndMonths = async (month, year, page) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await API.callAPI_GetPaymentsYearAndMonths(
       month,
@@ -15,6 +16,7 @@ export const getPaymentsByYearAndMonths = async (month, year, page) => {
 };
 
 export const deletePaymentById = async (id) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await API.callApi_deletePaymentByID(id);
     return response;
@@ -24,6 +26,7 @@ export const deletePaymentById = async (id) => {
 };
 
 export const getExChangeRateByMonthYear = async (month, year) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await API.callApi_getExchagerateByMonthAndYear(
       month,
@@ -36,6 +39,7 @@ export const getExChangeRateByMonthYear = async (month, year) => {
 };
 
 export const createExChangeRate = async (month, year, jpy, usd, idExRate) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     // if idExRate is null || trim, ''  => create
     const response = await API.callApi_createExchagerateByMonthAndYear(
