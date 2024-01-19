@@ -1,29 +1,32 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/";
-axios.defaults.baseURL = API_BASE_URL;
+axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
 
-// let isRefreshing = false;
-// let refreshSubscribers = [];
+export const paths = {
+  LOGIN: "auth/login",
+  GET_PAYMENTS_MONTH_YEAR: "payments",
+  PAYMENT: "payments",
+  EXCHAGE_RATE: "exchangeRate",
+  PL_REPORT:"getDataPL"
 
-// Function to get the authentication token from local storage
-const getAuthToken = () => {
-  return localStorage.getItem("token");
 };
-
-// Function to set the authentication token to local storage
-// const setAuthToken = (token) => {
-//   localStorage.setItem("token", token);
-// };
 
 // Request interceptor to attach the authentication token to each request
 axios.interceptors.request.use((config) => {
-  const authToken = getAuthToken();
+  const authToken = localStorage.getItem("token");
   if (authToken) {
     config.headers.Authorization = `Bearer ${authToken}`;
   }
   return config;
 });
+
+// let isRefreshing = false;
+// let refreshSubscribers = [];
+
+// Function to set the authentication token to local storage
+// const setAuthToken = (token) => {
+//   localStorage.setItem("token", token);
+// };
 
 // KHÚC BÊN DƯỚI DÙNG ĐỂ REFESH TOKEN KHÔNG RÕ AI LÀM // TODO //
 // axios.interceptors.response.use(
@@ -76,8 +79,3 @@ axios.interceptors.request.use((config) => {
 //     return Promise.reject(error);
 //   }
 // );
-
-export const paths = {
-  LOGIN: "auth/login",
-  GET_PAYMENTS_MONTH_YEAR: "payments",
-};

@@ -7,8 +7,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
 import Modal from "../../../../Utils/Modal";
 import Button from "../../../../Utils/Button";
+import { useTranslation } from "react-i18next";
 
 export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -61,7 +63,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
           onSubmit={onSubmit}
         >
           <InputCustomComponent
-            label={"Date (dd/mm/yyyy)"}
+            label={t("page_payment_detail.date")}
             placeholder={new Date()}
             name={"payment_date"}
             type="date"
@@ -70,7 +72,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
           />
 
           <InputCustomComponent
-            label={"Name"}
+            label={t("page_payment_detail.name")}
             name={"name"}
             register={register}
             errorMessage={errors?.name?.message}
@@ -87,7 +89,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
 
           <InputCustomComponent
             as={"textarea"}
-            label={"Note"}
+            label={t("page_payment_detail.note")}
             name={"note"}
             register={register}
             classNameInput=" w-full bg-main-theme overflow-y-scroll resize-none"
@@ -95,21 +97,21 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
           />
 
           <InputCustomComponent
-            label={"Journal"}
+            label={t("page_payment_detail.journal")}
             name={"category"}
             register={register}
             errorMessage={errors?.category?.message}
           />
 
           <InputCustomComponent
-            label={"Invoice"}
+            label={t("page_payment_detail.invoice")}
             name={"invoice"}
             register={register}
             errorMessage={errors?.invoice?.message}
           />
 
           <InputCustomComponent
-            label={"Pay"}
+            label={t("page_payment_detail.pay")}
             type="text"
             name={"pay"}
             register={register}
@@ -121,7 +123,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
               type="submit"
               className={" py-2 border-2 border-gray min-w-[150px]"}
             >
-              save
+                  {t("button.save")}
             </Button>
             <Button
               onClick={cancel}
@@ -129,7 +131,7 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
                 " border-red-500 bg-white border-2 py-2 min-w-[150px] "
               }
             >
-              <span className=" text-red-500  uppercase ">Cancel</span>
+              <span className=" text-red-500  uppercase ">  {t("button.cancel")}</span>
             </Button>
           </div>
         </form>
@@ -150,7 +152,7 @@ const InputCustomComponent = ({
   defaultValue = "",
 }) => {
   return (
-    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2`}>
+    <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
       <label className="lg:col-span-3">{label}</label>
       <div className=" lg:col-span-9 ml-3">
         <Element
