@@ -4,10 +4,8 @@ import NavHeader from "../../NavHeader";
 import { useTranslation } from "react-i18next";
 import "./styles.css";
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import Pagination2 from "./Pagination/Pagination";
-import InvoiceDetailFooter from "../../Account_Category/UI/InvoicDetailFooter/InvoiceDetailFooter";
-import { getInvoiceData } from "../Controller/index";
-
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
