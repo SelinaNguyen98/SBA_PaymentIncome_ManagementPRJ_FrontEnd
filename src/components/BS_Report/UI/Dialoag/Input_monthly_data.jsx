@@ -97,13 +97,22 @@ export default function InputMonthlyData({
   ).includes("INPUT MONTHLY DATA FOR");
 
   useEffect(() => {
-    API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
-  }, [])
+    if (visible) {
+      API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
+      API.getDataMonthly(selectedTime.getFullYear(), selectedTime.getMonth() + 1, setData_month)
+    }
+  }, [visible, selectedTime])
 
   useEffect(() => {
+    console.log(data_month)
     console.log(exchangeRate)
-  }, [exchangeRate])
-  
+  }, [data_month,exchangeRate])
+
+  const handleChange = (e) => {
+    console.log(e)
+    setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
+  }
+
   return (
     <Modal visible={visible}>
       <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
@@ -128,27 +137,28 @@ export default function InputMonthlyData({
               JPY
               <input
                 type="number"
-                className="ml-4 bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
-                name="JPY"
-                value={exchangeRate?.JPY}
+                className="ml-4 bg-white mx-2 min-w-[150px] shadow-sm rounded-md p-1"
+                name="jpy"
+                value={exchangeRate?.jpy}
+                onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="font-medium items-center  justify-center">
               USD
               <input
                 type="number"
-                className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md"
-                name="USD"
-                value={exchangeRate?.USD}
-
+                className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md p-1"
+                name="usd"
+                value={exchangeRate?.usd}
+                onChange={(e) => handleChange(e)}
               />
             </div>
           </div>
           <Button
             className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-            onClick={() => { }}
             data-modal-target="crud-modal"
             data-modal-toggle="crud-modal"
+            onClick={() => API.createOrUpdateExchangeRate(exchangeRate)}
           >
             {t_translate("button.save")}
           </Button>
@@ -172,17 +182,17 @@ export default function InputMonthlyData({
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              {data_month.map((rowData_month, index) => (
+              {data_month?.balance_sheet?.map((rowData_month, index) => (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
                   <td className="w-[3px]" name="tb_no">
-                    {rowData_month.No}
+                    {index + 1}
                   </td>
                   <td
                     className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
-                    {rowData_month.Account_category_name}
+                    {rowData_month.category_name}
                   </td>
 
                   <td
@@ -191,12 +201,12 @@ export default function InputMonthlyData({
                     contentEditable="true"
                     suppressContentEditableWarning={true}
                     onBlur={(e) => {
-                      const newData = [...data_month];
-                      newData[index].Amount = e.target.innerText;
-                      setData_month(newData);
+                      const newData =data_month.balance_sheet;
+                      newData[index].amount = e.target.innerText;
+                      setData_month({ ...data_month, newData });
                     }}
                   >
-                    {rowData_month.Amount}
+                    {rowData_month.amount}
                   </td>
 
                   <td className="w-[1px]"></td>
@@ -212,7 +222,7 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              // Handle save logic
+              API.saveMonthly(selectedTime.getMonth() + 1, selectedTime.getFullYear(), data_month)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >
