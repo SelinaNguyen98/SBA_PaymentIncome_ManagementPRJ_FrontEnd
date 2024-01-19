@@ -7,6 +7,7 @@ export const paths = {
   GET_PAYMENTS_MONTH_YEAR: "payments",
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
+  categoriesPL: "categories",
 };
 
 // Request interceptor to attach the authentication token to each request

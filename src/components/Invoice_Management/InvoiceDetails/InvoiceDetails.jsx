@@ -5,8 +5,6 @@ import "./styles.css";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
@@ -15,7 +13,10 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
-import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+import {
+  formatNumberSeparator,
+  formatStringMonthYearToDate,
+} from "../../../Utils/utils/maths";
 import {
   createExChangeRate,
   deletePaymentById,
@@ -29,16 +30,6 @@ export default function InvoiceDetails() {
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
 
   const { showToast } = useContext(AppContext);
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   setError,
-  //   setValue,
-  //   formState: { errors },
-  // } = useForm();
-
-  // });
 
   // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
@@ -85,8 +76,8 @@ export default function InvoiceDetails() {
   // state Form ExRate
   const [dataFormExRate, setFormExRate] = useState({
     idExRate: null,
-    jpy: null,
-    usd: null,
+    jpy: "",
+    usd: "",
   });
 
   const { idExRate, jpy, usd } = dataFormExRate;
@@ -152,8 +143,8 @@ export default function InvoiceDetails() {
 
         updateFormRate({
           idExRate: null,
-          jpy: null,
-          usd: null,
+          jpy: "",
+          usd: "",
         });
         console.log("khong co cai chi ca");
         return;
@@ -161,37 +152,30 @@ export default function InvoiceDetails() {
 
       updateFormRate({
         idExRate: response?.data[0].id,
-        jpy: parseInt(response?.data[0].jpy),
-        usd: parseInt(response?.data[0].usd),
+        jpy: formatNumberSeparator(response?.data[0].jpy.toString()),
+        usd: formatNumberSeparator(response?.data[0].usd.toString()),
       });
-      // setValue("idExRate", response?.data[0].id);
-      // setValue("jpy", parseInt(response?.data[0].jpy));
-      // setValue("usd", parseInt(response?.data[0].usd));
     } catch (error) {
       console.log(error);
     }
   };
 
-  const fetchSaveRate = async (data) => {
-    console.log(data);
-    // try {
-    //   const response = await createExChangeRate(
-    //     selectedDate.getMonth() + 1,
-    //     selectedDate.getFullYear(),
-    //     data.jpy,
-    //     data.usd,
-    //     data.idExRate
-    //   );
+  const fetchSaveRate = async () => {
+    try {
+      const response = await createExChangeRate(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear(),
+        jpy,
+        usd,
+        idExRate
+      );
+      console.log(response);
 
-    //   // setValue("idExRate", response?.data?.id || null);
-    //   // console.log(response?.message)
-    //   showToast(response?.message);
-    //   setDataChangeTrigger(!dataChangeTrigger);
-
-    //   // fetchExchangeRate();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      showToast(response?.message);
+      setDataChangeTrigger(!dataChangeTrigger);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDelete = async () => {
@@ -238,6 +222,16 @@ export default function InvoiceDetails() {
     fetchInvoices();
     fetchExchangeRate();
   }, [selectedDate, page, dataChangeTrigger]);
+
+  // useEffect(() => {
+  //   if (isFilterApplied.current && page !== 1) {
+  //     return;
+  //   }
+
+  //   console.log("Main effect");
+
+  //   fetchInvoices();
+  // }, []);
 
   function changePage(page) {
     isFilterApplied.current = false;
@@ -294,10 +288,7 @@ export default function InvoiceDetails() {
 
                     <Button
                       className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-                      // type="submit"
-                      // data-modal-target="crud-modal"
-                      // data-modal-toggle="crud-modal"
-                      onClick={fetchSaveRate}
+                      onClick={() => fetchSaveRate()}
                     >
                       {t("button.save")}
                     </Button>
@@ -305,8 +296,6 @@ export default function InvoiceDetails() {
                 </div>
               </div>
             </div>
-            {/* <span> {errors?.usd?.message}</span>
-            <span> {errors.usd?.message}</span> */}
 
             <div className="flex flex-row">
               <Button
@@ -404,7 +393,7 @@ export default function InvoiceDetails() {
                     </td>
 
                     {/* DATA MAIN*/}
-                    <td name="tb_no">{invoicePayment?.id}</td>
+                    <td name="tb_no">{(page - 1) * 10 + index + 1}</td>
                     <td name="tb_date">
                       <input
                         className="text-center"
@@ -415,30 +404,33 @@ export default function InvoiceDetails() {
                       />
                     </td>
                     <td name="tb_name">
-                      <input readOnly value={invoicePayment?.name} />
+                      <input readOnly value={invoicePayment?.name || ""} />
                     </td>
                     <td name="tb_jyp">
-                      <input readOnly value={invoicePayment?.jpy} />
+                      <input readOnly value={invoicePayment?.jpy || ""} />
                     </td>
                     <td name="tb_vnd">
-                      <input readOnly value={invoicePayment?.cost} />
+                      <input readOnly value={invoicePayment?.cost || ""} />
                     </td>
                     <td name="tb_usd">
-                      <input readOnly value={invoicePayment?.usd} />
+                      <input readOnly value={invoicePayment?.usd || ""} />
                     </td>
                     <td name="tb_note">
-                      <input readOnly value={invoicePayment?.note} />
+                      <input readOnly value={invoicePayment?.note || ""} />
                     </td>
                     <td name="tb_journal">
-                      <input readOnly value={invoicePayment?.category?.name} />
+                      <input
+                        readOnly
+                        value={invoicePayment?.category?.name || ""}
+                      />
                     </td>
                     <td name="tb_invoice">
-                      <input readOnly value={invoicePayment?.invoice} />
+                      <input readOnly value={invoicePayment?.invoice || ""} />
                     </td>
                     <td name="tb_pay">
                       <input
                         readOnly
-                        value={invoicePayment?.pay}
+                        value={invoicePayment?.pay || ""}
                         className="text-center"
                       />
                     </td>
@@ -563,6 +555,11 @@ export default function InvoiceDetails() {
             updateState({ isShowFormNewPayment: false });
           }}
           selectedDate={selectedDate}
+          changeEndPage={() => {
+            updateState({ isShowFormNewPayment: false });
+            changePage(1);
+          }}
+          exchangeRateId={idExRate}
         />
       )}
 
@@ -570,6 +567,8 @@ export default function InvoiceDetails() {
         <EditPaymentForm
           invoicePayment={selectedRowData}
           visible={isShowFormEditPayment}
+          selectedDate={selectedDate}
+          exchangeRateId={idExRate}
           cancel={() => {
             updateState({
               isShowFormEditPayment: false,

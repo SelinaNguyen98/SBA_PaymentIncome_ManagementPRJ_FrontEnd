@@ -1,4 +1,5 @@
 // Controller.js
+import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 import * as API from "../API";
 
 export const getPaymentsByYearAndMonths = async (month, year, page) => {
@@ -40,10 +41,30 @@ export const createExChangeRate = async (month, year, jpy, usd, idExRate) => {
     // if idExRate is null || trim, ''  => create
     const response = await API.callApi_createExchagerateByMonthAndYear(
       month + "-" + year,
-      jpy,
-      usd,
+      formatNumberHasDot(jpy),
+      formatNumberHasDot(usd),
       idExRate
     );
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getGetAllCategoriesPL = async () => {
+  try {
+    const response = await API.callAPI_GetAllCategoriesPL();
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createPayment = async (formData) => {
+  try {
+    // if idExRate is null || trim, ''  => create
+    const response = await API.callApi_createPayment(formData);
 
     return response;
   } catch (error) {

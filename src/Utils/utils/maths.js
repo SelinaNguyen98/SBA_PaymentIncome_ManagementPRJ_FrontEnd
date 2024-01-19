@@ -14,8 +14,25 @@ export const formatStringMonthYearToDate = (sMonth, sYear) => {
   return formattedDate;
 };
 
-
 export const checkRegexMonthDatePattern = (input) => {
   const regexPattern = /^(0[1-9]|1[0-2])\/\d{4}$/;
   return regexPattern.test(input);
+};
+
+export const formatNumberSeparator = (input) => {
+  // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
+  let numericValue = input.replace(/[^0-9]/g, "");
+
+  // loai bo trong hop bat dau bang 0 && null  && ''
+  numericValue =
+    numericValue == "0" || numericValue == "" ||  numericValue == null
+      ? "0"
+      : numericValue.replace(/^0+/, "");
+  // Định dạng giá trị nhập vào với dấu chấm làm phân tách hàng nghìn
+  return numericValue.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
+};
+
+export const formatNumberHasDot = (input) => {
+  // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
+  return Number(input.replace(/\./g, ""));
 };

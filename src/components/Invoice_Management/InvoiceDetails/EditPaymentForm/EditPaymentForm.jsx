@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,9 +8,19 @@ import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
 import Modal from "../../../../Utils/Modal";
 import Button from "../../../../Utils/Button";
 import { useTranslation } from "react-i18next";
+import { formatNumberSeparator } from "../../../../Utils/utils/maths";
+import { getGetAllCategoriesPL } from "../Controller";
 
-export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
+export default function EditPaymentForm({
+  visible,
+  cancel,
+  invoicePayment,
+  selectedDate,
+  exchangeRateId,
+}) {
   const { t } = useTranslation();
+  const [categories, setCategories] = useState([]);
+
   const {
     register,
     handleSubmit,
@@ -21,12 +31,29 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
     watch,
     getValues,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(createPaymentSchema) });
+    // } = useForm({ resolver: yupResolver(createPaymentSchema) });
+  } = useForm();
 
-  console.log(getValues("payment_date"));
+  // console.log(getValues("payment_date"));
 
-  const convertedDate = new Date(invoicePayment?.payment_date);
-  const formattedDate = convertedDate.toISOString().split("T")[0];
+  // const convertedDate = new Date(invoicePayment?.payment_date);
+  const formattedDate = invoicePayment?.payment_date.split(" ")[0];
+
+  // State Format Day
+  const maxDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth() + 1,
+    1
+  )
+    .toISOString()
+    .split("T")[0]; //max day
+  const minDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    2
+  )
+    .toISOString()
+    .split("T")[0];
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const existingData = {
@@ -36,15 +63,43 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
     note: invoicePayment?.note,
     invoice: invoicePayment?.invoice,
     pay: invoicePayment?.pay,
-    category_: invoicePayment?.category,
+    category_id: invoicePayment?.category?.id,
     cost: invoicePayment?.cost,
   };
+  console.log("existingData: ", existingData);
+  // useEffect(() => {
+  //   // Set the min and max attributes for the date input
+  //   let dateInput = document.getElementById("payment_date");
+  //   dateInput.setAttribute("min", minDate);
+  //   dateInput.setAttribute("max", maxDate);
+  // }, [minDate, maxDate]);
+
+  // useEffect(() => {
+  //   Object.keys(existingData).forEach((key) => {
+  //     setValue(key, existingData[key]);
+  //   });
+  // }, [setValue, existingData]);
 
   useEffect(() => {
+    fetchGetCategoriesPL();
+    setValue("user_id", 1);
+    setValue("exchange_rate_id", exchangeRateId);
+    setValue("currency_type", "vnd");
+
     Object.keys(existingData).forEach((key) => {
       setValue(key, existingData[key]);
     });
-  }, [setValue, existingData]);
+  }, [selectedDate]);
+
+  const fetchGetCategoriesPL = async () => {
+    try {
+      const response = await getGetAllCategoriesPL();
+      setCategories(response);
+      // console.log(ca);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -62,14 +117,25 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
           noValidate
           onSubmit={onSubmit}
         >
-          <InputCustomComponent
-            label={t("page_payment_detail.date")}
-            placeholder={new Date()}
-            name={"payment_date"}
-            type="date"
-            register={register}
-            errorMessage={errors?.payment_date?.message}
-          />
+          <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
+            <label className="lg:col-span-3">
+              {t("page_payment_detail.date")}
+            </label>
+            <div className=" lg:col-span-9 ml-3">
+              <input
+                type="date"
+                {...register("payment_date")}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                min={minDate}
+                max={maxDate}
+              />
+              <div
+                className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
+              >
+                {errors?.payment_date?.message}
+              </div>
+            </div>
+          </div>
 
           <InputCustomComponent
             label={t("page_payment_detail.name")}
@@ -78,14 +144,24 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
             errorMessage={errors?.name?.message}
           />
 
-          <InputCustomComponent
-            label={"VND"}
-            name={"cost"}
-            placeholder={0}
-            // type="number"
-            register={register}
-            errorMessage={errors?.cost?.message}
-          />
+          <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
+            <label className="lg:col-span-3">VND</label>
+            <div className=" lg:col-span-9 ml-3">
+              <input
+                defaultValue={0}
+                {...register("cost")}
+                onChange={(e) => {
+                  e.target.value = formatNumberSeparator(e.target.value);
+                }}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+              />
+              <div
+                className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
+              >
+                {errors?.cost?.message}
+              </div>
+            </div>
+          </div>
 
           <InputCustomComponent
             as={"textarea"}
@@ -96,13 +172,40 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
             errorMessage={errors?.note?.message}
           />
 
-          <InputCustomComponent
-            label={t("page_payment_detail.journal")}
-            name={"category"}
-            register={register}
-            errorMessage={errors?.category?.message}
-          />
-
+          <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
+            <label className="lg:col-span-3">
+              {t("page_payment_detail.journal")}
+            </label>
+            <div className=" lg:col-span-9 ml-3">
+              <select
+                {...register("category_id")}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                value={existingData.category_id + ""}
+              >
+                <option value="" disabled></option>
+                {categories.map((cateData, index) => {
+                  return (
+                    <option
+                      value={cateData?.id + ""}
+                      key={index}
+                      // selected={
+                      //   existingData.category_id + "" == cateData.id + ""
+                      //     ? true
+                      //     : false
+                      // }
+                    >
+                      {cateData?.name}
+                    </option>
+                  );
+                })}
+              </select>
+              <div
+                className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
+              >
+                {errors?.category_id?.message}
+              </div>
+            </div>
+          </div>
           <InputCustomComponent
             label={t("page_payment_detail.invoice")}
             name={"invoice"}
@@ -118,12 +221,12 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
             errorMessage={errors?.pay?.message}
           />
 
-          <div className="flex items-center justify-around  mt-4 mb-3 ">
+          <div className="flex items-center justify-around mt-4 mb-3 ">
             <Button
               type="submit"
               className={" py-2 border-2 border-gray min-w-[150px]"}
             >
-                  {t("button.save")}
+              {t("button.save")}
             </Button>
             <Button
               onClick={cancel}
@@ -131,7 +234,9 @@ export default function EditPaymentForm({ visible, cancel, invoicePayment }) {
                 " border-red-500 bg-white border-2 py-2 min-w-[150px] "
               }
             >
-              <span className=" text-red-500  uppercase ">  {t("button.cancel")}</span>
+              <span className=" text-red-500  uppercase ">
+                {t("button.cancel")}
+              </span>
             </Button>
           </div>
         </form>
