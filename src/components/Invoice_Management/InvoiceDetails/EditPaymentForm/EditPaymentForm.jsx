@@ -19,7 +19,6 @@ export default function EditPaymentForm({
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
 
-  
   const {
     register,
     handleSubmit,
@@ -59,7 +58,8 @@ export default function EditPaymentForm({
     invoice: invoicePayment?.invoice,
     pay: invoicePayment?.pay,
     category_id: invoicePayment?.category?.id,
-    cost: invoicePayment?.cost,
+    // cost: formatNumberSeparator(invoicePayment?.cost),
+    cost: formatNumberSeparator(invoicePayment?.cost.toString()),
   };
 
   useEffect(() => {
@@ -168,12 +168,21 @@ export default function EditPaymentForm({
               <select
                 {...register("category_id")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
-                defaultValue={existingData.category_id || ""}
+                // value={existingData.category_id}
               >
                 <option value="" disabled></option>
                 {categories.map((cateData, index) => {
+                  {
+                    /* console.log(existingData.category_id, cateData?.id); */
+                  }
                   return (
-                    <option value={cateData?.id} key={index}>
+                    <option
+                      value={cateData?.id}
+                      key={index}
+                      selected={
+                        existingData.category_id === cateData?.id ? true : false
+                      }
+                    >
                       {cateData?.name}
                     </option>
                   );

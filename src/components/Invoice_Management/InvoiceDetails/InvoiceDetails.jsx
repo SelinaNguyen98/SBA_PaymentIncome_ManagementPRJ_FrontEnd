@@ -246,97 +246,162 @@ export default function InvoiceDetails() {
 
         {/* table data */}
         <div className="h-[430px] 2xl-plus:h-[600px]">
-          <table id="invoiceDetailTable" className="table-fixed mt-1 h-auto">
-            <thead>
-              <tr>
-                <th className="w-[2%]">
-                  <input
-                    type="checkbox"
-                    checked={isSelectedAllDataInvoice}
-                    onChange={handleSelectAllCheckboxChange_Invoice}
-                  />
-                </th>
-                <th className=" w-[3%]"> NO</th>
-                <th className=" w-[10%]">{t("page_payment_detail.date")}</th>
-                <th className=" w-[10%]">{t("page_payment_detail.name")}</th>
-                <th className=" w-[8%]"> JPY</th>
-                <th className=" w-[8%]"> VND</th>
-                <th className=" w-[8%]"> USD</th>
-                <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
-                <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
-                <th className=" w-[16%] ">
-                  {t("page_payment_detail.invoice")}
-                </th>
-                <th className=" w-[8%]">{t("page_payment_detail.pay")}</th>
-                <th className=" w-[6%]">ACTION</th>
-                <th className=" w-[1%]"></th>
-              </tr>
+          <table id="" className=" table-fixed border-hidden w-full mt-2">
+            <thead className="py-2   bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
+              {/* Warring: The first tag td be liked left padding */}
+              <th className="w-[2%] py-2 rounded-l-[10px]">
+                <input
+                  type="checkbox"
+                  checked={isSelectedAllDataInvoice}
+                  onChange={handleSelectAllCheckboxChange_Invoice}
+                />
+              </th>
+              <th className=" w-[3%]"> NO</th>
+              <th className=" w-[10%]">{t("page_payment_detail.date")}</th>
+              <th className=" w-[10%]">{t("page_payment_detail.name")}</th>
+              <th className=" w-[8%]"> JPY</th>
+              <th className=" w-[8%]"> VND</th>
+              <th className=" w-[8%]"> USD</th>
+              <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
+              <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
+              <th className=" w-[16%] ">{t("page_payment_detail.invoice")}</th>
+              <th className=" w-[8%]">{t("page_payment_detail.pay")}</th>
+              <th className=" w-[6%]">ACTION</th>
+
+              {/* Warring: The last tag td be liked left padding */}
+              <th className=" w-[1%]  rounded-r-[10px]"></th>
             </thead>
-            <tbody>
-              {/* Firsh row is like padding-top */}
+            <tbody className=" bg-main-theme">
+              {/* Warring: First row like the margin between thead and tbody  */}
+              <tr className="bg-white h-2 border-hidden"></tr>
+
+              {/*Warring: Second row is like padding-top */}
               <tr>
-                <td colSpan={100}></td>
+                <td
+                  colSpan={100}
+                  className=" h-2 bg-main-theme  rounded-t-[10px] border border-main-theme   "
+                ></td>
               </tr>
 
               {dataTable?.payments &&
                 dataTable?.payments.map((invoicePayment, index) => (
                   <tr
                     key={index}
-                    className="h-[35px] 2xl-plus:h-[50px] text-sm text-[13px] p-2"
+                    className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
                   >
-                    {/* <tr key={index}> */}
-                    {/* First column of each row is like padding-left */}
-                    <td>
+                    {/* Warring:  First column of each row is like padding-left */}
+                    <td className=" text-center border-hidden  border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       <input
+                        className="outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         type="checkbox"
                         checked={selectedListRowsData[index]}
                         onChange={() => handleRowCheckboxChange_Invoice(index)}
                       />
                     </td>
 
-                    {/* DATA MAIN*/}
-                    <td name="tb_no">{(page - 1) * 10 + index + 1}</td>
-                    <td name="tb_date">
+                    {/* TODO DATA MAIN*/}
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_no"
+                    >
+                      {(page - 1) * 10 + index + 1}
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_date"
+                    >
                       <input
-                        className="text-center"
+                        className=" text-center outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={
                           (invoicePayment?.payment_date || "").split(" ")[0]
                         }
                       />
                     </td>
-                    <td name="tb_name">
-                      <input readOnly value={invoicePayment?.name || ""} />
-                    </td>
-                    <td name="tb_jyp">
-                      <input readOnly value={invoicePayment?.jpy || ""} />
-                    </td>
-                    <td name="tb_vnd">
-                      <input readOnly value={invoicePayment?.cost || ""} />
-                    </td>
-                    <td name="tb_usd">
-                      <input readOnly value={invoicePayment?.usd || ""} />
-                    </td>
-                    <td name="tb_note">
-                      <input readOnly value={invoicePayment?.note || ""} />
-                    </td>
-                    <td name="tb_journal">
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_name"
+                    >
                       <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.name || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_jyp"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.jpy || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_vnd"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.cost || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_usd"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.usd || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_note"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.note || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_journal"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={invoicePayment?.category?.name || ""}
                       />
                     </td>
-                    <td name="tb_invoice">
-                      <input readOnly value={invoicePayment?.invoice || ""} />
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_invoice"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.invoice || ""}
+                      />
                     </td>
-                    <td name="tb_pay">
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_pay"
+                    >
                       <input
                         readOnly
                         value={invoicePayment?.pay || ""}
-                        className="text-center"
+                        className="text-center  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                       />
                     </td>
-                    <td name="tb_action">
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_action"
+                    >
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
                         {/* Icon Edit */}
                         <svg
@@ -391,14 +456,17 @@ export default function InvoiceDetails() {
                         </svg>
                       </div>
                     </td>
-
-                    {/* Last column of each row is like padding-right */}
-                    <td></td>
+                    {/* Warring: Last column of each row is like padding-right */}
+                    <td className="px-10 pr-4 bg-main-theme text-center border-hidden"></td>
                   </tr>
                 ))}
 
-              <tr className=" bg-main-theme h-[0px] py-0 my-0 ">
-                <td colSpan={100}></td>
+              {/* Warring:  Last row like tha padding bottom */}
+              <tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 p-[5px]  rounded-b-[10px] border-hidden "
+                ></td>
               </tr>
             </tbody>
           </table>
@@ -416,7 +484,7 @@ export default function InvoiceDetails() {
       </div>
       {isShowConfirmModal && (
         <Modal visible={isShowConfirmModal}>
-          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
               {t("page_payment_detail.del_invoice_detail")}
             </span>

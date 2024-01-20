@@ -40,7 +40,7 @@ export default function ExRateComponent({
           usd,
           idExRate
         );
-        // TODO trả về response.id
+        console.log(response);
         updateParentIdExRate(response?.id || null);
 
         showToast.success(response?.message);
@@ -86,7 +86,7 @@ export default function ExRateComponent({
   }, [selectedDate]);
 
   return (
-    <div className="flex flex-row bg-main-theme items-center py-0.5 rounded-md ">
+    <div className="flex flex-row bg-main-theme items-center py-[1px] rounded-md ">
       <div
         className="items-center px-5 flex flex-row "
         // onSubmit={fetchSaveRate}

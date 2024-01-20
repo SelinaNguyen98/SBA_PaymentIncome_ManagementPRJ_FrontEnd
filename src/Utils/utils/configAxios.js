@@ -8,6 +8,7 @@ export const paths = {
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
   categoriesPL: "categories",
+  ANALYTICS: "analytics",
 };
 
 // Request interceptor to attach the authentication token to each request

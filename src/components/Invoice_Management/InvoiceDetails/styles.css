@@ -1,18 +1,40 @@
+/* tbody {
+  height: calc(100vh - 310px);
+  table-layout: fixed;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-style: hidden;
+}
+
+thead,
+tbody tr {
+  
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+} */
+
+tbody {
+  height: calc(100vh - 310px);
+  table-layout: fixed;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-style: hidden;
+}
+
+tbody tr {
+  /* display: table; */
+  /* width: 100%; */
+  /* table-layout: fixed; */
+}
+
 #invoiceDetailTable {
   margin-top: 8px;
   width: 100%;
-  /* background-color: white; */
-  /* margin-top: 0.7rem; */
-  /* overflow: scroll; */
-  /* max-width: 100%; */
-  /* flex: content; */
-  /* display: flex; */
-  /* display: block; */
-  /* border: none; */
-  /* border-style: hidden; */
+
   border: hidden;
-  /* min-height: 600px !important;
-  max-height: 600px !important; */
 }
 
 #invoiceDetailTable thead {
@@ -59,17 +81,14 @@
 
 /* #invoiceDetailTable tbody tr, */
 #invoiceDetailTable tbody td {
-  padding-left:   10px ;
+  padding-left: 10px;
   padding-right: 4px;
-  /* padding-right: 10px; */
   background-color: #e3edf9;
-  /* font-size: 15px; */
   text-align: center;
   border: 1px solid gray;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  /* line-height: 0; */
 }
 #invoiceDetailTable tbody td input {
   outline: none;

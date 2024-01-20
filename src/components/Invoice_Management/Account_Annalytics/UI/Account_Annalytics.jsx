@@ -1,295 +1,188 @@
-import { useContext, useEffect, useState } from "react";
-import { AppContext } from "../../../../Utils/contexts/app.context";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
 import { useTranslation } from "react-i18next";
-import Button from "../../../../Utils/Button";
 import InvoiceDetailFooter from "../../InvoiceDetails/InvoicDetailFooter/InvoiceDetailFooter";
+import { callAPI_GetAnalytics } from "../API";
+import { useEffect, useState } from "react";
 // eslint-disable-next-line react/prop-types
 const AccountAnnalytics = () => {
   const { t } = useTranslation();
-  const t_account = t;
-  const { isShowAsideFilter } = useContext(AppContext);
+
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [state, setState] = useState({
+    dataTable: [],
+    usdTotal: 0,
+    vndTotal: 0,
+    jpyTotal: 0,
+  });
+  const updateStateTable = (dataTable) =>
+    setState(() => ({ ...state, ...dataTable }));
+
+  const { dataTable, usdTotal, vndTotal, jpyTotal } = state;
 
   useEffect(() => {
-    console.log(selectedDate);
+    fetchAnalytics();
   }, [selectedDate]);
-  // eslint-disable-next-line no-unused-vars
-  const [data_AccountAnnalytics, setData_AccountAnnalytics] = useState([
-    {
-      No: 1,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 2,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 3,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 4,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 5,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 6,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 7,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 8,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 9,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 10,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 11,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 12,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 13,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 14,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 15,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 9,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 10,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 11,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 12,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 13,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 14,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-    {
-      No: 15,
-      Account_Category: "ABC",
-      JPY: 9,
-      VND: 1,
-      USD: 1,
-      Total: 9,
-    },
-  ]);
+
+  const fetchAnalytics = async () => {
+    try {
+      const response = await callAPI_GetAnalytics(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear()
+      );
+
+      updateStateTable({
+        dataTable: response?.categories?.category_analytics || [],
+        usdTotal: response?.categories?.total_cost_usd || 0,
+        vndTotal: response?.categories?.total_cost_vnd || 0,
+        jpyTotal: response?.categories?.total_cost_jpy || 0,
+      });
+
+      console.log(response?.categories?.total_cost_usd);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="h-screen">
-      <div
-        id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5 h-full ${
-          isShowAsideFilter ? "col-span-10" : "col-span-full"
-        }`}
-      >
-        {/* Lable */}
-        <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
-          <svg
-            viewBox="0 0 34 27"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5 mr-2"
-          >
-            <path
-              d="M32.006 0.00320557C28.7713 0.186782 22.342 0.854977 18.373 3.28456C18.0991 3.4522 17.9439 3.75029 17.9439 4.06196V25.5404C17.9439 26.2222 18.6894 26.6531 19.318 26.3367C23.4016 24.2813 29.3073 23.7206 32.2274 23.5671C33.2244 23.5146 33.9994 22.7153 33.9994 21.7573V1.81536C34 0.769977 33.0933 -0.0581833 32.006 0.00320557ZM15.6264 3.28456C11.658 0.854977 5.22868 0.187372 1.99396 0.00320557C0.906667 -0.0581833 0 0.769977 0 1.81536V21.7579C0 22.7165 0.775035 23.5157 1.77201 23.5677C4.6933 23.7212 10.602 24.2825 14.6855 26.339C15.3124 26.6548 16.0556 26.2245 16.0556 25.5445V4.05133C16.0556 3.73907 15.9009 3.45279 15.6264 3.28456Z"
-              fill="black"
+    <div className=" relative bg-main-theme pb-5 h-full ">
+      {/* Lable */}
+      <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
+        <svg
+          viewBox="0 0 34 27"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-5 h-5 mr-2"
+        >
+          <path
+            d="M32.006 0.00320557C28.7713 0.186782 22.342 0.854977 18.373 3.28456C18.0991 3.4522 17.9439 3.75029 17.9439 4.06196V25.5404C17.9439 26.2222 18.6894 26.6531 19.318 26.3367C23.4016 24.2813 29.3073 23.7206 32.2274 23.5671C33.2244 23.5146 33.9994 22.7153 33.9994 21.7573V1.81536C34 0.769977 33.0933 -0.0581833 32.006 0.00320557ZM15.6264 3.28456C11.658 0.854977 5.22868 0.187372 1.99396 0.00320557C0.906667 -0.0581833 0 0.769977 0 1.81536V21.7579C0 22.7165 0.775035 23.5157 1.77201 23.5677C4.6933 23.7212 10.602 24.2825 14.6855 26.339C15.3124 26.6548 16.0556 26.2245 16.0556 25.5445V4.05133C16.0556 3.73907 15.9009 3.45279 15.6264 3.28456Z"
+            fill="black"
+          />
+        </svg>
+        <span className="font-bold">{t("navHeader.accountAnalytics")}</span>
+      </div>
+
+      {/* control area */}
+      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
+        <div className="lg:flex  items-center mt-1 px-6 ">
+          <div className=" max-lg:px-10">
+            <MonthYearPicker
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
             />
-          </svg>
-          <span className="font-bold">
-            {t_account("navHeader.accountAnalytics")}
-          </span>
+          </div>
         </div>
 
-        {/* control area */}
-        <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
-          <div className="lg:flex  items-center mt-1 px-6 ">
-            <div className=" max-lg:px-10">
-              <MonthYearPicker
-                selectedDate={selectedDate}
-                setSelectedDate={setSelectedDate}
-                className=""
-              />
-            </div>
-          </div>
-          <table id="aaaa">
-            <thead>
-              <tr>
-                <th className="w-[1%]"></th>
-                <th>No</th>
-                <th>{t_account("accountAnalytics.account_category")}</th>
-                <th>JPY</th>
-                <th>VND</th>
-                <th>USD</th>
-                <th>{t_account("accountAnalytics.total")}</th>
-                <th className="w-[1%]"></th>
-              </tr>
+        {/* table data */}
+        <div className=" 2xl-plus:h-[600px]">
+          <table
+            id=""
+            className=" table-fixed  border-hidden w-full mt-2 h-[200px] max-h-[200px] overflow-scroll overflow-auto "
+          >
+            <thead className=" py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
+              {/* Warring: The first tag td be liked left padding */}
+              <th className="w-[5%] rounded-l-[10px]"></th>
+              {/* //////////////// */}
+              <th className="w-[10%] py-2"> NO</th>
+              <th className="w-[30%] min-w-20 ">Account Category</th>
+              <th className="w-[10%]"> JPY</th>
+              <th className="w-[10%]"> VND</th>
+              <th className="w-[10%]"> USD</th>
+              <th className="w-[20%] ">xxx</th>
+              {/* Warring: The last tag td be liked left padding */}
+              <th className=" w-[5%]  rounded-r-[10px]"></th>
+              {/* //////////////// */}
             </thead>
-            <tbody className=" overflow-y-scroll h-[430px]">
-              <tr className="">
-                <td colSpan={100}></td>
+            <tbody className=" bg-main-theme h-[200px] overflow-auto">
+              {/* Warring: First row like the margin between thead and tbody  */}
+              <tr className="bg-white h-2 border-hidden"></tr>
+              {/* //////////////// */}
+              {/*Warring: Second row is like padding-top */}
+              <tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 bg-main-theme  rounded-t-[10px] border border-main-theme   "
+                ></td>
               </tr>
+              {/* //////////////// */}
+              {dataTable &&
+                dataTable.map((analytic, index) => (
+                  <tr
+                    key={index}
+                    className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
+                  >
+                    {/* Warring:  First column of each row is like padding-left */}
+                    <td className=" text-center border-hidden border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"></td>
+                    {/* //////////////// */}
 
-              {data_AccountAnnalytics.map(
-                (rowData_AccountAnnalytics, index) => (
-                  <tr key={index}>
-                    <td className="w-[1%]"></td>
-                    <td className="w-[10%]" name="tb_no">
-                      {rowData_AccountAnnalytics.No}
+                    {/* TODO DATA MAIN*/}
+                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-solid border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                      {index + 1}
                     </td>
-                    <td className="w-[10%]" name="tb_account_category">
-                      {rowData_AccountAnnalytics.Account_Category}
+                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                      <input
+                        className=" text-center outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={analytic?.group_id || ""}
+                      />
                     </td>
-                    <td className="w-[10%]" name="tb_jpy">
-                      {rowData_AccountAnnalytics.JPY}
+                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={analytic?.cost_jpy || ""}
+                      />
                     </td>
-                    <td className="w-[10%]" name="tb_vnd">
-                      {rowData_AccountAnnalytics.VND}
-                    </td>
-                    <td className="w-[10%] overflow-x-hidden" name="tb_usd">
-                      {rowData_AccountAnnalytics.USD}
+                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={analytic?.cost_vnd || ""}
+                      />
                     </td>
                     <td
-                      className="max-w-[10%] min-w-[10%] w-[10%] overflow-x-hidden overflow-scroll"
-                      name="tb_total"
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_vnd"
                     >
-                      {rowData_AccountAnnalytics.Total}
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={analytic?.cost_usd || ""}
+                      />
                     </td>
-                    <td className="w-[1%]"></td>
-                  </tr>
-                )
-              )}
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_usd"
+                    >
+                      <input
+                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={"xxxxxxxxxx"}
+                      />
+                    </td>
 
-              <tr className="bg-main-theme h-[0px] py-0 my-0">
-                <td colSpan={100}></td>
+                    {/* Warring: Last column of each row is like padding-right */}
+                    <td className="px-10 pr-4 bg-main-theme text-center border-hidden"></td>
+                    {/* //////////////// */}
+                  </tr>
+                ))}
+
+              {/* Warring:  Last row like tha padding bottom */}
+              <tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 p-[5px]  rounded-b-[10px] border-hidden "
+                ></td>
               </tr>
+              {/* //////////////// */}
             </tbody>
           </table>
-
-          <InvoiceDetailFooter
-            totalUSD={2000}
-            totalVND={2000}
-            totalJPY={2000}
-          />
         </div>
+
+        <InvoiceDetailFooter
+          totalUSD={usdTotal}
+          totalVND={vndTotal}
+          totalJPY={jpyTotal}
+        />
       </div>
     </div>
   );
