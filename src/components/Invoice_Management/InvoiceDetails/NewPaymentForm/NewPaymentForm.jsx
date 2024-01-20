@@ -17,10 +17,10 @@ export default function NewPaymentForm({
   ok,
   selectedDate,
   exchangeRateId,
+  changeFirstPage,
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
-
   const {
     register,
     handleSubmit,
@@ -30,12 +30,11 @@ export default function NewPaymentForm({
   } = useForm({ resolver: yupResolver(createPaymentSchema) });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
       const resonse = await createPayment(data);
       console.log(resonse);
 
-      changeEndPage();
+      changeFirstPage();
     } catch (error) {
       console.log(error);
     }
@@ -54,16 +53,16 @@ export default function NewPaymentForm({
     .split("T")[0];
 
   // St
-  useEffect(() => {
-    // Set the min and max attributes for the date input
-    const dateInput = document.getElementById("payment_date");
-    dateInput.setAttribute("min", minDate);
-    dateInput.setAttribute("max", maxDate);
-  }, [minDate, maxDate]);
+  // useEffect(() => {
+  //   // Set the min and max attributes for the date input
+  //   const dateInput = document.getElementById("payment_date");
+  //   dateInput.setAttribute("min", minDate);
+  //   dateInput.setAttribute("max", maxDate);
+  // }, [minDate, maxDate]);
 
   useEffect(() => {
     fetchGetCategoriesPL();
-    setValue("user_id", 1);
+    setValue("user_id", localStorage.getItem("user_id"));
     setValue("exchange_rate_id", exchangeRateId);
     setValue("currency_type", "vnd");
   }, [selectedDate]);
@@ -72,7 +71,7 @@ export default function NewPaymentForm({
     try {
       const response = await getGetAllCategoriesPL();
       setCategories(response);
-      // console.log(ca);
+      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -90,14 +89,25 @@ export default function NewPaymentForm({
           noValidate
           onSubmit={onSubmit}
         >
-          <InputCustomComponent
-            label={t("page_payment_detail.date")}
-            id={"payment_date"}
-            name={"payment_date"}
-            type="date"
-            register={register}
-            errorMessage={errors?.payment_date?.message}
-          />
+          <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
+            <label className="lg:col-span-3">
+              {t("page_payment_detail.date")}
+            </label>
+            <div className=" lg:col-span-9 ml-3">
+              <input
+                type="date"
+                {...register("payment_date")}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                min={minDate}
+                max={maxDate}
+              />
+              <div
+                className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
+              >
+                {errors?.payment_date?.message}
+              </div>
+            </div>
+          </div>
 
           <InputCustomComponent
             label={t("page_payment_detail.name")}

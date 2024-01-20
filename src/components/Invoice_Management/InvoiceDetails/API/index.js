@@ -95,7 +95,21 @@ export const callAPI_GetAllCategoriesPL = async () => {
 
 export const callApi_createPayment = async (formData) => {
   try {
+    console.log("formData", formData);
+
     const response = await axios.post(paths.PAYMENT, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const callApi_updatePayment = async (formData) => {
+  try {
+    const response = await axios.put(
+      paths.PAYMENT + `/${formData.id}`,
+      formData
+    );
     return response.data;
   } catch (error) {
     throw error;

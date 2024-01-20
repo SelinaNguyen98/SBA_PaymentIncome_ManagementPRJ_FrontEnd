@@ -2,9 +2,11 @@ import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
 import { useTranslation } from "react-i18next";
+import Button from "../../../../Utils/Button";
+import InvoiceDetailFooter from "../../InvoiceDetails/InvoicDetailFooter/InvoiceDetailFooter";
 // eslint-disable-next-line react/prop-types
 const AccountAnnalytics = () => {
-  const {t } = useTranslation();
+  const { t } = useTranslation();
   const t_account = t;
   const { isShowAsideFilter } = useContext(AppContext);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -134,6 +136,62 @@ const AccountAnnalytics = () => {
       USD: 1,
       Total: 9,
     },
+    {
+      No: 9,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 10,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 11,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 12,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 13,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 14,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
+    {
+      No: 15,
+      Account_Category: "ABC",
+      JPY: 9,
+      VND: 1,
+      USD: 1,
+      Total: 9,
+    },
   ]);
   return (
     <div className="h-screen">
@@ -163,40 +221,33 @@ const AccountAnnalytics = () => {
 
         {/* control area */}
         <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
-          <div className="grid  gap-2 items-center w-full ">
-            <div className="flex items-center justify-between gap-2 flex-row max-[1390px]:flex-col">
-              <div className="mt-1 px-6 flex flex-row items-center">
-                <div className="gap-2 items-center flex flex-row max-[1000px]:flex-col">
-                  <MonthYearPicker
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
-                  />
-                </div>
-              </div>
+          <div className="lg:flex  items-center mt-1 px-6 ">
+            <div className=" max-lg:px-10">
+              <MonthYearPicker
+                selectedDate={selectedDate}
+                setSelectedDate={setSelectedDate}
+                className=""
+              />
             </div>
           </div>
-          {/* table data */}
-          <div className="max-h-[600px] overflow-y-auto mt-4">
-          <table id="invoiceTable" className="w-full">
+          <table id="aaaa">
             <thead>
               <tr>
                 <th className="w-[1%]"></th>
-                <th className="w-[10%]">No</th>
-                <th className="w-[20%]">{t_account("accountAnalytics.account_category")}</th>
-                <th className="w-[10%]">JPY</th>
-                <th className="w-[10%]">VND</th>
-                <th className="w-[10%]">USD</th>
-                <th className="w-[10%]">{t_account("accountAnalytics.total")}</th>
+                <th>No</th>
+                <th>{t_account("accountAnalytics.account_category")}</th>
+                <th>JPY</th>
+                <th>VND</th>
+                <th>USD</th>
+                <th>{t_account("accountAnalytics.total")}</th>
                 <th className="w-[1%]"></th>
               </tr>
             </thead>
-            
-            <tbody className="">
+            <tbody className=" overflow-y-scroll h-[430px]">
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              
+
               {data_AccountAnnalytics.map(
                 (rowData_AccountAnnalytics, index) => (
                   <tr key={index}>
@@ -232,40 +283,12 @@ const AccountAnnalytics = () => {
               </tr>
             </tbody>
           </table>
-          </div>
 
-          <div className=" mt-3">
-            <div className=" flex flex-wrap gap-4 items-center">
-              <span className="font-bold">  {t_account("title.total_of_month")}</span>
-              {/*  max-lg:space-y-2  */}
-              <div className="flex items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
-                <div className=" inline-flex mx-3 ">
-                  JPY
-                  <input
-                    type="text"
-                    className=" bg-main-theme max-w-[100px] ml-2  "
-                    readOnly
-                  />
-                </div>
-                <div className=" inline-flex mx-3 ">
-                  VND
-                  <input
-                    type="text"
-                    className=" bg-main-theme  max-w-[100px] ml-2 "
-                    readOnly
-                  />
-                </div>
-                <div className=" inline-flex mx-3 ">
-                  USD
-                  <input
-                    type="text"
-                    className=" bg-main-theme  max-w-[100px] ml-2 "
-                    readOnly
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <InvoiceDetailFooter
+            totalUSD={2000}
+            totalVND={2000}
+            totalJPY={2000}
+          />
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import "../../../Utils/style.css";
 import "./styles.css";
 
 // eslint-disable-next-line no-unused-vars
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 
@@ -13,21 +13,19 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
-import {
-  formatNumberSeparator,
-  formatStringMonthYearToDate,
-} from "../../../Utils/utils/maths";
-import {
-  createExChangeRate,
-  deletePaymentById,
-  getExChangeRateByMonthYear,
-  getPaymentsByYearAndMonths,
-} from "./Controller";
-import InputNumber from "../../../Utils/InputNumber";
+import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
+import ExRateComponent from "./ExRateComponent";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
+
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
+  const [idExRate, setIdRate] = useState(null);
+
+  const triggerData = () => {
+    setDataChangeTrigger(!dataChangeTrigger);
+  };
 
   const { showToast } = useContext(AppContext);
 
@@ -59,6 +57,7 @@ export default function InvoiceDetails() {
     selectedRowData: null, // single delete
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
+    // idExRate: null,
   });
 
   const {
@@ -72,18 +71,6 @@ export default function InvoiceDetails() {
 
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
-
-  // state Form ExRate
-  const [dataFormExRate, setFormExRate] = useState({
-    idExRate: null,
-    jpy: "",
-    usd: "",
-  });
-
-  const { idExRate, jpy, usd } = dataFormExRate;
-
-  const updateFormRate = (dataTable) =>
-    setFormExRate(() => ({ ...dataFormExRate, ...dataTable }));
 
   /// Handle Checkbox funtion
   const handleRowCheckboxChange_Invoice = (index) => {
@@ -116,63 +103,11 @@ export default function InvoiceDetails() {
         page
       );
 
-      // if (page > response?.pagination?.total_pages)
-      //   changePage(response?.pagination?.total_pages - 1);
       updateStateTable({
         dataTable: response,
         totalPage: response?.pagination?.total_pages,
       });
       console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchExchangeRate = async () => {
-    try {
-      const [status, response] = await getExChangeRateByMonthYear(
-        selectedDate.getMonth() + 1,
-        selectedDate.getFullYear()
-      );
-      console.log(response);
-      // Khong co gia tri duoc lay ta
-      if (status == 200 && response.success == false) {
-        // setValue("idExRate", null);
-        // setValue("jpy", null);
-        // setValue("usd", null);
-
-        updateFormRate({
-          idExRate: null,
-          jpy: "",
-          usd: "",
-        });
-        console.log("khong co cai chi ca");
-        return;
-      }
-
-      updateFormRate({
-        idExRate: response?.data[0].id,
-        jpy: formatNumberSeparator(response?.data[0].jpy.toString()),
-        usd: formatNumberSeparator(response?.data[0].usd.toString()),
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchSaveRate = async () => {
-    try {
-      const response = await createExChangeRate(
-        selectedDate.getMonth() + 1,
-        selectedDate.getFullYear(),
-        jpy,
-        usd,
-        idExRate
-      );
-      console.log(response);
-
-      showToast(response?.message);
-      setDataChangeTrigger(!dataChangeTrigger);
     } catch (error) {
       console.log(error);
     }
@@ -197,7 +132,7 @@ export default function InvoiceDetails() {
       setDataChangeTrigger(!dataChangeTrigger);
 
       updateState({ isShowConfirmModal: false });
-      showToast("Delete  successfully!");
+      showToast.success("Delete  successfully!");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -218,20 +153,8 @@ export default function InvoiceDetails() {
     }
 
     console.log("Main effect");
-
     fetchInvoices();
-    fetchExchangeRate();
   }, [selectedDate, page, dataChangeTrigger]);
-
-  // useEffect(() => {
-  //   if (isFilterApplied.current && page !== 1) {
-  //     return;
-  //   }
-
-  //   console.log("Main effect");
-
-  //   fetchInvoices();
-  // }, []);
 
   function changePage(page) {
     isFilterApplied.current = false;
@@ -239,10 +162,7 @@ export default function InvoiceDetails() {
   }
 
   return (
-    <div
-      id="invoiceDetailTable"
-      className={` relative bg-main-theme pb-5 h-full `}
-    >
+    <div className={` relative bg-main-theme pb-5 h-full `}>
       {/* Lable */}
       <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold ">
         <svg
@@ -269,31 +189,13 @@ export default function InvoiceDetails() {
                   setSelectedDate={setSelectedDate}
                   className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
                 />
-                <div className="flex flex-row bg-main-theme items-center py-1 rounded-md ">
-                  <div
-                    className="items-center px-5 flex flex-row "
-                    // onSubmit={fetchSaveRate}
-                  >
-                    <div className="font-medium ">
-                      JPY
-                      <InputNumber
-                        number={jpy}
-                        setNumber={(value) => updateFormRate({ jpy: value })}
-                      />
-                      <InputNumber
-                        number={usd}
-                        setNumber={(value) => updateFormRate({ usd: value })}
-                      />
-                    </div>
-
-                    <Button
-                      className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-                      onClick={() => fetchSaveRate()}
-                    >
-                      {t("button.save")}
-                    </Button>
-                  </div>
-                </div>
+                <ExRateComponent
+                  t={t}
+                  // fetchSaveRate={fetchSaveRate}
+                  selectedDate={selectedDate}
+                  triggerData={triggerData}
+                  updateParentIdExRate={setIdRate}
+                />
               </div>
             </div>
 
@@ -551,15 +453,17 @@ export default function InvoiceDetails() {
       {isShowFormNewPayment && (
         <NewPaymentForm
           visible={isShowFormNewPayment}
+          selectedDate={selectedDate}
+          exchangeRateId={idExRate}
           cancel={() => {
             updateState({ isShowFormNewPayment: false });
           }}
-          selectedDate={selectedDate}
-          changeEndPage={() => {
+          changeFirstPage={() => {
             updateState({ isShowFormNewPayment: false });
-            changePage(1);
+            if (page != 1) {
+              changePage(1);
+            } else triggerData();
           }}
-          exchangeRateId={idExRate}
         />
       )}
 
@@ -575,6 +479,7 @@ export default function InvoiceDetails() {
               selectedRowData: null,
             });
           }}
+          triggerData={triggerData}
         />
       )}
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-catch */
 // Controller.js
 import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 import * as API from "../API";
@@ -64,7 +65,22 @@ export const getGetAllCategoriesPL = async () => {
 export const createPayment = async (formData) => {
   try {
     // if idExRate is null || trim, ''  => create
+    let newCost = formatNumberHasDot(formData.cost);
+    formData.cost = newCost;
     const response = await API.callApi_createPayment(formData);
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updatePayment = async (formData) => {
+  try {
+    // if idExRate is null || trim, ''  => create
+    let newCost = formatNumberHasDot(formData.cost);
+    formData.cost = newCost;
+    const response = await API.callApi_updatePayment(formData);
 
     return response;
   } catch (error) {

@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
-// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
 import Modal from "../../../../Utils/Modal";
 import Button from "../../../../Utils/Button";
 import { useTranslation } from "react-i18next";
 import { formatNumberSeparator } from "../../../../Utils/utils/maths";
-import { getGetAllCategoriesPL } from "../Controller";
+import { getGetAllCategoriesPL, updatePayment } from "../Controller";
 
 export default function EditPaymentForm({
   visible,
@@ -17,24 +14,20 @@ export default function EditPaymentForm({
   invoicePayment,
   selectedDate,
   exchangeRateId,
+  triggerData,
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
 
+  
   const {
     register,
     handleSubmit,
     setValue,
-    // eslint-disable-next-line no-unused-vars
     setError,
-    // eslint-disable-next-line no-unused-vars
-    watch,
     getValues,
     formState: { errors },
-    // } = useForm({ resolver: yupResolver(createPaymentSchema) });
   } = useForm();
-
-  // console.log(getValues("payment_date"));
 
   // const convertedDate = new Date(invoicePayment?.payment_date);
   const formattedDate = invoicePayment?.payment_date.split(" ")[0];
@@ -55,34 +48,24 @@ export default function EditPaymentForm({
     .toISOString()
     .split("T")[0];
 
+  // console.log("invoicePayment", invoicePayment);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const existingData = {
+    id: invoicePayment.id,
     payment_date: formattedDate,
     name: invoicePayment?.name,
-    curency_type: invoicePayment?.curency_type,
+    currency_type: invoicePayment?.currency_type,
     note: invoicePayment?.note,
     invoice: invoicePayment?.invoice,
     pay: invoicePayment?.pay,
     category_id: invoicePayment?.category?.id,
     cost: invoicePayment?.cost,
   };
-  console.log("existingData: ", existingData);
-  // useEffect(() => {
-  //   // Set the min and max attributes for the date input
-  //   let dateInput = document.getElementById("payment_date");
-  //   dateInput.setAttribute("min", minDate);
-  //   dateInput.setAttribute("max", maxDate);
-  // }, [minDate, maxDate]);
-
-  // useEffect(() => {
-  //   Object.keys(existingData).forEach((key) => {
-  //     setValue(key, existingData[key]);
-  //   });
-  // }, [setValue, existingData]);
 
   useEffect(() => {
     fetchGetCategoriesPL();
-    setValue("user_id", 1);
+    setValue("id", localStorage.getItem("user_id"));
+    setValue("user_id", localStorage.getItem("user_id"));
     setValue("exchange_rate_id", exchangeRateId);
     setValue("currency_type", "vnd");
 
@@ -101,15 +84,20 @@ export default function EditPaymentForm({
     }
   };
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      const response = await updatePayment(data);
+      triggerData();
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 pt-5 pb-3 px-12 rounded-2xl">
         <span className=" uppercase py-1 mx-auto px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-          Edit payment
+          {t("page_payment_detail.edit_payment")}
         </span>
 
         <form
@@ -180,20 +168,12 @@ export default function EditPaymentForm({
               <select
                 {...register("category_id")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
-                value={existingData.category_id + ""}
+                defaultValue={existingData.category_id || ""}
               >
                 <option value="" disabled></option>
                 {categories.map((cateData, index) => {
                   return (
-                    <option
-                      value={cateData?.id + ""}
-                      key={index}
-                      // selected={
-                      //   existingData.category_id + "" == cateData.id + ""
-                      //     ? true
-                      //     : false
-                      // }
-                    >
+                    <option value={cateData?.id} key={index}>
                       {cateData?.name}
                     </option>
                   );

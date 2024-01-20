@@ -23,19 +23,24 @@ export const AppProvider = ({ children }) => {
 
   //State quản lý Toast thông báo
   const [toast, setToast] = useState(null);
-  const showToast = (message, type) => {
+  const showCustomToast = (message, type) => {
     setToast({ message, type });
-
     setTimeout(() => {
       setToast(null);
     }, 3000);
+  };
+  const showToast = {
+    success: (message) => {
+      showCustomToast(message, "success");
+    },
+    error: (message) => {
+      showCustomToast(message, "error");
+    },
   };
 
   return (
     <AppContext.Provider
       value={{
-        // isShowAsideFilter,
-        // toggleAsideFilter,
         toast,
         showToast,
       }}

@@ -19,6 +19,7 @@ export const checkRegexMonthDatePattern = (input) => {
   return regexPattern.test(input);
 };
 
+// chuyển kiểu số thành chuỗi có . phân cách
 export const formatNumberSeparator = (input) => {
   // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
   let numericValue = input.replace(/[^0-9]/g, "");
@@ -32,6 +33,7 @@ export const formatNumberSeparator = (input) => {
   return numericValue.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
 };
 
+// chuyen chuỗi ký tự số có dấu . thành kiểu số nguyên
 export const formatNumberHasDot = (input) => {
   // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
   return Number(input.replace(/\./g, ""));

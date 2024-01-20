@@ -19,6 +19,7 @@ export default function InputNumber({ number, setNumber, className }) {
     <input
       value={number}
       onChange={handleInputChange}
+      onBlur={handleInputChange}
       className={
         className
           ? className
