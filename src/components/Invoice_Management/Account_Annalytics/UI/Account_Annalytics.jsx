@@ -71,36 +71,36 @@ const AccountAnnalytics = () => {
             />
           </div>
         </div>
-
-        {/* table data */}
-        <div className=" 2xl-plus:h-[600px]">
-          <table
-            id=""
-            className=" table-fixed  border-hidden w-full mt-2 h-[200px] max-h-[200px] overflow-scroll overflow-auto "
-          >
-            <thead className=" py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
-              {/* Warring: The first tag td be liked left padding */}
-              <th className="w-[5%] rounded-l-[10px]"></th>
-              {/* //////////////// */}
-              <th className="w-[10%] py-2"> NO</th>
-              <th className="w-[30%] min-w-20 ">Account Category</th>
-              <th className="w-[10%]"> JPY</th>
-              <th className="w-[10%]"> VND</th>
-              <th className="w-[10%]"> USD</th>
-              <th className="w-[20%] ">xxx</th>
-              {/* Warring: The last tag td be liked left padding */}
-              <th className=" w-[5%]  rounded-r-[10px]"></th>
-              {/* //////////////// */}
+        {/* Body fixed */}
+        <div className=" overflow-auto h-[200px] w-full rounded-lg bg-white mt-2  ">
+          <table className="w-full border-hidden  ">
+            <thead className=" py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase sticky top-0 z-10  ">
+              <tr className=" border-hidden ">
+                {/* Warring: The first tag td be liked left padding */}
+                <th className=" w-[2%] rounded-l-[10px]"></th>
+                {/* //////////////// */}
+                <th className=" w-[10%] py-2"> NO</th>
+                <th className=" w-[26%]">Account Category</th>
+                <th className=" w-[20%]"> JPY</th>
+                <th className=" w-[20%]"> VND</th>
+                <th className=" w-[20%]"> USD</th>
+                {/* Warring: The last tag td be liked left padding */}
+                <th className=" w-[2%]  rounded-r-[10px]"></th>
+                {/* //////////////// */}
+              </tr>
+              <tr className=" h-2 bg-white border-hidden ">
+                <th colSpan={100}></th>
+              </tr>
             </thead>
-            <tbody className=" bg-main-theme h-[200px] overflow-auto">
-              {/* Warring: First row like the margin between thead and tbody  */}
-              <tr className="bg-white h-2 border-hidden"></tr>
+            {/* <thead className=" h-2 border-hidden"></thead> */}
+
+            <tbody className=" bg-main-theme rounded-lg">
               {/* //////////////// */}
               {/*Warring: Second row is like padding-top */}
-              <tr>
+              <tr className=" ">
                 <td
                   colSpan={100}
-                  className=" h-2 bg-main-theme  rounded-t-[10px] border border-main-theme   "
+                  className=" h-2 bg-main-theme rounded-t-[10px] border border-main-theme "
                 ></td>
               </tr>
               {/* //////////////// */}
@@ -111,57 +111,47 @@ const AccountAnnalytics = () => {
                     className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
                   >
                     {/* Warring:  First column of each row is like padding-left */}
-                    <td className=" text-center border-hidden border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"></td>
+                    <td className=" w-[2%] border-hidden border-gray-300 "></td>
                     {/* //////////////// */}
 
                     {/* TODO DATA MAIN*/}
-                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-solid border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                    <td className=" w-[10%] bg-main-theme text-center border border-solid border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       {index + 1}
                     </td>
-                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                    <td className=" w-[26%] bg-main-theme text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       <input
-                        className=" text-center outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" text-center outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={analytic?.group_id || ""}
                       />
                     </td>
-                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                    <td className="  w-[20%] pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={analytic?.cost_jpy || ""}
                       />
                     </td>
-                    <td className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                    <td className=" w-[20%] pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={analytic?.cost_vnd || ""}
                       />
                     </td>
                     <td
-                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      className=" w-[20%]  bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
                       name="tb_vnd"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={analytic?.cost_usd || ""}
                       />
                     </td>
-                    <td
-                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
-                      name="tb_usd"
-                    >
-                      <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
-                        readOnly
-                        value={"xxxxxxxxxx"}
-                      />
-                    </td>
 
                     {/* Warring: Last column of each row is like padding-right */}
-                    <td className="px-10 pr-4 bg-main-theme text-center border-hidden"></td>
+                    <td className=" w-[2%] bg-main-theme border-hidden"></td>
                     {/* //////////////// */}
                   </tr>
                 ))}

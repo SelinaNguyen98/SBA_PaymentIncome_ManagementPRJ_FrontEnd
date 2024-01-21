@@ -245,9 +245,9 @@ export default function InvoiceDetails() {
         </div>
 
         {/* table data */}
-        <div className="h-[430px] 2xl-plus:h-[600px]">
-          <table id="" className=" table-fixed border-hidden w-full mt-2">
-            <thead className="py-2   bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
+        <div className="h-[430px] 2xl-plus:h-[600px] mt-2">
+          <table id="" className=" table-fixed border-hidden w-full">
+            <thead className="py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
               {/* Warring: The first tag td be liked left padding */}
               <th className="w-[2%] py-2 rounded-l-[10px]">
                 <input
