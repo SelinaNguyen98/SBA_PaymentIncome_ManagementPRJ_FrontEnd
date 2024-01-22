@@ -17,7 +17,6 @@ import {
   formatFloatToCustomString,
   formatNumberSeparator,
   formatStringMonthYearToDate,
-  formatStringNumberWithSeparator,
 } from "../../../Utils/utils/maths";
 import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
 import ExRateComponent from "./ExRateComponent";
@@ -39,10 +38,15 @@ export default function InvoiceDetails() {
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
     isShowFormEditPayment: false,
+    isShowWarringModal: false,
   });
 
-  const { isShowConfirmModal, isShowFormNewPayment, isShowFormEditPayment } =
-    stateControl;
+  const {
+    isShowConfirmModal,
+    isShowFormNewPayment,
+    isShowFormEditPayment,
+    isShowWarringModal,
+  } = stateControl;
 
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
@@ -98,6 +102,13 @@ export default function InvoiceDetails() {
 
   // const [page, setPage] = useState(1);
   const isFilterApplied = useRef(false);
+  // const childInputExRateRef = useRef(null);
+
+  // const focusChildInput = (ref) => {
+  //   if (ref && ref.current) {
+  //     ref.current.focus();
+  //   }
+  // };
 
   // TODO fake  data here
   const fetchInvoices = async () => {
@@ -206,7 +217,14 @@ export default function InvoiceDetails() {
 
             <div className="flex flex-row">
               <Button
-                onClick={() => updateState({ isShowFormNewPayment: true })}
+                onClick={() => {
+                  console.log(idExRate);
+                  if (idExRate === null) {
+                    updateState({ isShowWarringModal: true });
+                  } else {
+                    updateState({ isShowFormNewPayment: true });
+                  }
+                }}
                 icon={
                   <svg
                     width="16"
@@ -352,10 +370,9 @@ export default function InvoiceDetails() {
                       <input
                         className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        // value={formatNumberSeparator(
-                        //   invoicePayment?.cost.toString() || ""
-                        // )}
-                        value={formatStringNumberWithSeparator( invoicePayment?.cost.toString())}
+                        value={formatNumberSeparator(
+                          invoicePayment?.cost.toString() || ""
+                        )}
                       />
                     </td>
                     <td
@@ -484,9 +501,9 @@ export default function InvoiceDetails() {
 
         {/* InvoiceDetailFooter */}
         <InvoiceDetailFooter
-          totalUSD={dataTable?.total_usd}
-          totalVND={dataTable?.total_cost}
-          totalJPY={dataTable?.total_jpy}
+          totalUSD={dataTable?.total_usd || 0}
+          totalVND={dataTable?.total_cost || 0}
+          totalJPY={dataTable?.total_jpy || 0}
           totalPage={totalPage}
           page={page}
           changePage={changePage}
@@ -559,6 +576,40 @@ export default function InvoiceDetails() {
           }}
           triggerData={triggerData}
         />
+      )}
+
+      {isShowWarringModal && (
+        <Modal visible={isShowWarringModal}>
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
+            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+              {/* TODO */}
+              WARRING
+            </span>
+
+            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+              {/* TODO */}
+              EXCHAGE RATE ID of this months not found!
+            </div>
+
+            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+              <Button
+                onClick={() => {
+                  const inputElement =
+                    document.getElementById("inputExRateJPY");
+                  if (inputElement) {
+                    inputElement.focus();
+                  }
+                  updateState({ isShowWarringModal: false });
+                }}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </Modal>
       )}
     </div>
   );

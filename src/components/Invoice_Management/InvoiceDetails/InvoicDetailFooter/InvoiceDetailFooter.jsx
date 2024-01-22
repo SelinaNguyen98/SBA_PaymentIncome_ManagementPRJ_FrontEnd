@@ -1,7 +1,11 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../../../../Utils/Pagination";
+import {
+  formatFloatToCustomString,
+  formatNumberSeparator,
+} from "../../../../Utils/utils/maths";
 
 // eslint-disable-next-line react/prop-types
 export default function InvoiceDetailFooter({
@@ -23,21 +27,36 @@ export default function InvoiceDetailFooter({
         <div className=" inline-flex mx-3 ">
           JPY:
           {/* <span className=" bg-main-theme max-w-[100px] ml-2  ">{totalUSD}</span> */}
-          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
-            {totalJPY}
-          </span>
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatFloatToCustomString(totalJPY)}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalJPY.toString())}
+          ></input>
         </div>
         <div className=" inline-flex mx-3 ">
           VND:
-          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
-            {totalVND}
-          </span>
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatNumberSeparator(totalVND.toString())}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalVND.toString())}
+          ></input>
         </div>
         <div className=" inline-flex mx-3 ">
           USD:
-          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
-            {totalUSD}
-          </span>
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatFloatToCustomString(totalUSD)}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalUSD.toString())}
+          ></input>
         </div>
       </div>
       <div className="  h-[40px] justify-end">

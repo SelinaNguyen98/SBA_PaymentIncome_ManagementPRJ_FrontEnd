@@ -3,6 +3,10 @@ import { useTranslation } from "react-i18next";
 import InvoiceDetailFooter from "../../InvoiceDetails/InvoicDetailFooter/InvoiceDetailFooter";
 import { callAPI_GetAnalytics } from "../API";
 import { useEffect, useState } from "react";
+import {
+  formatFloatToCustomString,
+  formatNumberSeparator,
+} from "../../../../Utils/utils/maths";
 // eslint-disable-next-line react/prop-types
 const AccountAnnalytics = () => {
   const { t } = useTranslation();
@@ -123,28 +127,35 @@ const AccountAnnalytics = () => {
                         <input
                           className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap text-center"
                           readOnly
-                          value={analytic?.group_id || ""}
+                          value={analytic?.name || ""}
                         />
                       </td>
                       <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
                         <input
                           className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                           readOnly
-                          value={analytic?.cost_jpy || "0"}
+                          value={formatFloatToCustomString(
+                            analytic?.cost_jpy || 0
+                          )}
+                        />
+                      </td>
+
+                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        <input
+                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
+                          readOnly
+                          // value={analytic?.cost_vnd || "0"}
+                          value={formatNumberSeparator(analytic?.cost_vnd || 0)}
                         />
                       </td>
                       <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
                         <input
                           className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
                           readOnly
-                          value={analytic?.cost_vnd || "0"}
-                        />
-                      </td>
-                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                        <input
-                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
-                          readOnly
-                          value={analytic?.cost_usd || "0"}
+                          // value={analytic?.cost_usd || "0"}
+                          value={formatFloatToCustomString(
+                            analytic?.cost_usd || 0
+                          )}
                         />
                       </td>
 
@@ -168,9 +179,9 @@ const AccountAnnalytics = () => {
         </div>
 
         <InvoiceDetailFooter
-          totalUSD={usdTotal}
-          totalVND={vndTotal}
-          totalJPY={jpyTotal}
+          totalUSD={usdTotal || 0}
+          totalVND={vndTotal || 0}
+          totalJPY={jpyTotal || 0}
         />
       </div>
     </div>

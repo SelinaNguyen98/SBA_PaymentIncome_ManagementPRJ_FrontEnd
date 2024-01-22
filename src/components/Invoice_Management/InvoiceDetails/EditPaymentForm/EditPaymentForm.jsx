@@ -87,6 +87,7 @@ export default function EditPaymentForm({
     try {
       const response = await updatePayment(data);
       triggerData();
+      cancel()
     } catch (error) {
       console.log(error);
     }

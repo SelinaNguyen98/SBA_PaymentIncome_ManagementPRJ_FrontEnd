@@ -41,7 +41,8 @@ export const formatNumberHasDot = (input) => {
 
 // Format Float to String with Separator ,
 export const formatFloatToCustomString = (input) => {
-  return input === 0
+  input = parseFloat(input);
+  return input === 0 || input === null
     ? 0
     : input
         .toLocaleString("en-US", {

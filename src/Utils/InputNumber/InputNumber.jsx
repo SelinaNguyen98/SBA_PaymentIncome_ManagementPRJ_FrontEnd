@@ -1,7 +1,7 @@
 import React from "react";
 import { formatNumberSeparator } from "../utils/maths";
 
-export default function InputNumber({ number, setNumber, className }) {
+export default function InputNumber({ number, setNumber, className, ...ref }) {
   const handleInputChange = (e) => {
     // // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
     // const numericValue = e.target.value.replace(/[^0-9]/g, "");
@@ -20,6 +20,7 @@ export default function InputNumber({ number, setNumber, className }) {
       value={number}
       onChange={handleInputChange}
       onBlur={handleInputChange}
+      {...ref}
       className={
         className
           ? className

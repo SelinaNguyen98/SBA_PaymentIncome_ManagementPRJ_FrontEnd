@@ -17,6 +17,7 @@ export default function ExRateComponent({
     usd: "",
   });
 
+  const [isShowWarringModal, setShowWarringModal] = useState(false);
   const { idExRate, jpy, usd } = dataFormExRate;
 
   const updateFormRate = (dataTable) =>
@@ -94,6 +95,7 @@ export default function ExRateComponent({
         <div className="font-medium ">
           JPY
           <InputNumber
+            id={"inputExRateJPY"}
             number={jpy}
             setNumber={(value) => updateFormRate({ jpy: value })}
           />
