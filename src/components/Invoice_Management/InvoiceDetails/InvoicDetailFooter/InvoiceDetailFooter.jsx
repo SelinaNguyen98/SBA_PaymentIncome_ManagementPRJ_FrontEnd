@@ -21,21 +21,21 @@ export default function InvoiceDetailFooter({
       <span className="font-bold">{t_invoice("title.total_of_month")}</span>
       <div className="flex items-start gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
         <div className=" inline-flex mx-3 ">
-          JPY
+          JPY:
           {/* <span className=" bg-main-theme max-w-[100px] ml-2  ">{totalUSD}</span> */}
-          <span type="text" className=" bg-main-theme max-w-[100px] ml-2  ">
+          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
             {totalJPY}
           </span>
         </div>
         <div className=" inline-flex mx-3 ">
-          VND
-          <span type="text" className=" bg-main-theme  max-w-[100px] ml-2 ">
+          VND:
+          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
             {totalVND}
           </span>
         </div>
         <div className=" inline-flex mx-3 ">
-          USD
-          <span type="text" className=" bg-main-theme  max-w-[100px] ml-2">
+          USD:
+          <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
             {totalUSD}
           </span>
         </div>

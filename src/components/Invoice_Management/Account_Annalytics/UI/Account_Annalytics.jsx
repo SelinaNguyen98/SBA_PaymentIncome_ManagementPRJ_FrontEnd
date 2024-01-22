@@ -71,101 +71,100 @@ const AccountAnnalytics = () => {
             />
           </div>
         </div>
-        {/* Body fixed */}
-        <div className=" overflow-auto h-[200px] w-full rounded-lg bg-white mt-2  ">
-          <table className="w-full border-hidden  ">
-            <thead className=" py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase sticky top-0 z-10  ">
-              <tr className=" border-hidden ">
-                {/* Warring: The first tag td be liked left padding */}
-                <th className=" w-[2%] rounded-l-[10px]"></th>
-                {/* //////////////// */}
-                <th className=" w-[10%] py-2"> NO</th>
-                <th className=" w-[26%]">Account Category</th>
-                <th className=" w-[20%]"> JPY</th>
-                <th className=" w-[20%]"> VND</th>
-                <th className=" w-[20%]"> USD</th>
-                {/* Warring: The last tag td be liked left padding */}
-                <th className=" w-[2%]  rounded-r-[10px]"></th>
-                {/* //////////////// */}
-              </tr>
-              <tr className=" h-2 bg-white border-hidden ">
-                <th colSpan={100}></th>
-              </tr>
-            </thead>
-            {/* <thead className=" h-2 border-hidden"></thead> */}
+        {/* table fix header */}
+        <div className=" w-full h-[430px] 2xl-plus:h-[600px]   ">
+          <div className=" overflow-auto  h-[400px] 2xl-plus:h-[566px] w-full rounded-lg bg-white mt-2   ">
+            <table className=" table-fixed w-full border-hidden min-w-[1000px]     ">
+              <thead className=" table-fixed py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase sticky top-0 z-10  ">
+                <tr className=" border-hidden ">
+                  {/* Warring: The first tag td be liked left padding */}
+                  <th className=" w-[2%] rounded-l-[10px]"></th>
+                  {/* //////////////// */}
+                  <th className=" w-[10%] py-2"> NO</th>
+                  <th className=" w-[26%]">Account Category</th>
+                  <th className=" w-[20%]"> JPY</th>
+                  <th className=" w-[20%]"> VND</th>
+                  <th className=" w-[20%]"> USD</th>
+                  {/* Warring: The last tag td be liked left padding */}
+                  <th className=" w-[2%]  rounded-r-[10px]"></th>
+                  {/* //////////////// */}
+                </tr>
+                <tr className=" h-2 bg-white border-hidden ">
+                  <th colSpan={100}></th>
+                </tr>
+              </thead>
+              {/* <thead className=" h-2 border-hidden"></thead> */}
 
-            <tbody className=" bg-main-theme rounded-lg">
-              {/* //////////////// */}
-              {/*Warring: Second row is like padding-top */}
-              <tr className=" ">
-                <td
-                  colSpan={100}
-                  className=" h-2 bg-main-theme rounded-t-[10px] border border-main-theme "
-                ></td>
-              </tr>
-              {/* //////////////// */}
-              {dataTable &&
-                dataTable.map((analytic, index) => (
-                  <tr
-                    key={index}
-                    className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
-                  >
-                    {/* Warring:  First column of each row is like padding-left */}
-                    <td className=" w-[2%] border-hidden border-gray-300 "></td>
-                    {/* //////////////// */}
-
-                    {/* TODO DATA MAIN*/}
-                    <td className=" w-[10%] bg-main-theme text-center border border-solid border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                      {index + 1}
-                    </td>
-                    <td className=" w-[26%] bg-main-theme text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                      <input
-                        className=" text-center outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
-                        readOnly
-                        value={analytic?.group_id || ""}
-                      />
-                    </td>
-                    <td className="  w-[20%] pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                      <input
-                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
-                        readOnly
-                        value={analytic?.cost_jpy || ""}
-                      />
-                    </td>
-                    <td className=" w-[20%] pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
-                      <input
-                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
-                        readOnly
-                        value={analytic?.cost_vnd || ""}
-                      />
-                    </td>
-                    <td
-                      className=" w-[20%]  bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
-                      name="tb_vnd"
+              <tbody className=" bg-main-theme rounded-lg">
+                {/* //////////////// */}
+                {/*Warring: Second row is like padding-top */}
+                <tr className=" ">
+                  <td
+                    colSpan={100}
+                    className=" h-2 bg-main-theme rounded-t-[10px] border border-main-theme "
+                  ></td>
+                </tr>
+                {/* //////////////// */}
+                {dataTable &&
+                  dataTable.map((analytic, index) => (
+                    <tr
+                      key={index}
+                      className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
                     >
-                      <input
-                        className="  outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
-                        readOnly
-                        value={analytic?.cost_usd || ""}
-                      />
-                    </td>
+                      {/* Warring:  First column of each row is like padding-left */}
+                      <td className=" border-hidden "></td>
+                      {/* //////////////// */}
 
-                    {/* Warring: Last column of each row is like padding-right */}
-                    <td className=" w-[2%] bg-main-theme border-hidden"></td>
-                    {/* //////////////// */}
-                  </tr>
-                ))}
+                      {/* TODO DATA MAIN*/}
+                      <td className=" bg-main-theme text-center border border-solid border-gray-500 overflow-hidden whitespace-nowrap ">
+                        {index + 1}
+                      </td>
+                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        <input
+                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap text-center"
+                          readOnly
+                          value={analytic?.group_id || ""}
+                        />
+                      </td>
+                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        <input
+                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
+                          readOnly
+                          value={analytic?.cost_jpy || "0"}
+                        />
+                      </td>
+                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        <input
+                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
+                          readOnly
+                          value={analytic?.cost_vnd || "0"}
+                        />
+                      </td>
+                      <td className=" px-4 bg-main-theme border border-solid border-gray-500 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                        <input
+                          className=" w-full outline-none bg-transparent overflow-hidden overflow-ellipsis whitespace-nowrap"
+                          readOnly
+                          value={analytic?.cost_usd || "0"}
+                        />
+                      </td>
 
-              {/* Warring:  Last row like tha padding bottom */}
-              <tr>
-                <td
-                  colSpan={100}
-                  className=" h-2 p-[5px]  rounded-b-[10px] border-hidden "
-                ></td>
-              </tr>
-              {/* //////////////// */}
-            </tbody>
-          </table>
+                      {/* Warring: Last column of each row is like padding-right */}
+                      <td className=" w-[2%] bg-main-theme border-hidden"></td>
+                      {/* //////////////// */}
+                    </tr>
+                  ))}
+
+                {/* Warring:  Last row like tha padding bottom */}
+                <tr>
+                  <td
+                    colSpan={100}
+                    className=" h-2 p-[5px]  rounded-b-[10px] border-hidden "
+                  ></td>
+                </tr>
+                {/* //////////////// */}
+              </tbody>
+            </table>
+          </div>
         </div>
 
         <InvoiceDetailFooter

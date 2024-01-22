@@ -13,7 +13,12 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
-import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
+import {
+  formatFloatToCustomString,
+  formatNumberSeparator,
+  formatStringMonthYearToDate,
+  formatStringNumberWithSeparator,
+} from "../../../Utils/utils/maths";
 import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
 import ExRateComponent from "./ExRateComponent";
 
@@ -245,9 +250,9 @@ export default function InvoiceDetails() {
         </div>
 
         {/* table data */}
-        <div className="h-[430px] 2xl-plus:h-[600px] mt-2">
-          <table id="" className=" table-fixed border-hidden w-full">
-            <thead className="py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
+        <div className=" h-[430px] 2xl-plus:h-[600px] mt-2 overflow-x-auto ">
+          <table className=" table-fixed  border-hidden w-full  min-w-[1000px]    ">
+            <thead className="  py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
               {/* Warring: The first tag td be liked left padding */}
               <th className="w-[2%] py-2 rounded-l-[10px]">
                 <input
@@ -301,10 +306,11 @@ export default function InvoiceDetails() {
 
                     {/* TODO DATA MAIN*/}
                     <td
-                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      className=" pl-3 pr-2 bg-main-theme text-center border border-gray-300 overflow-hidden "
                       name="tb_no"
                     >
                       {(page - 1) * 10 + index + 1}
+                      {/* {invoicePayment?.id} */}
                     </td>
                     <td
                       className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
@@ -319,23 +325,24 @@ export default function InvoiceDetails() {
                       />
                     </td>
                     <td
-                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      className=" pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
                       name="tb_name"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={invoicePayment?.name || ""}
                       />
                     </td>
                     <td
-                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      className=" pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
                       name="tb_jyp"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        value={invoicePayment?.jpy || ""}
+                        // value={invoicePayment?.jpy.toFixed(4) || 0}
+                        value={formatFloatToCustomString(invoicePayment?.jpy)}
                       />
                     </td>
                     <td
@@ -343,9 +350,12 @@ export default function InvoiceDetails() {
                       name="tb_vnd"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        value={invoicePayment?.cost || ""}
+                        // value={formatNumberSeparator(
+                        //   invoicePayment?.cost.toString() || ""
+                        // )}
+                        value={formatStringNumberWithSeparator( invoicePayment?.cost.toString())}
                       />
                     </td>
                     <td
@@ -353,9 +363,9 @@ export default function InvoiceDetails() {
                       name="tb_usd"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        value={invoicePayment?.usd || ""}
+                        value={formatFloatToCustomString(invoicePayment?.usd)}
                       />
                     </td>
                     <td
@@ -363,7 +373,7 @@ export default function InvoiceDetails() {
                       name="tb_note"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={invoicePayment?.note || ""}
                       />
@@ -373,7 +383,7 @@ export default function InvoiceDetails() {
                       name="tb_journal"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={invoicePayment?.category?.name || ""}
                       />
@@ -383,7 +393,7 @@ export default function InvoiceDetails() {
                       name="tb_invoice"
                     >
                       <input
-                        className="  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={invoicePayment?.invoice || ""}
                       />

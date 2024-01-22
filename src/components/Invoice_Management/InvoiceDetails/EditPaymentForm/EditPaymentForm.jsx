@@ -64,8 +64,7 @@ export default function EditPaymentForm({
 
   useEffect(() => {
     fetchGetCategoriesPL();
-    setValue("id", localStorage.getItem("user_id"));
-    setValue("user_id", localStorage.getItem("user_id"));
+    setValue("user_id", localStorage.getItem("user_id") || 1);
     setValue("exchange_rate_id", exchangeRateId);
     setValue("currency_type", "vnd");
 

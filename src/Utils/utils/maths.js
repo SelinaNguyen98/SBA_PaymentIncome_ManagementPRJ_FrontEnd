@@ -26,7 +26,7 @@ export const formatNumberSeparator = (input) => {
 
   // loai bo trong hop bat dau bang 0 && null  && ''
   numericValue =
-    numericValue == "0" || numericValue == "" ||  numericValue == null
+    numericValue == "0" || numericValue == "" || numericValue == null
       ? "0"
       : numericValue.replace(/^0+/, "");
   // Định dạng giá trị nhập vào với dấu chấm làm phân tách hàng nghìn
@@ -37,4 +37,18 @@ export const formatNumberSeparator = (input) => {
 export const formatNumberHasDot = (input) => {
   // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
   return Number(input.replace(/\./g, ""));
+};
+
+// Format Float to String with Separator ,
+export const formatFloatToCustomString = (input) => {
+  return input === 0
+    ? 0
+    : input
+        .toLocaleString("en-US", {
+          minimumFractionDigits: 4,
+          maximumFractionDigits: 4,
+        })
+        .replace(/[,\.]/g, function (match) {
+          return match === "," ? "." : ",";
+        });
 };
