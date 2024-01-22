@@ -7,8 +7,9 @@ export const paths = {
   GET_PAYMENTS_MONTH_YEAR: "payments",
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
-  PL_REPORT:"getDataPL"
-
+  PL_REPORT:"getDataPL",
+  GET_ORDER_MONTH_YEAR: "orders",
+  DELETE_ORDER: "orders",
 };
 
 // Request interceptor to attach the authentication token to each request
