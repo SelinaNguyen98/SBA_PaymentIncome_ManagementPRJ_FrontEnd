@@ -1,10 +1,14 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import {
+  // eslint-disable-next-line no-unused-vars
   formatFloatToCustomString,
   formatInputToFloatStringSeparator,
+  // eslint-disable-next-line no-unused-vars
   formatNumberSeparator,
 } from "../utils/maths";
 
+// eslint-disable-next-line react/prop-types
 export default function InputNumber({ number, setNumber, className, ...ref }) {
   const handleInputChange = (e) => {
     // // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào

@@ -12,11 +12,17 @@ import { formatNumberSeparator } from "../../../../Utils/utils/maths";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function NewPaymentForm({
+    // eslint-disable-next-line react/prop-types
   visible,
+    // eslint-disable-next-line react/prop-types
   cancel,
+    // eslint-disable-next-line react/prop-types, no-unused-vars
   ok,
+    // eslint-disable-next-line react/prop-types
   selectedDate,
+    // eslint-disable-next-line react/prop-types
   exchangeRateId,
+    // eslint-disable-next-line react/prop-types
   changeFirstPage,
 }) {
   const { t } = useTranslation();
@@ -24,6 +30,7 @@ export default function NewPaymentForm({
   const {
     register,
     handleSubmit,
+    // eslint-disable-next-line no-unused-vars
     setError,
     setValue,
     formState: { errors },
@@ -42,12 +49,15 @@ export default function NewPaymentForm({
 
   // State Format Day
   let maxDate = new Date(
+    // eslint-disable-next-line react/prop-types
     selectedDate.getFullYear(),
+    // eslint-disable-next-line react/prop-types
     selectedDate.getMonth() + 1,
     1
   )
     .toISOString()
     .split("T")[0]; //max day
+  // eslint-disable-next-line react/prop-types
   let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 2)
     .toISOString()
     .split("T")[0];
@@ -251,6 +261,7 @@ const InputCustomComponent = ({
   classNameError,
   // eslint-disable-next-line react/prop-types
   defaultValue = "",
+  // eslint-disable-next-line react/prop-types
   id,
 }) => {
   return (

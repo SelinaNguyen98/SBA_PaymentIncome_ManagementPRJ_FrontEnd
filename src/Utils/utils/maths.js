@@ -47,6 +47,7 @@ export const formatNumberSeparator = (input) => {
  */
 export const formatNumberHasDot = (input) => {
   // Loại bỏ các ký tự không phải số khỏi giá trị nhập vào
+  // eslint-disable-next-line no-useless-escape
   return Number(input.replace(/\,/g, ""));
 };
 
