@@ -179,9 +179,9 @@ export default function InvoiceDetails() {
 
   return (
     
-    <div className="relative bg-main-theme pb-5 h-full">
+    <div className="relative bg-main-theme pb-5 h-screen">
       {/* Lable */}
-      <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold h-full">
+      <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold ">
         <svg
           viewBox="0 0 34 27"
           fill="none"
@@ -196,7 +196,7 @@ export default function InvoiceDetails() {
         {t("navHeader.invoiceDetails")}
       </div>
       {/* control area */}
-      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px] ">
+      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px]">
         <div className="grid  gap-2 items-center w-full ">
           <div className="flex items-center justify-between gap-2 flex-row max-[1390px]:flex-col">
             <div className="mt-1 px-6 flex flex-row items-center">

@@ -6,7 +6,8 @@ import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
-import { format } from "date-fns";
+// 982002
+
 import { createOrderSchema } from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
 import { updateOrder } from "../../Controller";
@@ -86,7 +87,7 @@ export default function EditOrderForm({
   const onSubmit = handleSubmit(async (data) => {
     try {
       // Format the date before sending the request
-      data.order_date = format(new Date(data.order_date), "dd-MM-yyyy");
+      // data.order_date = format(new Date(data.order_date), "dd-MM-yyyy");
       // console.log(data.order_date);
       // console.log(data);
       const response = await updateOrder(data);

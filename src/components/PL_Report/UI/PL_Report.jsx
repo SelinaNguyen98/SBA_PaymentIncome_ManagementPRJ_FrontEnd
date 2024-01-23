@@ -42,7 +42,7 @@ const PL_Report = () => {
             ? JSON.parse(category.data)
             : category.data;
         const formattedData = Object.keys(data).reduce((acc, month) => {
-          acc[month] = formatNumber(Math.round(data[month])) || 0;
+          acc[month] = formatNumber(data[month]) || 0;
           return acc;
         }, {});
 
@@ -59,7 +59,7 @@ const PL_Report = () => {
           : group.total_month;
       const formattedTotalMonth = Object.keys(total_month).reduce(
         (acc, month) => {
-          acc[month] = formatNumber(Math.round(total_month[month])) || 0;
+          acc[month] = formatNumber(total_month[month]) || 0;
           return acc;
         },
         {}
@@ -75,8 +75,15 @@ const PL_Report = () => {
   };
 
   const formatNumber = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
+    const roundedNumber = parseFloat(number).toFixed(2);
+    const numberWithCommas = roundedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const [integerPart, decimalPart] = numberWithCommas.split(".");
+    const formattedNumber = decimalPart
+        ? `${integerPart}.${decimalPart}`
+        : numberWithCommas;
+
+    return formattedNumber;
+};
 
   const exportToExcel = () => {
     const titleRow = [t("title.PL_report")]; // Add title row

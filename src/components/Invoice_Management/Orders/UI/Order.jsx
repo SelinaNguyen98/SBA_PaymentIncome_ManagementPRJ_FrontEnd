@@ -968,12 +968,19 @@ const Component_Order = () => {
     isShowFormEditOrder: false,
     isShowWarringModal: false,
     selectedRowOrder_Edit: null,
+    dataExRate: null,
   });
   const formatNumber = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
+    const roundedNumber = parseFloat(number).toFixed(2);
+    const numberWithCommas = roundedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const [integerPart, decimalPart] = numberWithCommas.split(".");
+    const formattedNumber = decimalPart
+        ? `${integerPart}.${decimalPart}`
+        : numberWithCommas;
+
+    return formattedNumber;
+};
   const [idExRate, setIdRate] = useState(false);
-  const [dataExRate, setDataExRate] = useState([]);
 
   const fetchExchangeRate = async () => {
     try {
@@ -986,9 +993,7 @@ const Component_Order = () => {
         setIdRate(false);
         return;
       } else {
-        setDataExRate(response?.data[0].id);
-        console.log(dataExRate);
-        console.log(dataExRate);
+        updateState({ dataExRate: response?.data[0].id });
         setIdRate(true);
         console.log("Setting idExRate to true");
       }
@@ -1115,12 +1120,17 @@ const Component_Order = () => {
   };
 
   useEffect(() => {
-    fetchExchangeRate();
-    fetchData_Order();
-  }, [selectedDate, currentPage_Order, selectedOrderIds]);
+    const fetchData = async () => {
+      await fetchExchangeRate();
+      console.log(state.dataExRate);
+      fetchData_Order();
+    };
+
+    fetchData();
+  }, [selectedDate, currentPage_Order, selectedOrderIds,]);
 
   return (
-    <div className="">
+    <div className="h-screen">
       <MonthYearPicker
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
@@ -1157,6 +1167,8 @@ const Component_Order = () => {
                     if (idExRate === false) {
                       updateState({ isShowWarringModal: true });
                     } else {
+                      console.log(idExRate);
+                      console.log(state.dataExRate);
                       updateState({ isShowFormNewOrder: true });
                     }
                   }}
@@ -1201,7 +1213,7 @@ const Component_Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[235px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="max-h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -1399,9 +1411,10 @@ const Component_Order = () => {
         t={t_order}
         cancel={() => updateState({ isShowFormNewOrder: false })}
         selectedDate={selectedDate}
-        exchangeRateId={dataExRate}
+        exchangeRateId={state.dataExRate}
         changeFirstPage={() => {
           updateState({ isShowFormNewOrder: false });
+          setCurrentPage_Order(1);
           fetchData_Order();
         }}
       />
@@ -1410,7 +1423,7 @@ const Component_Order = () => {
         visible={state.isShowFormEditOrder}
         t={t_order}
         selectedDate={selectedDate}
-        exchangeRateId={dataExRate}
+        exchangeRateId={state.dataExRate}
         cancel={() => {
           updateState({
             isShowFormEditOrder: false,

@@ -46,7 +46,7 @@ export const createOrder = async (formData) => {
   try {
     // if idExRate is null || trim, ''  => create
     console.log(formData.order_date);
-    // formData.order_date = format(new Date(formData.order_date), 'dd-MM-yyyy');
+    //formData.order_date = format(new Date(formData.order_date), 'dd-MM-yyyy');
     let newCost = formatNumberHasDot(formData.vnd);
     formData.vnd = parseFloat(newCost); // Convert to a float
     const response = await API.callApi_createOrder(formData);

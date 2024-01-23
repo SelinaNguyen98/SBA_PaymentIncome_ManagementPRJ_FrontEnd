@@ -38,6 +38,7 @@ export default function AddOrderForm({
   } = useForm({ resolver: yupResolver(createOrderSchema) });
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
+    setValue("exchange_rate_id", exchangeRateId);
     try {
       const response = await createOrder(data);
       console.log(response);
