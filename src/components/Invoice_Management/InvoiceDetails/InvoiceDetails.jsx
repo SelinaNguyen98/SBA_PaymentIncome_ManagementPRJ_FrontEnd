@@ -18,7 +18,11 @@ import {
   formatNumberSeparator,
   formatStringMonthYearToDate,
 } from "../../../Utils/utils/maths";
-import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
+import {
+  deleteInvoiceByIds,
+  deletePaymentById,
+  getPaymentsByYearAndMonths,
+} from "./Controller";
 import ExRateComponent from "./ExRateComponent";
 import { useLocation } from "react-router-dom";
 
@@ -44,14 +48,16 @@ export default function InvoiceDetails() {
 
   // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
-    isShowConfirmModal: false,
+    isShowConfirmDeleteAllModal: false,
+    isShowConfirmDeleteSingle: false,
     isShowFormNewPayment: false,
     isShowFormEditPayment: false,
     isShowWarringModal: false,
   });
 
   const {
-    isShowConfirmModal,
+    isShowConfirmDeleteAllModal,
+    isShowConfirmDeleteSingle,
     isShowFormNewPayment,
     isShowFormEditPayment,
     isShowWarringModal,
@@ -92,6 +98,7 @@ export default function InvoiceDetails() {
     totalPage: 0,
     dataTable: null,
     selectedRowData: null, // single delete
+    // selectedRows: [],
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
     // idExRate: null,
@@ -101,6 +108,7 @@ export default function InvoiceDetails() {
     totalPage,
     dataTable,
     selectedRowData,
+    // selectedRows,
     selectedListRowsData,
     isSelectedAllDataInvoice,
     page,
@@ -109,34 +117,42 @@ export default function InvoiceDetails() {
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
 
-  /// Handle Checkbox funtion
-  const handleRowCheckboxChange_Invoice = (index) => {
-    const newSelectedRows = [...selectedListRowsData];
-    newSelectedRows[index] = !newSelectedRows[index];
-    updateStateTable({ selectedListRowsData: newSelectedRows });
+  const [selectedRows, setSelectedRows] = useState([]);
+  // const [, setSelectedRows] = useState([]);
+
+  const handleCheckboxChange = (id) => {
+    const newSelectedRows = selectedRows.includes(id)
+      ? selectedRows.filter((rowId) => rowId !== id)
+      : [...selectedRows, id];
+
+    setSelectedRows(newSelectedRows);
+    // updateStateTable({ selectedRows: newSelectedRows });
+    console.log(newSelectedRows);
   };
 
-  const handleSelectAllCheckboxChange_Invoice = () => {
-    const tmpIsSelectedAllDataInvoice = !isSelectedAllDataInvoice;
+  const handlePageCheckboxChange = () => {
+    // Lấy danh sách ID từ dataTable của trang đó
+    const pageRowIds = dataTable?.payments.map((row) => row.id);
+    // console.log("pageRowIds", pageRowIds);
 
-    const newSelectedRows = new Array(dataTable?.payments.length).fill(
-      tmpIsSelectedAllDataInvoice
+    // Kiểm tra xem tất cả ID của dòng có trong selectedRows không và phủ định
+    const isSelected = pageRowIds.every((rowId) =>
+      selectedRows.includes(rowId)
     );
-    updateStateTable({
-      isSelectedAllDataInvoice: tmpIsSelectedAllDataInvoice,
-      selectedListRowsData: newSelectedRows,
-    });
+
+    console.log(isSelected);
+    const newSelectedRows = isSelected
+      ? selectedRows.filter((rowId) => !pageRowIds.includes(rowId))
+      : [...selectedRows, ...pageRowIds];
+    setSelectedRows(newSelectedRows);
+    // updateStateTable({ selectedRows: newSelectedRows });
+
+    console.log(newSelectedRows);
   };
 
   // const [page, setPage] = useState(1);
   const isFilterApplied = useRef(false);
   // const childInputExRateRef = useRef(null);
-
-  // const focusChildInput = (ref) => {
-  //   if (ref && ref.current) {
-  //     ref.current.focus();
-  //   }
-  // };
 
   // TODO fake  data here
   const fetchInvoices = async () => {
@@ -168,6 +184,11 @@ export default function InvoiceDetails() {
       //    1.2 nê dau tien cua trang 1 thi set ve 1
       // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
 
+      // xoa id no neu no ton tai trong mang da cho selectedrow
+      setSelectedRows((prevList) => {
+        return prevList.filter((itemId) => itemId !== selectedRowData?.id);
+      });
+
       // if(dataTable?.payments.length == 1 && page >= totalPage &&  )
       if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
         changePage(page - 1);
@@ -175,19 +196,44 @@ export default function InvoiceDetails() {
       }
       setDataChangeTrigger(!dataChangeTrigger);
 
-      updateState({ isShowConfirmModal: false });
-      showToast.success("Delete  successfully!");
+      updateState({ isShowConfirmDeleteSingle: false });
+      showToast.success("Delete successfully!");
       console.log(response);
     } catch (error) {
       console.log(error);
     } finally {
-      updateState({ isShowConfirmModal: false });
+      updateState({ isShowConfirmDeleteSingle: false });
+    }
+  };
+
+  const handleDeleteList = async () => {
+    try {
+      if (selectedRows.length !== 0) {
+        console.log(selectedRows);
+        const response = await deleteInvoiceByIds(selectedRows);
+        // updateStateTable({ selectedRows: [] });
+        setSelectedRows([]);
+
+        if (page != 1) {
+          changePage(1);
+        } else triggerData();
+        updateState({ isShowConfirmDeleteAllModal: false });
+        showToast.success("Delete successfully!");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      updateState({ isShowConfirmDeleteAllModal: false });
     }
   };
 
   useEffect(() => {
     console.log("Filter change effect");
+    // updateStateTable({ selectedRows: [] });
+    setSelectedRows([]);
     isFilterApplied.current = true;
+    // updateStateTable({ selectedRows: [] });
+
     updateStateTable({ page: 1 });
   }, [selectedDate]);
 
@@ -272,7 +318,11 @@ export default function InvoiceDetails() {
               </Button>
 
               <Button
-                onClick={() => updateState({ isShowConfirmModal: true })}
+                onClick={() => {
+                  if (selectedRows.length !== 0) {
+                    updateState({ isShowConfirmDeleteAllModal: true });
+                  }
+                }}
                 className="bg-red ml-2"
                 icon={
                   <svg
@@ -303,8 +353,13 @@ export default function InvoiceDetails() {
               <th className="w-[2%] py-2 rounded-l-[10px]">
                 <input
                   type="checkbox"
-                  checked={isSelectedAllDataInvoice}
-                  onChange={handleSelectAllCheckboxChange_Invoice}
+                  checked={
+                    dataTable?.payments.length > 0 &&
+                    dataTable?.payments.every((row) =>
+                      selectedRows.includes(row.id)
+                    )
+                  }
+                  onChange={() => handlePageCheckboxChange()}
                 />
               </th>
               <th className=" w-[3%]"> NO</th>
@@ -345,8 +400,10 @@ export default function InvoiceDetails() {
                       <input
                         className="outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         type="checkbox"
-                        checked={selectedListRowsData[index]}
-                        onChange={() => handleRowCheckboxChange_Invoice(index)}
+                        checked={selectedRows.includes(invoicePayment?.id)}
+                        onChange={() =>
+                          handleCheckboxChange(invoicePayment?.id)
+                        }
                       />
                     </td>
 
@@ -486,7 +543,7 @@ export default function InvoiceDetails() {
 
                         <svg
                           onClick={() => {
-                            updateState({ isShowConfirmModal: true });
+                            updateState({ isShowConfirmDeleteSingle: true });
                             updateStateTable({
                               selectedRowData: invoicePayment,
                             });
@@ -536,8 +593,44 @@ export default function InvoiceDetails() {
           changePage={changePage}
         />
       </div>
-      {isShowConfirmModal && (
-        <Modal visible={isShowConfirmModal}>
+      {isShowConfirmDeleteAllModal && (
+        <Modal visible={isShowConfirmDeleteAllModal}>
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
+            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+              {t("page_payment_detail.del_invoice_detail")}
+            </span>
+
+            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+              {t("page_payment_detail.del_invoice_content")}
+            </div>
+
+            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+              <Button
+                onClick={() => handleDeleteList()}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
+              >
+                {t("button.confirm")}
+              </Button>
+              <Button
+                onClick={() => {
+                  updateState({ isShowConfirmDeleteAllModal: false });
+                }}
+                className={
+                  " border-red-500 bg-white border-2 py-2 px-6 min-w-[12px] "
+                }
+              >
+                <span className=" text-red-500  ml-1 font-medium uppercase">
+                  {t("button.cancel")}
+                </span>
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {isShowConfirmDeleteSingle && (
+        <Modal visible={isShowConfirmDeleteSingle}>
           <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
               {t("page_payment_detail.del_invoice_detail")}
@@ -558,7 +651,7 @@ export default function InvoiceDetails() {
               </Button>
               <Button
                 onClick={() => {
-                  updateState({ isShowConfirmModal: false });
+                  updateState({ isShowConfirmDeleteSingle: false });
                 }}
                 className={
                   " border-red-500 bg-white border-2 py-2 px-6 min-w-[12px] "
