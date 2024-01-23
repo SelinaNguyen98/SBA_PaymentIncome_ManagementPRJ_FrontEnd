@@ -58,7 +58,6 @@ export default function EditPaymentForm({
     invoice: invoicePayment?.invoice,
     pay: invoicePayment?.pay,
     category_id: invoicePayment?.category?.id,
-    // cost: formatNumberSeparator(invoicePayment?.cost),
     cost: formatNumberSeparator(invoicePayment?.cost.toString()),
   };
 

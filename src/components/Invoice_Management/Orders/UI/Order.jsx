@@ -16,6 +16,7 @@ import DeleteOutsourcing from "./Dialog/DeleteOutsourcing";
 // eslint-disable-next-line no-unused-vars
 import DeletePaymentManagement from "./Dialog/DeletePaymentManagement";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 // eslint-disable-next-line react/prop-types
 const Order = () => {
   const { t } = useTranslation();
@@ -244,6 +245,22 @@ const Order = () => {
     console.log(`Changing to page ${newPage}`);
   };
 
+  const navigator = useNavigate();
+  const handleNotFoundIdExRate = () => {
+    // 1. check condition if idExChageRate dont exist || null || '' || undefine
+    // 2. if false =>
+
+    let state = {
+      month: selectedDate.getMonth() + 1,
+      year: selectedDate.getFullYear(),
+    };
+    navigator("/home/InvoiceDetails", { state });
+    
+    console.log(selectedDate.getFullYear() + "-" + selectedDate.getMonth() + 1);
+
+    // updateState({ isShowFormNewOrder: true })
+  };
+
   return (
     <div className="">
       <MonthYearPicker
@@ -279,7 +296,7 @@ const Order = () => {
 
               <div className="flex flex-row">
                 <Button
-                  onClick={() => updateState({ isShowFormNewOrder: true })}
+                  onClick={handleNotFoundIdExRate}
                   icon={
                     <svg
                       width="16"

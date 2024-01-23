@@ -5,9 +5,7 @@ import "./styles.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import { useForm } from "react-hook-form";
 // eslint-disable-next-line no-unused-vars
-import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import Modal from "../../../Utils/Modal/Modal";
@@ -22,21 +20,22 @@ import {
 } from "../../../Utils/utils/maths";
 import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
 import ExRateComponent from "./ExRateComponent";
+import { useLocation } from "react-router-dom";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
 
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
   const [idExRate, setIdRate] = useState(null);
-  const {
-    register,
-    handleSubmit,
-    // eslint-disable-next-line no-unused-vars
-    setError,
-    setValue,
-    // eslint-disable-next-line no-unused-vars
-    formState: { errors },
-  } = useForm();
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   // eslint-disable-next-line no-unused-vars
+  //   setError,
+  //   setValue,
+  //   // eslint-disable-next-line no-unused-vars
+  //   formState: { errors },
+  // } = useForm();
   const triggerData = () => {
     setDataChangeTrigger(!dataChangeTrigger);
   };
@@ -61,14 +60,33 @@ export default function InvoiceDetails() {
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
 
-  // Bao gom tong so trang, page, du lieu table dang duoc chon
+  const location = useLocation();
+  const { state } = useLocation();
+
   const [selectedDate, setSelectedDate] = useState(() => {
+    if (state) {
+      const { month, year } = state;
+      return formatStringMonthYearToDate(month, year);
+    }
     const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    return formatStringMonthYearToDate(month, year);
+    const monthT = today.getMonth() + 1;
+    const yearT = today.getFullYear();
+    return formatStringMonthYearToDate(monthT, yearT);
   }); //
 
+  useEffect(() => {
+    // Access the state object directly
+    const { state } = location;
+
+    // Check if state is defined before accessing its properties
+    if (state) {
+      const { month, year } = state;
+      console.log("Month:", month);
+      console.log("Year:", year);
+    }
+  }, [location.state]);
+
+  // Bao gom tong so trang, page, du lieu table dang duoc chon
   const [stateTable, setStateTable] = useState({
     page: 1,
     totalPage: 0,
@@ -369,7 +387,6 @@ export default function InvoiceDetails() {
                       <input
                         className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        // value={invoicePayment?.jpy.toFixed(4) || 0}
                         value={formatFloatToCustomString(invoicePayment?.jpy)}
                       />
                     </td>
