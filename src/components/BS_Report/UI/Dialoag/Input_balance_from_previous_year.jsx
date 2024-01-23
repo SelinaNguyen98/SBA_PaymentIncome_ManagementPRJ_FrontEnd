@@ -12,7 +12,7 @@ export default function Input_balance_from_previous_year({
   // eslint-disable-next-line react/prop-types
   t,
   // eslint-disable-next-line react/prop-types
-  selectedTime,
+  selectedTime, showToast,
 }) {
   const t_translate = t;
   // eslint-disable-next-line no-unused-vars
@@ -20,67 +20,67 @@ export default function Input_balance_from_previous_year({
     {
       No: 1,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 2,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 3,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 4,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 5,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 6,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 7,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 8,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 9,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 10,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 11,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 12,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
     {
       No: 13,
       category_name: "John Doe",
-      total_amount: "100",
+      amount: "100",
     },
   ]);
   // eslint-disable-next-line react/prop-types
@@ -94,7 +94,17 @@ export default function Input_balance_from_previous_year({
     if (visible) {
       API.getDataYearly(selectedTime.getFullYear(), setData_year)
     }
+    else {
+      setData_year([])
+    }
   }, [visible])
+
+  function addComma(number) {
+    if (!number) return number
+    number = number.toString().replaceAll(',', '')
+    return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white max-h-[600px] m-2 py-5 px-12 rounded-2xl w-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[600px] overflow-y-auto">
@@ -110,16 +120,16 @@ export default function Input_balance_from_previous_year({
           </span>
         )}
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm">
+          <table id="invoiceTable" className="text-sm w-full table-fixed">
             <thead>
               <tr>
                 <th className="w-[1px]"></th>
-                <th className="w-[3px]">No</th>
-                <th className="w-[100px]">
+                <th className="w-16">No</th>
+                <th className="w-72">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
-                <th className="w-[10px]">
-                  {t_translate("form_input_monthly_data_BS.title_table_total_amount")}
+                <th className="w-full">
+                  {t_translate("form_input_monthly_data_BS.title_table_amount")}
                 </th>
                 <th className="w-[1px]"></th>
               </tr>
@@ -135,7 +145,7 @@ export default function Input_balance_from_previous_year({
                     {index + 1}
                   </td>
                   <td
-                    className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                    className="w-72 overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
                     {rowData_year.category_name}
@@ -143,16 +153,16 @@ export default function Input_balance_from_previous_year({
 
                   <td
                     className="w-[10px] editable-cell"
-                    name="tb_total_amount"
+                    name="tb_amount"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
-                    onBlur={(e) => {
+                    onKeyUp={(e) => {
                       const newData = [...data_year];
-                      newData[index].total_amount = e.target.innerText;
+                      newData[index].amount = addComma(e.target.innerText);
                       setData_year(newData);
                     }}
                   >
-                    {rowData_year.total_amount}
+                    {rowData_year.amount}
                   </td>
 
                   <td className="w-[1px]"></td>
@@ -168,7 +178,7 @@ export default function Input_balance_from_previous_year({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              // Handle save logic
+              API.saveYearly(data_year, showToast)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >

@@ -38,21 +38,30 @@ export default function SideBar() {
   };
   const location = useLocation();
   useEffect(() => {
-    const currentPath = location.pathname;
+    const dbh = async () => {
+      const token = localStorage.getItem("token");
+     console.log(token);
+      if (!token) {
+        navigate("/");
+        return;
+      }
+      const currentPath = location.pathname;
 
-    if (
-      currentPath.includes("/home/InvoiceDetails") ||
-      currentPath.includes("/home/Account_Annalytics") ||
-      currentPath.includes("/home/Order")
-    ) {
-      setIsHiddenInvoiceManagement(false);
-    } else {
-      setIsHiddenInvoiceManagement(true);
-    }
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
+      if (
+        currentPath.includes("/home/InvoiceDetails") ||
+        currentPath.includes("/home/Account_Annalytics") ||
+        currentPath.includes("/home/Order")
+      ) {
+        setIsHiddenInvoiceManagement(false);
+      } else {
+        setIsHiddenInvoiceManagement(true);
+      }
+      window.addEventListener("resize", handleResize);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
     };
+    dbh();
   }, [location.pathname]);
 
   const isMobile = screenWidth <= 850;
@@ -103,26 +112,19 @@ export default function SideBar() {
     // Add logic to navigate based on the selected option if needed
     const selectOption = e.currentTarget.innerText.trim();
     switch (true) {
-      case (
-        selectOption === t(`navHeader.invoiceDetails`) ||
-        selectOption === "INVOICE DETAILS"
-      ):
+      case selectOption === t(`navHeader.invoiceDetails`) ||
+        selectOption === "INVOICE DETAILS":
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/home/InvoiceDetails");
         break;
-      case (
-        selectOption === t(`navHeader.accountAnalytics`) ||
-        selectOption === "ACCOUNT ANALYTICS"
-      ):
+      case selectOption === t(`navHeader.accountAnalytics`) ||
+        selectOption === "ACCOUNT ANALYTICS":
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/home/Account_Annalytics");
         break;
-      case (
-        selectOption === t(`navHeader.orders`) ||
-        selectOption === "ORDERS"
-      ):
+      case selectOption === t(`navHeader.orders`) || selectOption === "ORDERS":
         // Navigate to the appropriate route
         setIsHiddenInvoiceManagement(false);
         navigate("/home/Order");
@@ -130,12 +132,13 @@ export default function SideBar() {
       default:
         break;
     }
-    console.log(e.currentTarget.innerText.trim())
+    console.log(e.currentTarget.innerText.trim());
   };
 
   const handleLogout = () => {
     // Add logic for logout
     // Example: clear local storage, perform API request, etc.
+    localStorage.removeItem("token");
     navigate("/");
   };
 

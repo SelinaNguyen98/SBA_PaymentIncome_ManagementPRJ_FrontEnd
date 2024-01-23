@@ -1,48 +1,72 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Pagination from "../../../../Utils/Pagination";
+import {
+  formatFloatToCustomString,
+  formatNumberSeparator,
+} from "../../../../Utils/utils/maths";
 
 // eslint-disable-next-line react/prop-types
-export default function InvoiceDetailFooter({ changePage, page, totalPage }) {
+export default function InvoiceDetailFooter({
+  changePage,
+  page,
+  totalPage,
+  totalUSD,
+  totalVND,
+  totalJPY,
+}) {
   // eslint-disable-next-line react/prop-types
   const { t } = useTranslation();
 
   const t_invoice = t;
   return (
-    <div className=" mt-3">
-      <div className=" flex flex-wrap gap-4 items-center">
-        <span className="font-bold">{t_invoice("title.total_of_month")}</span>
-        <div className="flex items-center gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
-          <div className=" inline-flex mx-3 ">
-            JPY
-            <input
-              type="text"
-              className=" bg-main-theme max-w-[100px] ml-2  "
-            />
-          </div>
-          <div className=" inline-flex mx-3 ">
-            VND
-            <input
-              type="text"
-              className=" bg-main-theme  max-w-[100px] ml-2 "
-            />
-          </div>
-          <div className=" inline-flex mx-3 ">
-            USD
-            <input
-              type="text"
-              className=" bg-main-theme  max-w-[100px] ml-2 "
-            />
-          </div>
+    <div className=" flex flex-wrap gap-4 items-center py-1">
+      <span className="font-bold">{t_invoice("title.total_of_month")}</span>
+      <div className="flex items-start gird grid-cols-12 gap-2 flex-1 max-lg:space-y-2  max-[680px]:flex-col">
+        <div className=" inline-flex mx-3 ">
+          JPY:
+          {/* <span className=" bg-main-theme max-w-[100px] ml-2  ">{totalUSD}</span> */}
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatFloatToCustomString(totalJPY)}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalJPY.toString())}
+          ></input>
         </div>
-        <div className=" flex-1  flex justify-end">
+        <div className=" inline-flex mx-3 ">
+          VND:
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatNumberSeparator(totalVND.toString())}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalVND.toString())}
+          ></input>
+        </div>
+        <div className=" inline-flex mx-3 ">
+          USD:
+          {/* <span type="text" className=" bg-main-theme w-[150px] ml-2  px-2  ">
+            {formatFloatToCustomString(totalUSD)}
+          </span> */}
+          <input
+            className=" bg-main-theme w-[150px] ml-2 px-2 "
+            readOnly
+            value={formatNumberSeparator(totalUSD.toString())}
+          ></input>
+        </div>
+      </div>
+      <div className="  h-[40px] justify-end">
+        {totalPage && (
           <Pagination
             totalPage={totalPage}
             page={page}
             changePage={changePage}
           />
-        </div>
+        )}
       </div>
     </div>
   );
