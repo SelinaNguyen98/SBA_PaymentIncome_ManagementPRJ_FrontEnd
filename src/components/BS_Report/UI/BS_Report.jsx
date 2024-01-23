@@ -22,6 +22,7 @@ const BS_Report = () => {
   }, [selectedYear]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const { showToast } = useContext(AppContext);
 
 
   const [selectedYearExport, setSelectedYearExport] = useState(new Date());
@@ -255,12 +256,12 @@ const BS_Report = () => {
       Total: 1300,
     },
   ]);
-  useEffect(() => {
-    console.log(dataBS);
-  }, [dataBS]);
-  useEffect(() => {
-    console.log(selectedYearExport);
-  }, [selectedYearExport]);
+  // useEffect(() => {
+  //   console.log(dataBS);
+  // }, [dataBS]);
+  // useEffect(() => {
+  //   console.log(selectedYearExport);
+  // }, [selectedYearExport]);
 
 
   // eslint-disable-next-line no-unused-vars
@@ -278,7 +279,6 @@ const BS_Report = () => {
   } = state;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
   const handleInputMonthlyDataButtonClick = () => {
-    console.log(selectedDate, "aloalo");
     updateState({ isShowForm_InputMonthlyData: true });
   };
 
@@ -551,7 +551,7 @@ const BS_Report = () => {
         cancel={() => {
           updateState({ isShowForm_InputMonthlyData: false });
         }}
-        selectedTime={selectedDate}
+        selectedTime={selectedDate} showToast={showToast}
       />
       <Form_InputBalanceYeatData
         // eslint-disable-next-line no-undef

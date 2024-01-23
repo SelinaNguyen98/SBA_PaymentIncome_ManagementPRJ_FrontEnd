@@ -10,7 +10,7 @@ export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   cancel,
   // eslint-disable-next-line react/prop-types
-  selectedTime,
+  selectedTime, showToast,
 }) {
   const { t } = useTranslation();
   const t_translate = t;
@@ -83,9 +83,10 @@ export default function InputMonthlyData({
     },
   ]);
   const [exchangeRate, setExchangeRate] = useState({
-    JPY: '',
-    USD: '',
+    jpy: '',
+    usd: '',
   })
+
   // Extract month and year from selectedTime
   // eslint-disable-next-line react/prop-types
   const month = selectedTime.getMonth() + 1; // Months are zero-based
@@ -100,16 +101,17 @@ export default function InputMonthlyData({
     if (visible) {
       API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
       API.getDataMonthly(selectedTime.getFullYear(), selectedTime.getMonth() + 1, setData_month)
+    } else {
+      setData_month([])
     }
   }, [visible, selectedTime])
 
-  useEffect(() => {
-    console.log(data_month)
-    console.log(exchangeRate)
-  }, [data_month,exchangeRate])
+  // useEffect(() => {
+  //   console.log(data_month)
+  //   console.log(exchangeRate)
+  // }, [data_month,exchangeRate])
 
   const handleChange = (e) => {
-    console.log(e)
     setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
   }
 
@@ -158,7 +160,7 @@ export default function InputMonthlyData({
             className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
             data-modal-target="crud-modal"
             data-modal-toggle="crud-modal"
-            onClick={() => API.createOrUpdateExchangeRate(exchangeRate)}
+            onClick={() => API.createOrUpdateExchangeRate(exchangeRate, showToast)}
           >
             {t_translate("button.save")}
           </Button>
@@ -201,7 +203,7 @@ export default function InputMonthlyData({
                     contentEditable="true"
                     suppressContentEditableWarning={true}
                     onBlur={(e) => {
-                      const newData =data_month.balance_sheet;
+                      const newData = data_month.balance_sheet;
                       newData[index].amount = e.target.innerText;
                       setData_month({ ...data_month, newData });
                     }}
@@ -222,14 +224,16 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveMonthly(selectedTime.getMonth() + 1, selectedTime.getFullYear(), data_month)
+              API.saveMonthly(selectedTime.getMonth() + 1, selectedTime.getFullYear(), data_month, showToast)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >
             {t_translate("button.save")}
           </Button>
           <Button
-            onClick={cancel}
+            onClick={
+              cancel
+            }
             className="border-red-500 bg-white border-2 py-2 min-w-[150px]"
           >
             <span className="text-red-500 uppercase">
