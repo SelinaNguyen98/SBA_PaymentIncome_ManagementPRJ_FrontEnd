@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 // // eslint-disable-next-line no-unused-vars
 // import React, { useContext, useEffect, useState } from "react";
@@ -950,6 +951,7 @@ import DeleteOrder from "./Dialog/DeleteOrder";
 import { useTranslation } from "react-i18next";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
 import Modal from "../../../../Utils/Modal/Modal";
+import { useNavigate } from "react-router-dom";
 import {
   getOrderByYearAndMonths,
   deleteOrderByIds,
@@ -1128,6 +1130,21 @@ const Component_Order = () => {
 
     fetchData();
   }, [selectedDate, currentPage_Order, selectedOrderIds,]);
+  const navigator = useNavigate();
+  const handleNotFoundIdExRate = () => {
+    // 1. check condition if idExChageRate dont exist || null || '' || undefine
+    // 2. if false =>
+
+    let state = {
+      month: selectedDate.getMonth() + 1,
+      year: selectedDate.getFullYear(),
+    };
+    navigator("/home/InvoiceDetails", { state });
+    
+    console.log(selectedDate.getFullYear() + "-" + selectedDate.getMonth() + 1);
+
+    // updateState({ isShowFormNewOrder: true })
+  };
 
   return (
     <div className="h-screen">
@@ -1389,6 +1406,7 @@ const Component_Order = () => {
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
               <Button
                 onClick={() => {
+                  handleNotFoundIdExRate();
                   const inputElement =
                     document.getElementById("inputExRateJPY");
                   if (inputElement) {

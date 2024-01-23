@@ -86,4 +86,6 @@ export const updatePayment = async (formData) => {
   } catch (error) {
     throw error;
   }
+
 };
+

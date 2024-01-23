@@ -14,6 +14,7 @@ export const paths = {
   UPDATE_ORDER:"orders",
   categoriesPL: "categories",
   ANALYTICS: "analytics",
+
 };
 
 // Request interceptor to attach the authentication token to each request

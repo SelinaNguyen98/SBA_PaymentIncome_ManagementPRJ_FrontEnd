@@ -12,7 +12,7 @@ import { formatNumberSeparator } from "../../../../Utils/utils/maths";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function NewPaymentForm({
-  // eslint-disable-next-line react/prop-types
+    // eslint-disable-next-line react/prop-types
   visible,
     // eslint-disable-next-line react/prop-types
   cancel,

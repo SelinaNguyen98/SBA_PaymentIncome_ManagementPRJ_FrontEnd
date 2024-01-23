@@ -4,16 +4,23 @@ import InputNumber from "../../../../Utils/InputNumber";
 import Button from "../../../../Utils/Button";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import { createExChangeRate, getExChangeRateByMonthYear } from "../Controller";
-import { formatNumberSeparator } from "../../../../Utils/utils/maths";
+import {
+   // eslint-disable-next-line no-unused-vars
+  formatFloatToCustomString,
+  formatInputToFloatStringSeparator,
+   // eslint-disable-next-line no-unused-vars
+  formatNumberSeparator,
+} from "../../../../Utils/utils/maths";
 
 export default function ExRateComponent({
+  
   // eslint-disable-next-line react/prop-types
   t,
-   // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   selectedDate,
-   // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   triggerData,
-   // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   updateParentIdExRate,
 }) {
   const [dataFormExRate, setFormExRate] = useState({
@@ -77,14 +84,17 @@ export default function ExRateComponent({
         });
 
         updateParentIdExRate(null);
-        console.log("khong co cai chi ca");
         return;
       }
 
       updateFormRate({
         idExRate: response?.data[0].id,
-        jpy: formatNumberSeparator(response?.data[0].jpy.toString()),
-        usd: formatNumberSeparator(response?.data[0].usd.toString()),
+        jpy: formatInputToFloatStringSeparator(
+          response?.data[0].jpy.toString()
+        ),
+        usd: formatInputToFloatStringSeparator(
+          response?.data[0].usd.toString()
+        ),
       });
       updateParentIdExRate(response?.data[0].id);
     } catch (error) {
@@ -93,6 +103,7 @@ export default function ExRateComponent({
   };
 
   useEffect(() => {
+    // console.log(jpy)
     fetchExchangeRate();
   }, [selectedDate]);
 

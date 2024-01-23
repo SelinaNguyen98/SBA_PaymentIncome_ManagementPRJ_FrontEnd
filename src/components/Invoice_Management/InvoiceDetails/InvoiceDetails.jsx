@@ -5,7 +5,7 @@ import "./styles.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-
+// eslint-disable-next-line no-unused-vars
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import Modal from "../../../Utils/Modal/Modal";
@@ -20,13 +20,22 @@ import {
 } from "../../../Utils/utils/maths";
 import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
 import ExRateComponent from "./ExRateComponent";
+import { useLocation } from "react-router-dom";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
 
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
   const [idExRate, setIdRate] = useState(null);
-
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   // eslint-disable-next-line no-unused-vars
+  //   setError,
+  //   setValue,
+  //   // eslint-disable-next-line no-unused-vars
+  //   formState: { errors },
+  // } = useForm();
   const triggerData = () => {
     setDataChangeTrigger(!dataChangeTrigger);
   };
@@ -51,14 +60,33 @@ export default function InvoiceDetails() {
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
 
-  // Bao gom tong so trang, page, du lieu table dang duoc chon
+  const location = useLocation();
+  const { state } = useLocation();
+
   const [selectedDate, setSelectedDate] = useState(() => {
+    if (state) {
+      const { month, year } = state;
+      return formatStringMonthYearToDate(month, year);
+    }
     const today = new Date();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    return formatStringMonthYearToDate(month, year);
+    const monthT = today.getMonth() + 1;
+    const yearT = today.getFullYear();
+    return formatStringMonthYearToDate(monthT, yearT);
   }); //
 
+  useEffect(() => {
+    // Access the state object directly
+    const { state } = location;
+
+    // Check if state is defined before accessing its properties
+    if (state) {
+      const { month, year } = state;
+      console.log("Month:", month);
+      console.log("Year:", year);
+    }
+  }, [location.state]);
+
+  // Bao gom tong so trang, page, du lieu table dang duoc chon
   const [stateTable, setStateTable] = useState({
     page: 1,
     totalPage: 0,
@@ -178,8 +206,7 @@ export default function InvoiceDetails() {
   }
 
   return (
-    
-    <div className="relative bg-main-theme pb-5 h-screen">
+    <div className={` relative bg-main-theme pb-5 h-screen `}>
       {/* Lable */}
       <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold ">
         <svg
@@ -196,7 +223,7 @@ export default function InvoiceDetails() {
         {t("navHeader.invoiceDetails")}
       </div>
       {/* control area */}
-      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px]">
+      <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4   bg-white rounded-[16px] ">
         <div className="grid  gap-2 items-center w-full ">
           <div className="flex items-center justify-between gap-2 flex-row max-[1390px]:flex-col">
             <div className="mt-1 px-6 flex flex-row items-center">
@@ -360,7 +387,6 @@ export default function InvoiceDetails() {
                       <input
                         className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        // value={invoicePayment?.jpy.toFixed(4) || 0}
                         value={formatFloatToCustomString(invoicePayment?.jpy)}
                       />
                     </td>

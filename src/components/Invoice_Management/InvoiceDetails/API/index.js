@@ -60,6 +60,7 @@ export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
 //   }
 // };
 
+
 export const callApi_createExchagerateByMonthAndYear = async (
   monthYear,
   jpy,
@@ -114,4 +115,5 @@ export const callApi_updatePayment = async (formData) => {
   } catch (error) {
     throw error;
   }
+
 };

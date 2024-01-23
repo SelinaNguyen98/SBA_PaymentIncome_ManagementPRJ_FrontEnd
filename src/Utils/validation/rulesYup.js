@@ -3,14 +3,14 @@ import * as yup from "yup";
 export const createPaymentSchema = yup
   .object()
   .shape({
-    payment_date: yup.string().required("Value can not be null!"),
-    name: yup.string().required("Value can not be null!"),
+    payment_date: yup.string().required("Ngày thanh toán là bắt buộc"),
+    name: yup.string().required("name là bắt buộc"),
     cost: yup
-      .number()
-      .typeError("cost must be a number")
-      .required("Value can not be null!")
-      .min(0, "Phải lớn hơn hoặc bằng 0")
-      .default(0),
+      .string()
+      .required("is required")
+      .matches(/^\d{1,3}(?:\.\d{3})*(?:,\d+)?$/, "hay nhap 1 so"),
+    pay: yup.string().required("is required"),
+    category_id: yup.string().required("is required"),
   })
   .required();
 
@@ -22,3 +22,4 @@ export const createOrderSchema = yup
     vnd: yup.string().required(),
   })
   .required();
+

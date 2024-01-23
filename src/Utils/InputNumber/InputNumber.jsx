@@ -1,6 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import React from "react";
-import { formatNumberSeparator } from "../utils/maths";
+import {
+  // eslint-disable-next-line no-unused-vars
+  formatFloatToCustomString,
+  formatInputToFloatStringSeparator,
+  // eslint-disable-next-line no-unused-vars
+  formatNumberSeparator,
+} from "../utils/maths";
 
 // eslint-disable-next-line react/prop-types
 export default function InputNumber({ number, setNumber, className, ...ref }) {
@@ -14,14 +20,16 @@ export default function InputNumber({ number, setNumber, className, ...ref }) {
     // const formattedValue = numericValue.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
     // setNumber(formattedValue);
 
-    setNumber(formatNumberSeparator(e.target.value));
+    setNumber(formatInputToFloatStringSeparator(e.target.value));
+    // setNumber(e.target.value);
   };
 
   return (
     <input
       value={number}
+      // type="number"
       onChange={handleInputChange}
-      onBlur={handleInputChange}
+      // onInput={handleInputChange}
       {...ref}
       className={
         className
@@ -29,5 +37,7 @@ export default function InputNumber({ number, setNumber, className, ...ref }) {
           : "bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
       }
     />
+
+    
   );
 }
