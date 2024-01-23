@@ -185,16 +185,13 @@ export default function InputMonthlyData({
               (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
-                  <td className="w-[3px]" name="tb_no"></td>
-                    {index + 1}
-                  <td className="w-[3px]" name="tb_no">
-                    {index + 1}
-                  </td>
+                  <td className="w-[3px]" name="tb_no">{index + 1}</td>
+                    
+                 
                   <td
                     className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
-                    {rowData_month.category_name}
                     {rowData_month.category_name}
                   </td>
 

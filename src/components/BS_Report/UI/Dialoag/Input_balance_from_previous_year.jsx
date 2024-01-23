@@ -130,7 +130,7 @@ export default function Input_balance_from_previous_year({
                 <th className="w-[100px]">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
-                <th className="w-full">
+                <th className="w-10px">
                   {t_translate("form_input_monthly_data_BS.title_table_amount")}
                 </th>
                 <th className="w-[1px]"></th>

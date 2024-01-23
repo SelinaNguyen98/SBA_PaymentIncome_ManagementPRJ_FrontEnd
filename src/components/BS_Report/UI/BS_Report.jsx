@@ -421,7 +421,7 @@ const BS_Report = () => {
 
                       {dataBS?.map((rowData_BS, index1) => <>
                         {rowData_BS?.categories?.map((rowData_Category, index2) => (
-                          <tr key={idx++}>
+                          <tr key={idx}>
                             <td className="w-[1px]"></td>
                             <td className="w-[2px]" name="tb_no" >
                               {idx++}
@@ -479,7 +479,7 @@ const BS_Report = () => {
                           </tr>
                         )
                         )}
-                        <tr key={idx++} className="bg-slate-800">
+                        <tr key={idx} className="bg-slate-800">
                           <td className="w-[1px] td_group"></td>
                           <td className="w-[2px] td_group" name="tb_no" >
                             {idx++}
