@@ -2,13 +2,12 @@ import "../../../Utils/style.css";
 import "./styles.css";
 
 // eslint-disable-next-line no-unused-vars
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 // eslint-disable-next-line no-unused-vars
 import { yupResolver } from "@hookform/resolvers/yup";
-
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import Modal from "../../../Utils/Modal/Modal";
@@ -16,20 +15,19 @@ import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
 
-import { formatStringMonthYearToDate } from "../../../Utils/utils/maths";
 import {
-  createExChangeRate,
-  deletePaymentById,
-  getExChangeRateByMonthYear,
-  getPaymentsByYearAndMonths,
-} from "./Controller";
+  formatFloatToCustomString,
+  formatNumberSeparator,
+  formatStringMonthYearToDate,
+} from "../../../Utils/utils/maths";
+import { deletePaymentById, getPaymentsByYearAndMonths } from "./Controller";
+import ExRateComponent from "./ExRateComponent";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
+
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
-
-  const { showToast } = useContext(AppContext);
-
+  const [idExRate, setIdRate] = useState(null);
   const {
     register,
     handleSubmit,
@@ -39,20 +37,26 @@ export default function InvoiceDetails() {
     // eslint-disable-next-line no-unused-vars
     formState: { errors },
   } = useForm();
+  const triggerData = () => {
+    setDataChangeTrigger(!dataChangeTrigger);
+  };
 
-  // const handleSaveRate = handleSubmit((data) => {
-
-  // });
+  const { showToast } = useContext(AppContext);
 
   // state theo doi cac modal
   const [stateControl, setStateControl] = useState({
     isShowConfirmModal: false,
     isShowFormNewPayment: false,
     isShowFormEditPayment: false,
+    isShowWarringModal: false,
   });
 
-  const { isShowConfirmModal, isShowFormNewPayment, isShowFormEditPayment } =
-    stateControl;
+  const {
+    isShowConfirmModal,
+    isShowFormNewPayment,
+    isShowFormEditPayment,
+    isShowWarringModal,
+  } = stateControl;
 
   const updateState = (data) =>
     setStateControl(() => ({ ...stateControl, ...data }));
@@ -72,6 +76,7 @@ export default function InvoiceDetails() {
     selectedRowData: null, // single delete
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
+    // idExRate: null,
   });
 
   const {
@@ -107,6 +112,13 @@ export default function InvoiceDetails() {
 
   // const [page, setPage] = useState(1);
   const isFilterApplied = useRef(false);
+  // const childInputExRateRef = useRef(null);
+
+  // const focusChildInput = (ref) => {
+  //   if (ref && ref.current) {
+  //     ref.current.focus();
+  //   }
+  // };
 
   // TODO fake  data here
   const fetchInvoices = async () => {
@@ -117,58 +129,11 @@ export default function InvoiceDetails() {
         page
       );
 
-      // if (page > response?.pagination?.total_pages)
-      //   changePage(response?.pagination?.total_pages - 1);
       updateStateTable({
         dataTable: response,
         totalPage: response?.pagination?.total_pages,
       });
       console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchExchangeRate = async () => {
-    try {
-      const [status, response] = await getExChangeRateByMonthYear(
-        selectedDate.getMonth() + 1,
-        selectedDate.getFullYear()
-      );
-      console.log(response);
-      // Khong co gia tri duoc lay ta
-      if (status == 200 && response.success == false) {
-        setValue("idExRate", null);
-        setValue("jpy", null);
-        setValue("usd", null);
-        console.log("khong co cai chi ca");
-        return;
-      }
-      setValue("idExRate", response?.data[0].id);
-      setValue("jpy", parseFloat(response?.data[0].jpy).toFixed(4));
-      setValue("usd", parseFloat(response?.data[0].usd).toFixed(4));
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const fetchSaveRate = async (data) => {
-    console.log(data);
-    try {
-      const response = await createExChangeRate(
-        selectedDate.getMonth() + 1,
-        selectedDate.getFullYear(),
-        data.jpy,
-        data.usd,
-        data.idExRate
-      );
-
-      // setValue("idExRate", response?.data?.id || null);
-      // console.log(response?.message)
-      showToast(response?.message);
-      setDataChangeTrigger(!dataChangeTrigger);
-
-      // fetchExchangeRate();
     } catch (error) {
       console.log(error);
     }
@@ -193,7 +158,7 @@ export default function InvoiceDetails() {
       setDataChangeTrigger(!dataChangeTrigger);
 
       updateState({ isShowConfirmModal: false });
-      showToast("Delete  successfully!");
+      showToast.success("Delete  successfully!");
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -214,9 +179,7 @@ export default function InvoiceDetails() {
     }
 
     console.log("Main effect");
-
     fetchInvoices();
-    fetchExchangeRate();
   }, [selectedDate, page, dataChangeTrigger]);
 
   function changePage(page) {
@@ -225,10 +188,7 @@ export default function InvoiceDetails() {
   }
 
   return (
-    <div
-      id="invoiceDetailTable"
-      className={` relative bg-main-theme pb-5 h-full `}
-    >
+    <div className={` relative bg-main-theme pb-5 h-full `}>
       {/* Lable */}
       <div className="mt-1 px-6 flex flex-shrink-0 items-center font-bold ">
         <svg
@@ -255,56 +215,26 @@ export default function InvoiceDetails() {
                   setSelectedDate={setSelectedDate}
                   className="col-span-12 lg:col-span-2 max-[1000px]:w-full"
                 />
-                <div className="flex flex-row bg-main-theme items-center py-1 rounded-md ">
-                  <form
-                    className="items-center px-5 flex flex-row "
-                    onSubmit={handleSubmit(fetchSaveRate)}
-                  >
-                    <div className="font-medium ">
-                      JPY
-                      <input
-                        type="number"
-                        step="0.0001"
-                        defaultValue={0}
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
-                        {...register("jpy", {
-                          number: "This field is number",
-                          required: "This field is required",
-                        })}
-                      />
-                    </div>
-                    <div className="font-medium">
-                      USD
-                      <input
-                        type="number"
-                        step="0.0001"
-                        defaultValue={0}
-                        className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
-                        {...register("usd", {
-                          number: "This field is number",
-                          required: "This field is required",
-                        })}
-                      />
-                    </div>
-
-                    <Button
-                      className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
-                      // type="submit"
-                      data-modal-target="crud-modal"
-                      data-modal-toggle="crud-modal"
-                    >
-                      {t("button.save")}
-                    </Button>
-                  </form>
-                </div>
+                <ExRateComponent
+                  t={t}
+                  // fetchSaveRate={fetchSaveRate}
+                  selectedDate={selectedDate}
+                  triggerData={triggerData}
+                  updateParentIdExRate={setIdRate}
+                />
               </div>
             </div>
-            {/* <span> {errors?.usd?.message}</span>
-            <span> {errors.usd?.message}</span> */}
 
             <div className="flex flex-row">
               <Button
-                onClick={() => updateState({ isShowFormNewPayment: true })}
+                onClick={() => {
+                  console.log(idExRate);
+                  if (idExRate === null) {
+                    updateState({ isShowWarringModal: true });
+                  } else {
+                    updateState({ isShowFormNewPayment: true });
+                  }
+                }}
                 icon={
                   <svg
                     width="16"
@@ -348,95 +278,167 @@ export default function InvoiceDetails() {
         </div>
 
         {/* table data */}
-        <div className="h-[430px] 2xl-plus:h-[600px]">
-          <table id="invoiceDetailTable" className="table-fixed mt-1 h-auto">
-            <thead>
-              <tr>
-                <th className="w-[2%]">
-                  <input
-                    type="checkbox"
-                    checked={isSelectedAllDataInvoice}
-                    onChange={handleSelectAllCheckboxChange_Invoice}
-                  />
-                </th>
-                <th className=" w-[3%]"> NO</th>
-                <th className=" w-[10%]">{t("page_payment_detail.date")}</th>
-                <th className=" w-[10%]">{t("page_payment_detail.name")}</th>
-                <th className=" w-[8%]"> JPY</th>
-                <th className=" w-[8%]"> VND</th>
-                <th className=" w-[8%]"> USD</th>
-                <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
-                <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
-                <th className=" w-[16%] ">
-                  {t("page_payment_detail.invoice")}
-                </th>
-                <th className=" w-[8%]">{t("page_payment_detail.pay")}</th>
-                <th className=" w-[6%]">ACTION</th>
-                <th className=" w-[1%]"></th>
-              </tr>
+        <div className=" h-[430px] 2xl-plus:h-[600px] mt-2 overflow-x-auto ">
+          <table className=" table-fixed  border-hidden w-full  min-w-[1000px]    ">
+            <thead className="  py-2 bg-main-theme text-[11px] 2xl-plus:text-[16px] uppercase ">
+              {/* Warring: The first tag td be liked left padding */}
+              <th className="w-[2%] py-2 rounded-l-[10px]">
+                <input
+                  type="checkbox"
+                  checked={isSelectedAllDataInvoice}
+                  onChange={handleSelectAllCheckboxChange_Invoice}
+                />
+              </th>
+              <th className=" w-[3%]"> NO</th>
+              <th className=" w-[10%]">{t("page_payment_detail.date")}</th>
+              <th className=" w-[10%]">{t("page_payment_detail.name")}</th>
+              <th className=" w-[8%]"> JPY</th>
+              <th className=" w-[8%]"> VND</th>
+              <th className=" w-[8%]"> USD</th>
+              <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
+              <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
+              <th className=" w-[16%] ">{t("page_payment_detail.invoice")}</th>
+              <th className=" w-[8%]">{t("page_payment_detail.pay")}</th>
+              <th className=" w-[6%]">ACTION</th>
+
+              {/* Warring: The last tag td be liked left padding */}
+              <th className=" w-[1%]  rounded-r-[10px]"></th>
             </thead>
-            <tbody>
-              {/* Firsh row is like padding-top */}
+            <tbody className=" bg-main-theme">
+              {/* Warring: First row like the margin between thead and tbody  */}
+              <tr className="bg-white h-2 border-hidden"></tr>
+
+              {/*Warring: Second row is like padding-top */}
               <tr>
-                <td colSpan={100}></td>
+                <td
+                  colSpan={100}
+                  className=" h-2 bg-main-theme  rounded-t-[10px] border border-main-theme   "
+                ></td>
               </tr>
 
               {dataTable?.payments &&
                 dataTable?.payments.map((invoicePayment, index) => (
                   <tr
                     key={index}
-                    className="h-[35px] 2xl-plus:h-[50px] text-sm text-[13px] p-2"
+                    className="h-[35px] 2xl-plus:h-[50px] text-[14px] 2xl-plus:text-[18px] 2xl-plus:p-2 "
                   >
-                    {/* <tr key={index}> */}
-                    {/* First column of each row is like padding-left */}
-                    <td>
+                    {/* Warring:  First column of each row is like padding-left */}
+                    <td className=" text-center border-hidden  border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis">
                       <input
+                        className="outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         type="checkbox"
                         checked={selectedListRowsData[index]}
                         onChange={() => handleRowCheckboxChange_Invoice(index)}
                       />
                     </td>
 
-                    {/* DATA MAIN*/}
-                    <td name="tb_no">{invoicePayment?.id}</td>
-                    <td name="tb_date">
+                    {/* TODO DATA MAIN*/}
+                    <td
+                      className=" pl-3 pr-2 bg-main-theme text-center border border-gray-300 overflow-hidden "
+                      name="tb_no"
+                    >
+                      {(page - 1) * 10 + index + 1}
+                      {/* {invoicePayment?.id} */}
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_date"
+                    >
                       <input
-                        className="text-center"
+                        className=" text-center outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
                         value={
                           (invoicePayment?.payment_date || "").split(" ")[0]
                         }
                       />
                     </td>
-                    <td name="tb_name">
-                      <input readOnly value={invoicePayment?.name} />
-                    </td>
-                    <td name="tb_jyp">
-                      <input readOnly value={invoicePayment?.jpy} />
-                    </td>
-                    <td name="tb_vnd">
-                      <input readOnly value={invoicePayment?.cost} />
-                    </td>
-                    <td name="tb_usd">
-                      <input readOnly value={invoicePayment?.usd} />
-                    </td>
-                    <td name="tb_note">
-                      <input readOnly value={invoicePayment?.note} />
-                    </td>
-                    <td name="tb_journal">
-                      <input readOnly value={invoicePayment?.category?.name} />
-                    </td>
-                    <td name="tb_invoice">
-                      <input readOnly value={invoicePayment?.invoice} />
-                    </td>
-                    <td name="tb_pay">
+                    <td
+                      className=" pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_name"
+                    >
                       <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
                         readOnly
-                        value={invoicePayment?.pay}
-                        className="text-center"
+                        value={invoicePayment?.name || ""}
                       />
                     </td>
-                    <td name="tb_action">
+                    <td
+                      className=" pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_jyp"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        // value={invoicePayment?.jpy.toFixed(4) || 0}
+                        value={formatFloatToCustomString(invoicePayment?.jpy)}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_vnd"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={formatNumberSeparator(
+                          invoicePayment?.cost.toString() || ""
+                        )}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_usd"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={formatFloatToCustomString(invoicePayment?.usd)}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_note"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.note || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_journal"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.category?.name || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_invoice"
+                    >
+                      <input
+                        className=" outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                        readOnly
+                        value={invoicePayment?.invoice || ""}
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_pay"
+                    >
+                      <input
+                        readOnly
+                        value={invoicePayment?.pay || ""}
+                        className="text-center  outline-none bg-transparent w-full overflow-hidden overflow-ellipsis whitespace-nowrap"
+                      />
+                    </td>
+                    <td
+                      className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
+                      name="tb_action"
+                    >
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
                         {/* Icon Edit */}
                         <svg
@@ -491,14 +493,17 @@ export default function InvoiceDetails() {
                         </svg>
                       </div>
                     </td>
-
-                    {/* Last column of each row is like padding-right */}
-                    <td></td>
+                    {/* Warring: Last column of each row is like padding-right */}
+                    <td className="px-10 pr-4 bg-main-theme text-center border-hidden"></td>
                   </tr>
                 ))}
 
-              <tr className=" bg-main-theme h-[0px] py-0 my-0 ">
-                <td colSpan={100}></td>
+              {/* Warring:  Last row like tha padding bottom */}
+              <tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 p-[5px]  rounded-b-[10px] border-hidden "
+                ></td>
               </tr>
             </tbody>
           </table>
@@ -506,9 +511,9 @@ export default function InvoiceDetails() {
 
         {/* InvoiceDetailFooter */}
         <InvoiceDetailFooter
-          totalUSD={dataTable?.total_usd}
-          totalVND={dataTable?.total_cost}
-          totalJPY={dataTable?.total_jpy}
+          totalUSD={dataTable?.total_usd || 0}
+          totalVND={dataTable?.total_cost || 0}
+          totalJPY={dataTable?.total_jpy || 0}
           totalPage={totalPage}
           page={page}
           changePage={changePage}
@@ -516,7 +521,7 @@ export default function InvoiceDetails() {
       </div>
       {isShowConfirmModal && (
         <Modal visible={isShowConfirmModal}>
-          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex flex-col">
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
             <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
               {t("page_payment_detail.del_invoice_detail")}
             </span>
@@ -528,7 +533,9 @@ export default function InvoiceDetails() {
             <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
               <Button
                 onClick={() => handleDelete()}
-                className={" bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
               >
                 {t("button.confirm")}
               </Button>
@@ -551,10 +558,17 @@ export default function InvoiceDetails() {
       {isShowFormNewPayment && (
         <NewPaymentForm
           visible={isShowFormNewPayment}
+          selectedDate={selectedDate}
+          exchangeRateId={idExRate}
           cancel={() => {
             updateState({ isShowFormNewPayment: false });
           }}
-          selectedDate={selectedDate}
+          changeFirstPage={() => {
+            updateState({ isShowFormNewPayment: false });
+            if (page != 1) {
+              changePage(1);
+            } else triggerData();
+          }}
         />
       )}
 
@@ -562,13 +576,50 @@ export default function InvoiceDetails() {
         <EditPaymentForm
           invoicePayment={selectedRowData}
           visible={isShowFormEditPayment}
+          selectedDate={selectedDate}
+          exchangeRateId={idExRate}
           cancel={() => {
             updateState({
               isShowFormEditPayment: false,
               selectedRowData: null,
             });
           }}
+          triggerData={triggerData}
         />
+      )}
+
+      {isShowWarringModal && (
+        <Modal visible={isShowWarringModal}>
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
+            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+              {/* TODO */}
+              WARRING
+            </span>
+
+            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+              {/* TODO */}
+              EXCHAGE RATE ID of this months not found!
+            </div>
+
+            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+              <Button
+                onClick={() => {
+                  const inputElement =
+                    document.getElementById("inputExRateJPY");
+                  if (inputElement) {
+                    inputElement.focus();
+                  }
+                  updateState({ isShowWarringModal: false });
+                }}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </Modal>
       )}
     </div>
   );
