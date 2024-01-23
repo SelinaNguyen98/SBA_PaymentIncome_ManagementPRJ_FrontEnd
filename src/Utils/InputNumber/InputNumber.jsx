@@ -1,5 +1,9 @@
 import React from "react";
-import { formatNumberSeparator } from "../utils/maths";
+import {
+  formatFloatToCustomString,
+  formatInputToFloatStringSeparator,
+  formatNumberSeparator,
+} from "../utils/maths";
 
 export default function InputNumber({ number, setNumber, className, ...ref }) {
   const handleInputChange = (e) => {
@@ -12,14 +16,16 @@ export default function InputNumber({ number, setNumber, className, ...ref }) {
     // const formattedValue = numericValue.replace(/(\d)(?=(\d{3})+$)/g, "$1.");
     // setNumber(formattedValue);
 
-    setNumber(formatNumberSeparator(e.target.value));
+    setNumber(formatInputToFloatStringSeparator(e.target.value));
+    // setNumber(e.target.value);
   };
 
   return (
     <input
       value={number}
+      // type="number"
       onChange={handleInputChange}
-      onBlur={handleInputChange}
+      // onInput={handleInputChange}
       {...ref}
       className={
         className
@@ -27,5 +33,7 @@ export default function InputNumber({ number, setNumber, className, ...ref }) {
           : "bg-white mx-2 min-w-[150px] shadow-sm rounded-md px-1"
       }
     />
+
+    
   );
 }

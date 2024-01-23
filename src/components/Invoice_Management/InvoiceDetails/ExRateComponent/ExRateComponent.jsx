@@ -3,7 +3,11 @@ import InputNumber from "../../../../Utils/InputNumber";
 import Button from "../../../../Utils/Button";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import { createExChangeRate, getExChangeRateByMonthYear } from "../Controller";
-import { formatNumberSeparator } from "../../../../Utils/utils/maths";
+import {
+  formatFloatToCustomString,
+  formatInputToFloatStringSeparator,
+  formatNumberSeparator,
+} from "../../../../Utils/utils/maths";
 
 export default function ExRateComponent({
   t,
@@ -67,14 +71,17 @@ export default function ExRateComponent({
         });
 
         updateParentIdExRate(null);
-        console.log("khong co cai chi ca");
         return;
       }
 
       updateFormRate({
         idExRate: response?.data[0].id,
-        jpy: formatNumberSeparator(response?.data[0].jpy.toString()),
-        usd: formatNumberSeparator(response?.data[0].usd.toString()),
+        jpy: formatInputToFloatStringSeparator(
+          response?.data[0].jpy.toString()
+        ),
+        usd: formatInputToFloatStringSeparator(
+          response?.data[0].usd.toString()
+        ),
       });
       updateParentIdExRate(response?.data[0].id);
     } catch (error) {
@@ -83,6 +90,7 @@ export default function ExRateComponent({
   };
 
   useEffect(() => {
+    // console.log(jpy)
     fetchExchangeRate();
   }, [selectedDate]);
 
