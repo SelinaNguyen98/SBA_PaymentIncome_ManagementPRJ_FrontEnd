@@ -5,7 +5,9 @@ import "./styles.css";
 import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-
+import { useForm } from "react-hook-form";
+// eslint-disable-next-line no-unused-vars
+import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "../../../Utils/Button";
 import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import Modal from "../../../Utils/Modal/Modal";
@@ -26,7 +28,15 @@ export default function InvoiceDetails() {
 
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
   const [idExRate, setIdRate] = useState(null);
-
+  const {
+    register,
+    handleSubmit,
+    // eslint-disable-next-line no-unused-vars
+    setError,
+    setValue,
+    // eslint-disable-next-line no-unused-vars
+    formState: { errors },
+  } = useForm();
   const triggerData = () => {
     setDataChangeTrigger(!dataChangeTrigger);
   };

@@ -4,7 +4,9 @@ import NavHeader from "../../NavHeader";
 import { useTranslation } from "react-i18next";
 import "./styles.css";
 import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import Pagination2 from "./Pagination/Pagination";
+import InvoiceDetailFooter from "../../Account_Category/UI/InvoicDetailFooter/InvoiceDetailFooter";
 
 export default function InvoiceDetails() {
   const { t } = useTranslation();
@@ -52,9 +54,11 @@ export default function InvoiceDetails() {
           onChange={handleSearchChange}
           style={{
             width: "400px",
-            height: "40px",
+            height: "50px",
             backgroundColor: "white",
             color: "black",
+            borderRadius: "0px 10px 10px 0px",
+            border: "1px solid #ccc",
           }}
         >
           {filterCategories1.map((category) => (
@@ -71,9 +75,11 @@ export default function InvoiceDetails() {
           onChange={handleSearchChange}
           style={{
             width: "400px",
-            height: "40px",
+            height: "50px",
             backgroundColor: "white",
             color: "black",
+            borderRadius: "0px 10px 10px 0px",
+            border: "1px solid #ccc",
           }}
         >
           {filterCategories1.map((category) => (
@@ -91,10 +97,10 @@ export default function InvoiceDetails() {
           onChange={handleSearchChange}
           placeholder={t("titlePage.searchPlaceholder")}
           style={{
-            padding: "8px 30px 8px 10px",
             width: "400px",
-            height: "40px",
-            border: "1px solid transparent",
+            height: "50px",
+            borderRadius: "0px 10px 10px 0px",
+            border: "1px solid #ccc",
           }}
         />
       );
@@ -126,25 +132,17 @@ export default function InvoiceDetails() {
                 fill="black"
               />
             </svg>
-            <div
-              style={{
-                display: "flex",
-                width: "full",
-                border: "1px solid transparent",
-                borderRadius: "15px",
-                overflow: "hidden",
-              }}
-            >
+            
               <div style={{ fontWeight: "bold" }}>
                 {t("titlePage.groupDetail")}
               </div>
+              <div style={{ display: "inline-block", marginLeft: "75px",position: "relative" }}></div>
               <div
                 style={{
                   display: "flex",
-                  width: "full",
-                  border: "1px solid transparent",
+                  positon: "relative",
+                  alignItems: "center",
                   borderRadius: "15px",
-                  overflow: "hidden",
                 }}
               >
                 <select
@@ -153,9 +151,10 @@ export default function InvoiceDetails() {
                   onChange={handleOptionChange}
                   style={{
                     width: "200px",
-                    height: "40px",
+                    height: "50px",
                     backgroundColor: "midnightblue",
                     color: "white",
+                    borderRadius: "10px 0px 0px 10px",
                   }}
                 >
                   {filterCategories.map((category) => (
@@ -175,7 +174,7 @@ export default function InvoiceDetails() {
                 <div
                   style={{
                     borderLeft: "1px solid transparent",
-                    height: "40px",
+                    height: "50px",
                   }}
                 ></div>
                 <div style={{ flex: 1, position: "relative" }}>
@@ -198,7 +197,6 @@ export default function InvoiceDetails() {
                 </div>
               </div>
             </div>
-          </div>
           {/* control area */}
           <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
             <div className=" w-full overflow-auto col-span-12 lg:col-span-3 flex  justify-end items-end"></div>
@@ -245,7 +243,7 @@ export default function InvoiceDetails() {
                 </tr>
               </tbody>
             </table>
-            <Pagination2 />
+            <InvoiceDetailFooter />
           </div>
         </div>
       </div>
