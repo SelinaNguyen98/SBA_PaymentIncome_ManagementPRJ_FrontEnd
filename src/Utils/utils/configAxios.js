@@ -10,6 +10,10 @@ export const paths = {
   PL_REPORT:"getDataPL",
   GET_ORDER_MONTH_YEAR: "orders",
   DELETE_ORDER: "orders",
+  CREATE_ORDER:"orders",
+  UPDATE_ORDER:"orders",
+  categoriesPL: "categories",
+  ANALYTICS: "analytics",
 };
 
 // Request interceptor to attach the authentication token to each request

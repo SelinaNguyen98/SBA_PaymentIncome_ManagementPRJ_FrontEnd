@@ -75,7 +75,6 @@ const PL_Report = () => {
   };
 
   const formatNumber = (number) => {
-    // return number.toLocaleString('en-US');
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
 

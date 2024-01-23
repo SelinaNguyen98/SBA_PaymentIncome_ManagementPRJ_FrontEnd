@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // // eslint-disable-next-line no-unused-vars
 // import React, { useContext, useEffect, useState } from "react";
 // import Button from "../../../../Utils/Button";
@@ -939,7 +940,8 @@
 
 // Order.js
 // eslint-disable-next-line no-unused-vars
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { AppContext } from "../../../../Utils/contexts/app.context";
 import Button from "../../../../Utils/Button";
 import Pagination from "../../../../Utils/Pagination";
 import AddOrderForm from "./Dialog/AddOrderForm";
@@ -947,24 +949,61 @@ import EditOrderForm from "./Dialog/EditOrderForm";
 import DeleteOrder from "./Dialog/DeleteOrder";
 import { useTranslation } from "react-i18next";
 import MonthYearPicker from "../../../../Utils/MonthYearPicker";
-import { getOrderByYearAndMonths, deleteOrderByIds } from "../Controller"; // Import the deleteOrderByIds function
+import Modal from "../../../../Utils/Modal/Modal";
+import {
+  getOrderByYearAndMonths,
+  deleteOrderByIds,
+  getExChangeRateByMonthYear,
+} from "../Controller"; // Import the deleteOrderByIds function
 import "./style.css";
 
 const Component_Order = () => {
+  const { showToast } = useContext(AppContext);
   const { t } = useTranslation();
   const t_order = t;
-
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [state, setState] = useState({
     isShowDeleteModal_Order: false,
     isShowFormNewOrder: false,
     isShowFormEditOrder: false,
+    isShowWarringModal: false,
+    selectedRowOrder_Edit: null,
   });
+  const formatNumber = (number) => {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+  const [idExRate, setIdRate] = useState(false);
+  const [dataExRate, setDataExRate] = useState([]);
 
+  const fetchExchangeRate = async () => {
+    try {
+      const [status, response] = await getExChangeRateByMonthYear(
+        selectedDate.getMonth() + 1,
+        selectedDate.getFullYear()
+      );
+      if (status == 200 && response.success == false) {
+        console.log("Setting idExRate to false");
+        setIdRate(false);
+        return;
+      } else {
+        setDataExRate(response?.data[0].id);
+        console.log(dataExRate);
+        console.log(dataExRate);
+        setIdRate(true);
+        console.log("Setting idExRate to true");
+      }
+    } catch (error) {
+      console.log("Error fetching exchange rate:", error);
+      setIdRate(false);
+    } finally {
+      console.log("Final idExRate:", idExRate);
+    }
+  };
+  //Order
   const [dataOrder, setDataOrder] = useState([]);
   const [selectedRows_Order, setSelectedRows_Order] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [currentPage_Order, setCurrentPage_Order] = useState(1);
+  const [totalPages_Order, setTotalPages_Order] = useState(1);
   const [selectedOrderIds, setSelectedOrderIds] = useState([]); // New state to store selected order IDs
 
   const updateState = (data) =>
@@ -988,7 +1027,7 @@ const Component_Order = () => {
   const [selectAllPages_Order, setSelectAllPages_Order] = useState([false]);
   const handleSelectAllCheckboxChange_Order = () => {
     // Use the current page to determine the index in the array
-    const pageIndex = currentPage - 1;
+    const pageIndex = currentPage_Order - 1;
 
     setSelectAllPages_Order((prevSelectAllPages) => {
       const newSelectAllPages = [...prevSelectAllPages];
@@ -1015,8 +1054,8 @@ const Component_Order = () => {
     });
   };
 
-  const handleChangePage = (newPage) => {
-    setCurrentPage(newPage);
+  const handleChangePage_Order = (newPage) => {
+    setCurrentPage_Order(newPage);
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -1025,9 +1064,10 @@ const Component_Order = () => {
       await deleteOrderByIds(selectedOrderIds);
       // Clear selected order IDs after successful deletion
       setSelectedOrderIds([]);
-      setCurrentPage(1);
+      setCurrentPage_Order(1);
       fetchData_Order();
-      updateState({ isShowDeleteModal_Order: false })
+      updateState({ isShowDeleteModal_Order: false });
+      showToast.success("Delete successfully!");
     } catch (error) {
       console.error("Error deleting orders:", error);
     }
@@ -1036,53 +1076,48 @@ const Component_Order = () => {
     try {
       const response = await getOrderByYearAndMonths(
         selectedDate,
-        currentPage
+        currentPage_Order
       );
 
       console.log("API Response:", response);
 
       if (response && response.pagination) {
         if (response.orders === null) {
-          setTotalPages(1);
-          setCurrentPage(1);
+          setTotalPages_Order(1);
+          setCurrentPage_Order(1);
         } else {
           setDataOrder((prevData) => {
             console.log("Previous Data:", prevData);
             return response.orders || [];
           });
-          setTotalPages(response.pagination.total_pages);
+          setTotalPages_Order(response.pagination.total_pages);
 
           // Check and update selectedRows_Order based on selectedOrderIds
-          const newSelectedRows = new Array(response.orders.length).fill(
-            false
-          );
+          const newSelectedRows = new Array(response.orders.length).fill(false);
           response.orders.forEach((order, index) => {
             if (selectedOrderIds.includes(order.id)) {
               newSelectedRows[index] = true;
             }
           });
           setSelectedRows_Order(newSelectedRows);
+          // setSelectedRow_Order([]);
         }
       } else {
         console.error("Invalid response format:", response);
         setDataOrder([]);
-        setTotalPages(1);
+        setTotalPages_Order(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataOrder([]);
-      setTotalPages(1);
+      setTotalPages_Order(1);
     }
   };
 
-
   useEffect(() => {
+    fetchExchangeRate();
     fetchData_Order();
-  }, [selectedDate, currentPage, selectedOrderIds]);
-
-  const formatNumber = (number) => {
-    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-  };
+  }, [selectedDate, currentPage_Order, selectedOrderIds]);
 
   return (
     <div className="">
@@ -1116,7 +1151,15 @@ const Component_Order = () => {
 
               <div className="flex flex-row">
                 <Button
-                  onClick={() => updateState({ isShowFormNewOrder: true })}
+                  // onClick={() => updateState({ isShowFormNewOrder: true })}
+                  onClick={() => {
+                    console.log(idExRate);
+                    if (idExRate === false) {
+                      updateState({ isShowWarringModal: true });
+                    } else {
+                      updateState({ isShowFormNewOrder: true });
+                    }
+                  }}
                   icon={
                     <svg
                       width="16"
@@ -1165,8 +1208,8 @@ const Component_Order = () => {
                   <th className="w-1">
                     <input
                       type="checkbox"
-                checked={selectAllPages_Order[currentPage - 1]}
-                onChange={handleSelectAllCheckboxChange_Order}
+                      checked={selectAllPages_Order[currentPage_Order - 1]}
+                      onChange={handleSelectAllCheckboxChange_Order}
                     />
                   </th>
                   <th className="w-8">No</th>
@@ -1230,7 +1273,7 @@ const Component_Order = () => {
                           value={formatNumber(Math.round(rowDataOrder.vnd))}
                         />
                       </td>
-                      <td className="w32" name="tb_usd">
+                      <td className="w-32" name="tb_usd">
                         <input
                           className="text-center"
                           readOnly
@@ -1240,9 +1283,16 @@ const Component_Order = () => {
                       <td className="w-8" name="tb_action">
                         <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                           <svg
-                            onClick={() =>
-                              updateState({ isShowFormEditOrder: true })
-                            }
+                            onClick={() => {
+                              updateState({ isShowFormEditOrder: true });
+                              console.log(rowDataOrder);
+                              updateState({
+                                selectedRowOrder_Edit: rowDataOrder,
+                              });
+                              updateState({
+                                selectedRowOrder_Edit: rowDataOrder,
+                              });
+                            }}
                             className="cursor-pointer"
                             width="19"
                             height="19"
@@ -1304,23 +1354,70 @@ const Component_Order = () => {
           </div>
           <div className="flex-1 flex justify-end mt-5">
             <Pagination
-              changePage={handleChangePage}
-              page={currentPage}
-              totalPage={totalPages}
+              changePage={handleChangePage_Order}
+              page={currentPage_Order}
+              totalPage={totalPages_Order}
             />
           </div>
         </div>
       </div>
+      {state.isShowWarringModal && (
+        <Modal visible={state.isShowWarringModal}>
+          <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl flex flex-col">
+            <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+              {/* TODO */}
+              WARRING
+            </span>
 
+            <div className=" text-center pt-5 px-2 text-red-600 font-bold text-sm rounded-full  ">
+              {/* TODO */}
+              EXCHAGE RATE DATA OF THIS MONTH DOES NOT EXIST!
+            </div>
+
+            <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+              <Button
+                onClick={() => {
+                  const inputElement =
+                    document.getElementById("inputExRateJPY");
+                  if (inputElement) {
+                    inputElement.focus();
+                  }
+                  updateState({ isShowWarringModal: false });
+                }}
+                className={
+                  " bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"
+                }
+              >
+                OK
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
       <AddOrderForm
         visible={state.isShowFormNewOrder}
         t={t_order}
         cancel={() => updateState({ isShowFormNewOrder: false })}
+        selectedDate={selectedDate}
+        exchangeRateId={dataExRate}
+        changeFirstPage={() => {
+          updateState({ isShowFormNewOrder: false });
+          fetchData_Order();
+        }}
       />
       <EditOrderForm
+        invoiceOrder={state.selectedRowOrder_Edit}
         visible={state.isShowFormEditOrder}
         t={t_order}
-        cancel={() => updateState({ isShowFormEditOrder: false })}
+        selectedDate={selectedDate}
+        exchangeRateId={dataExRate}
+        cancel={() => {
+          updateState({
+            isShowFormEditOrder: false,
+            selectedRowOrder_Edit: null,
+          });
+          fetchData_Order();
+        }}
       />
       <DeleteOrder
         visible={state.isShowDeleteModal_Order}

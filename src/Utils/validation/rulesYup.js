@@ -13,3 +13,12 @@ export const createPaymentSchema = yup
       .default(0),
   })
   .required();
+
+export const createOrderSchema = yup
+  .object()
+  .shape({
+    order_date: yup.string().required("Value cannot be null!"),
+    company_name: yup.string().required("Value cannot be null!"),
+    vnd: yup.string().required(),
+  })
+  .required();

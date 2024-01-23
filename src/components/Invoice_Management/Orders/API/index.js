@@ -46,3 +46,26 @@ export const callAPI_DeleteOrder = async (orderIds) => {
     throw error;
   }
 };
+
+
+export const callApi_createOrder = async (formData) => {
+  try {
+    console.log("formData", formData);
+    const response = await axios.post(paths.CREATE_ORDER, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const callApi_updateOrder = async (formData) => {
+  try {
+    const response = await axios.put(
+      paths.UPDATE_ORDER + `/${formData.id}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
