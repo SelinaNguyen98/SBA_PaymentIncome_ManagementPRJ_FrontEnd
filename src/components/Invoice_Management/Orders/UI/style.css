@@ -1,0 +1,133 @@
+#Table_Order {
+    margin-top: 8px;
+    width: 100%;
+    /* background-color: white; */
+    /* margin-top: 0.7rem; */
+    /* overflow: scroll; */
+    /* max-width: 100%; */
+    /* flex: content; */
+    /* display: flex; */
+    /* display: block; */
+    /* border: none; */
+    /* border-style: hidden; */
+    border: hidden;
+    /* min-height: 600px !important;
+    max-height: 600px !important; */
+  }
+  
+  
+#Table_Order thead {
+  border-radius: 10px;
+  overflow: hidden;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  background-color: #e3edf9
+}
+  
+  #Table_Order thead th {
+    
+    background-color: #e3edf9;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  
+  
+  /* #Table_Order tbody tr:not(:nth-child(1)):not(:last-child) {
+    height: 50px;
+  } */
+  
+  /* #Table_Order tbody tr:last-child {
+    height: calc(100% - (50px * (n-1)));
+    height: 100%;
+  } */
+  
+  /* border-radius = top left, top right, bottom right, bottom left */
+  /* curves the top left */
+  /* curves the top right */
+  #Table_Order th:first-child {
+    border-radius: 10px 0 0 10px;
+  }
+  
+  #Table_Order th:last-child {
+    border-radius: 0 10px 10px 0;
+  }
+  /* //////////////////////////////////// */
+  
+  #Table_Order thead::after {
+    background-color: white;
+    line-height: 0.5rem;
+    content: ".";
+    color: white;
+    display: block;
+  }
+  
+  /* #Table_Order tbody tr, */
+  #Table_Order tbody td {
+    padding-left:   10px ;
+    padding-right: 4px;
+    /* padding-right: 10px; */
+    background-color: #e3edf9;
+    /* font-size: 15px; */
+    text-align: center;
+    border: 1px solid gray;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    /* line-height: 0; */
+  }
+  #Table_Order tbody td input {
+    outline: none;
+    background-color: transparent; /* Thay #your-main-theme-color bằng màu chủ đề của bạn */
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  @media (min-width: 1537px) {
+    #Table_Order tbody tr,
+    #Table_Order tbody td {
+      font-size: 18px;
+      padding: 10px;
+    }
+  
+    #Table_Order thead th {
+      /* padding-top: 1rem;
+      padding-bottom: 1rem; */
+      
+      font-size: 16px;
+    }
+  }
+  
+  /** border body doc trai tren, phai tren
+    xoa border row dau tien
+    */
+  #Table_Order tr:nth-child(1) td:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 5px !important;
+  }
+  
+  /** border body doc trai duoi, phai duoi
+    xoa border row dau cuoi
+    */
+  #Table_Order tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 5px !important;
+  }
+  
+  /* xoa di border o dau va cuoi moi hanmh */
+  #Table_Order tr td:first-child,
+  #Table_Order tr td:last-child {
+    border-style: hidden;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  
+  #Table_Order tbody .brown-row td {
+    background-color: #c1c1c1;
+    color: black; /* You may adjust the text color for better visibility */
+  }

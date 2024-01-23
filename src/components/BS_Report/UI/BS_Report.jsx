@@ -2,6 +2,7 @@
 import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../Utils/Button";
 import "../../../Utils/style.css";
+import "./index.css"
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
 import "../../Invoice_Management/InvoiceDetails/styles.css";
@@ -10,26 +11,20 @@ import { useTranslation } from "react-i18next";
 import "../../../Utils/style.css";
 import Form_InputMonthlyData from "./Dialoag/Input_monthly_data";
 import Form_InputBalanceYeatData from "./Dialoag/Input_balance_from_previous_year";
+import * as API from "../API/index"
 const BS_Report = () => {
   const { isShowAsideFilter } = useContext(AppContext);
   // Chuyển đổi ngôn ngữ
-  const {t } = useTranslation();
+  const { t } = useTranslation();
   const [selectedYear, setSelectedYear] = useState(new Date());
   useEffect(() => {
     console.log(selectedYear);
   }, [selectedYear]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  useEffect(() => {
-    console.log(selectedDate);
-  }, [selectedDate]);
+
 
   const [selectedYearExport, setSelectedYearExport] = useState(new Date());
-  useEffect(() => {
-    console.log(selectedYearExport);
-  }, [selectedYearExport]);
-
-  // eslint-disable-next-line no-unused-vars
   const [dataBS, setDataBS] = useState([
     {
       No: 1,
@@ -260,6 +255,16 @@ const BS_Report = () => {
       Total: 1300,
     },
   ]);
+  useEffect(() => {
+    console.log(dataBS);
+  }, [dataBS]);
+  useEffect(() => {
+    console.log(selectedYearExport);
+  }, [selectedYearExport]);
+
+
+  // eslint-disable-next-line no-unused-vars
+
 
   // eslint-disable-next-line no-unused-vars
   const [state, setState] = useState({
@@ -273,14 +278,19 @@ const BS_Report = () => {
   } = state;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
   const handleInputMonthlyDataButtonClick = () => {
-    // Custom logic for the input data button click
-    updateState({isShowForm_InputMonthlyData: true });
+    console.log(selectedDate, "aloalo");
+    updateState({ isShowForm_InputMonthlyData: true });
   };
 
   const handleInputBalanceYearDataButtonClick = () => {
     // Custom logic for the input data button click
-    updateState({isShowForm_InputBalanceFromPreviousYear: true });
+    updateState({ isShowForm_InputBalanceFromPreviousYear: true });
   };
+
+  useEffect(() => {
+    API.getAllTable(selectedYearExport.getFullYear(), setDataBS)
+  }, [selectedYearExport])
+  let idx = 1
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
       <div
@@ -293,9 +303,8 @@ const BS_Report = () => {
           <div className="h-screen">
             <div
               id="contentInvoiceDetail"
-              className={` relative bg-main-theme pb-5 h-full ${
-                isShowAsideFilter ? "col-span-10" : "col-span-full"
-              }`}
+              className={` relative bg-main-theme pb-5 h-full ${isShowAsideFilter ? "col-span-10" : "col-span-full"
+                }`}
             >
               {/* Lable */}
               <div className="mt-2 px-6 flex flex-shrink-0 items-center ">
@@ -328,7 +337,7 @@ const BS_Report = () => {
                         />
                         <Button
                           className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1 gap-2"
-                          onClick={() => {}}
+                          onClick={() => { }}
                           data-modal-target="crud-modal"
                           data-modal-toggle="crud-modal"
                         >
@@ -366,16 +375,16 @@ const BS_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[600px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
-                  <table id="invoiceTable" className="ttext-sm w-full table-fixed">
+                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
+                  <table id="invoiceTable" className="text-sm">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
-                        <th className="w-16">No</th>
-                        <th className="w-64">
+                        <th className="w-[2px]">No</th>
+                        <th className="w-[100px]">
                           {t("header_table_PL_BS.name")}
                         </th>
-                        <th className="w-32">
+                        <th className="w-[10px]">
                           {selectedYearExport.getFullYear() - 1}
                         </th>
                         {Array.from({ length: 12 }).map((_, monthIndex) => {
@@ -385,13 +394,13 @@ const BS_Report = () => {
                             Math.floor((monthIndex + 3) / 12);
 
                           return (
-                            <th key={monthIndex} className="w-32">
+                            <th key={monthIndex} className="w-[10px]">
                               {`${displayMonth}/${displayYear}`}
                             </th>
                           );
                         })}
 
-                        <th className="w-24">
+                        <th className="w-[10px]">
                           {t("header_table_PL_BS.total")}
                         </th>
                         <th className="w-[1px]"></th>
@@ -403,64 +412,125 @@ const BS_Report = () => {
                         <td colSpan={100}></td>
                       </tr>
 
-                      {dataBS.map((rowData_BS, index) => (
-                        <tr key={index}>
-                          <td className="w-[1px]"></td>
-                          <td className="w-16" name="tb_no">
-                            {rowData_BS.No}
+                      {dataBS?.map((rowData_BS, index1) => <>
+                        {rowData_BS?.categories?.map((rowData_Category, index2) => (
+                          <tr key={idx++}>
+                            <td className="w-[1px]"></td>
+                            <td className="w-[2px]" name="tb_no" >
+                              {idx++}
+                            </td>
+                            <td
+                              className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
+                              name="tb_account_category"
+                            >
+                              {rowData_Category.category_name}
+                            </td>
+
+                            <td className="w-[10px]" name="tb_pevious_year" >
+                              {rowData_Category.data[selectedYearExport.getFullYear() - 1]}
+                            </td>
+                            <td className="w-[10px]" name="tb_04">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-04"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_05">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-05"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_06">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-06"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_07">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-07"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_08">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-08"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_09">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-09"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_10">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-10"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_11">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-11"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_12">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + "-12"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_01_Next_Year">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + 1 + "-01"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_02_Next_Year">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + 1 + "-02"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_03_Next_Year">
+                              {rowData_Category.data[selectedYearExport.getFullYear() + 1 + "-03"]}
+                            </td>
+                            <td className="w-[10px]" name="tb_total">
+                              {rowData_Category.data.total}
+                            </td>
+                            <td className="w-[1px]"></td>
+                          </tr>
+                        )
+                        )}
+                        <tr key={idx++} className="bg-slate-800">
+                          <td className="w-[1px] td_group"></td>
+                          <td className="w-[2px] td_group" name="tb_no" >
+                            {idx++}
                           </td>
                           <td
-                            className="w-64 overflow-x-auto overflow-scroll"
+                            className="max-w-[1 td_group00px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll td_group"
                             name="tb_account_category"
                           >
-                            {rowData_BS.Account_category_name}
+                            {rowData_BS?.group_name}
                           </td>
 
-                          <td className="w-32" name="tb_pevious_year">
-                            {rowData_BS["2022"]}
+                          <td className="w-[10px] td_group" name="tb_pevious_year">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() - 1]}
                           </td>
-                          <td className="w-32" name="tb_04">
-                            {rowData_BS["04/2023"]}
+                          <td className="w-[10px] td_group" name="tb_04">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-04"]}
                           </td>
-                          <td className="w-32" name="tb_05">
-                            {rowData_BS["05/2023"]}
+                          <td className="w-[10px] td_group" name="tb_05">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-05"]}
                           </td>
-                          <td className="w-32" name="tb_06">
-                            {rowData_BS["06/2023"]}
+                          <td className="w-[10px] td_group" name="tb_06">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-06"]}
                           </td>
-                          <td className="w-32" name="tb_07">
-                            {rowData_BS["07/2023"]}
+                          <td className="w-[10px] td_group" name="tb_07">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-07"]}
                           </td>
-                          <td className="w-32" name="tb_08">
-                            {rowData_BS["08/2023"]}
+                          <td className="w-[10px] td_group" name="tb_08">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-08"]}
                           </td>
-                          <td className="w-32" name="tb_09">
-                            {rowData_BS["09/2023"]}
+                          <td className="w-[10px] td_group" name="tb_09">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-09"]}
                           </td>
-                          <td className="w-32" name="tb_10">
-                            {rowData_BS["10/2023"]}
+                          <td className="w-[10px] td_group" name="tb_10">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-10"]}
                           </td>
-                          <td className="w-32" name="tb_11">
-                            {rowData_BS["11/2023"]}
+                          <td className="w-[10px] td_group" name="tb_11">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-11"]}
                           </td>
-                          <td className="w-32" name="tb_12">
-                            {rowData_BS["12/2023"]}
+                          <td className="w-[10px] td_group" name="tb_12">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + "-12"]}
                           </td>
-                          <td className="w-32" name="tb_01_Next_Year">
-                            {rowData_BS["01/2024"]}
+                          <td className="w-[10px] td_group" name="tb_01_Next_Year">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + 1 + "-01"]}
                           </td>
-                          <td className="w-32" name="tb_02_Next_Year">
-                            {rowData_BS["02/2024"]}
+                          <td className="w-[10px] td_group" name="tb_02_Next_Year">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + 1 + "-02"]}
                           </td>
-                          <td className="w-32" name="tb_03_Next_Year">
-                            {rowData_BS["03/2024"]}
+                          <td className="w-[10px] td_group" name="tb_03_Next_Year">
+                            {rowData_BS.total_month?.[selectedYearExport.getFullYear() + 1 + "-03"]}
                           </td>
-                          <td className="w-32" name="tb_total">
-                            {rowData_BS.Total}
+                          <td className="w-[10px] td_group" name="tb_total">
+                            {rowData_BS.total_month?.total}
                           </td>
-                          <td className="w-[1px]"></td>
+                          <td className="w-[1px] td_group"></td>
                         </tr>
-                      ))}
+
+                      </>
+                      )}
 
                       <tr className="bg-main-theme h-[0px] py-0 my-0">
                         <td colSpan={100}></td>
@@ -472,7 +542,7 @@ const BS_Report = () => {
             </div>
           </div>
         </div>
-       
+
       </div>
       <Form_InputMonthlyData
         // eslint-disable-next-line no-undef
@@ -488,7 +558,7 @@ const BS_Report = () => {
         visible={isShowForm_InputBalanceFromPreviousYear}
         t={t}
         cancel={() => {
-          updateState({isShowForm_InputBalanceFromPreviousYear: false });
+          updateState({ isShowForm_InputBalanceFromPreviousYear: false });
         }}
         selectedTime={selectedYear}
       />

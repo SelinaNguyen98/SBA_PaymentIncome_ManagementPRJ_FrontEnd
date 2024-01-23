@@ -4,7 +4,7 @@ import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export default function DeleteOrder({ visible, cancel, t }) {
+export default function DeleteOrder({ visible, cancel, t,deleteOrder }) {
   const t_delete = t;
   return (
     <Modal visible={visible}>
@@ -18,7 +18,7 @@ export default function DeleteOrder({ visible, cancel, t }) {
         </div>
 
         <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-          <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
+          <Button onClick={deleteOrder} className={" bg-red py-2 px-6"}>
             {t_delete("button.confirm")}
           </Button>
           <Button
