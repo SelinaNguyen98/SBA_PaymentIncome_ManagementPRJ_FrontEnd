@@ -59,18 +59,7 @@ export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
 //     throw error;
 //   }
 // };
-// eslint-disable-next-line no-unused-vars
-export const callApi_ExchagerateByMonthAndYear = async (month, year) => {
-  // eslint-disable-next-line no-useless-catch
-  try {
-    // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
-    const response = await axios.get(`categories/11`);
-    // console.log(response.data);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
+
 
 export const callApi_createExchagerateByMonthAndYear = async (
   monthYear,
@@ -126,4 +115,5 @@ export const callApi_updatePayment = async (formData) => {
   } catch (error) {
     throw error;
   }
+
 };

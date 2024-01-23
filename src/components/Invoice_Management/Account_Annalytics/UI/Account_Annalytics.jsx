@@ -48,7 +48,7 @@ const AccountAnnalytics = () => {
   };
 
   return (
-    <div className=" relative bg-main-theme pb-5 h-full ">
+    <div className=" relative bg-main-theme pb-5 h-screen">
       {/* Lable */}
       <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
         <svg

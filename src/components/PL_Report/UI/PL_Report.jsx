@@ -1,245 +1,136 @@
 /* eslint-disable no-unused-vars */
-import { React, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../Utils/Button";
-import "../../../Utils/style.css";
 import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
-import "../../Invoice_Management/InvoiceDetails/styles.css";
+import "../Style/style.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import { PiTranslateFill } from "react-icons/pi";
-import { locales } from "../../../Utils/i18n/i18n";
-import "../../../Utils/style.css";
-import Popover from "../../../Utils/Popover";
-import classNames from "classnames";
+import { getPaymentsByYearAndMonths } from "../Controller";
+import * as XLSX from "xlsx";
 const PL_Report = () => {
+  let sequentialNumber = 1;
+  let sequentialNumber_excel = 1;
   const { isShowAsideFilter } = useContext(AppContext);
-  // Chuyển đổi ngôn ngữ
   const { t } = useTranslation();
 
   const [selectedYearExport, setSelectedYearExport] = useState(new Date());
+  const [dataBS, setDataBS] = useState([]);
+
   useEffect(() => {
-    console.log(selectedYearExport);
+    getPaymentsData(selectedYearExport.getFullYear());
   }, [selectedYearExport]);
 
-  // eslint-disable-next-line no-unused-vars
-  const [dataBS, setDataBS] = useState([
-    {
-      No: 1,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 2,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 3,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 4,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 5,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 6,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 7,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 8,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 9,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 10,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 11,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-    {
-      No: 12,
-      Account_category_name: "John Doe",
-      Company_Name: "John Doe",
-      "04/2023": 100,
-      "05/2023": 100,
-      "06/2023": 100,
-      "07/2023": 100,
-      "08/2023": 100,
-      "09/2023": 100,
-      "10/2023": 100,
-      "11/2023": 100,
-      "12/2023": 100,
-      "01/2024": 100,
-      "02/2024": 100,
-      "03/2024": 100,
-      Total: 1200,
-    },
-  ]);
+  const getPaymentsData = async (year) => {
+    try {
+      const response = await getPaymentsByYearAndMonths(year);
+      console.log(response);
+      const formattedData = formatData(response);
+      console.log(formattedData);
+      setDataBS(formattedData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const formatData = (rawData) => {
+    rawData.sort((a, b) => a.group_id - b.group_id);
+
+    return rawData.map((group) => {
+      const categories = group.categories.map((category) => {
+        const data =
+          typeof category.data === "string"
+            ? JSON.parse(category.data)
+            : category.data;
+        const formattedData = Object.keys(data).reduce((acc, month) => {
+          acc[month] = formatNumber(data[month]) || 0;
+          return acc;
+        }, {});
+
+        return {
+          category_id: category.category_id,
+          category_name: category.category_name,
+          data: formattedData,
+        };
+      });
+
+      const total_month =
+        typeof group.total_month === "string"
+          ? JSON.parse(group.total_month)
+          : group.total_month;
+      const formattedTotalMonth = Object.keys(total_month).reduce(
+        (acc, month) => {
+          acc[month] = formatNumber(total_month[month]) || 0;
+          return acc;
+        },
+        {}
+      );
+
+      return {
+        group_id: group.group_id,
+        group_name: group.group_name,
+        categories,
+        total_month: formattedTotalMonth,
+      };
+    });
+  };
+
+  const formatNumber = (number) => {
+    const roundedNumber = parseFloat(number).toFixed(2);
+    const numberWithCommas = roundedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const [integerPart, decimalPart] = numberWithCommas.split(".");
+    const formattedNumber = decimalPart
+        ? `${integerPart}.${decimalPart}`
+        : numberWithCommas;
+
+    return formattedNumber;
+};
+
+  const exportToExcel = () => {
+    const titleRow = [t("title.PL_report")]; // Add title row
+    const headerRow = [
+      "",
+      "No",
+      t("header_table_PL_BS.name"),
+      ...Array.from({ length: 12 }).map((_, monthIndex) => {
+        const displayMonth = ((monthIndex + 3) % 12) + 1;
+        const displayYear =
+          selectedYearExport.getFullYear() + Math.floor((monthIndex + 3) / 12);
+
+        return `${displayMonth}/${displayYear}`;
+      }),
+      t("header_table_PL_BS.total"),
+      "",
+    ];
+
+    const dataRows = dataBS.flatMap((groupData, groupIndex) => [
+      ...groupData.categories.map((categoryData, categoryIndex) => [
+        "",
+        sequentialNumber_excel++,
+        categoryData.category_name,
+        ...Object.keys(categoryData.data).map(
+          (month) => categoryData.data[month]
+        ),
+        categoryData.total,
+        "",
+      ]),
+      [
+        "",
+        sequentialNumber_excel++,
+        groupData.group_name,
+        ...Object.keys(groupData.total_month).map(
+          (month) => groupData.total_month[month]
+        ),
+        "",
+      ],
+      ["", "", "", "", "", "", ""],
+    ]);
+    const ws = XLSX.utils.aoa_to_sheet([titleRow, headerRow, ...dataRows]);
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    XLSX.writeFile(wb, "Profit_and_Loss_Report.xlsx");
+  };
+
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
       <div
@@ -256,7 +147,6 @@ const PL_Report = () => {
                 isShowAsideFilter ? "col-span-10" : "col-span-full"
               }`}
             >
-              {/* Lable */}
               <div className="mt-2 px-6 flex flex-shrink-0 items-center ">
                 <svg
                   viewBox="0 0 34 27"
@@ -274,7 +164,6 @@ const PL_Report = () => {
                   {t("title.PL_report")}
                 </span>
               </div>
-              {/* control area */}
               <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4  bg-white rounded-[16px] ">
                 <div className="grid  gap-2 items-center w-full ">
                   <div className="flex items-center justify-between gap-2 flex-row max-[1400px]:flex-col">
@@ -287,7 +176,7 @@ const PL_Report = () => {
                         />
                         <Button
                           className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1 gap-2"
-                          onClick={() => {}}
+                          onClick={exportToExcel}
                           data-modal-target="crud-modal"
                           data-modal-toggle="crud-modal"
                         >
@@ -306,11 +195,8 @@ const PL_Report = () => {
                     </div>
                   </div>
                 </div>
-                <div className="max-h-[600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-                  <table
-                    id="invoiceTable"
-                    className="text-sm w-full table-fixed"
-                  >
+                <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+                  <table id="Table" className="text-sm w-full table-fixed">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
@@ -336,65 +222,53 @@ const PL_Report = () => {
                       </tr>
                     </thead>
                     <tbody className="">
-                      <tr className="">
+                      <tr className="bg-main-theme h-[0px] py-0 my-0">
                         <td colSpan={100}></td>
                       </tr>
-                      {dataBS.map((rowData_BS, index) => (
-                        <tr key={index}>
-                          <td className="w-[1px]"></td>
-                          <td className="w-16" name="tb_no">
-                            {rowData_BS.No}
-                          </td>
-                          <td
-                            className="w-64 overflow-x-auto overflow-scroll"
-                            name="tb_account_category"
-                          >
-                            {rowData_BS.Account_category_name}
-                          </td>
-
-                          <td className="w-32" name="tb_04">
-                            {rowData_BS["04/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_05">
-                            {rowData_BS["05/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_06">
-                            {rowData_BS["06/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_07">
-                            {rowData_BS["07/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_08">
-                            {rowData_BS["08/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_09">
-                            {rowData_BS["09/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_10">
-                            {rowData_BS["10/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_11">
-                            {rowData_BS["11/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_12">
-                            {rowData_BS["12/2023"]}
-                          </td>
-                          <td className="w-32" name="tb_01_Next_Year">
-                            {rowData_BS["01/2024"]}
-                          </td>
-                          <td className="w-32" name="tb_02_Next_Year">
-                            {rowData_BS["02/2024"]}
-                          </td>
-                          <td className="w-32" name="tb_03_Next_Year">
-                            {rowData_BS["03/2024"]}
-                          </td>
-                          <td className="w-32" name="tb_total">
-                            {rowData_BS.Total}
-                          </td>
-                          <td className="w-[1px]"></td>
-                        </tr>
+                      {dataBS.map((groupData, groupIndex) => (
+                        <React.Fragment key={groupIndex}>
+                          {groupData.categories.map(
+                            (categoryData, categoryIndex) => (
+                              <tr key={`${groupIndex}-${categoryIndex}`}>
+                                <td className="w-[1px]"></td>
+                                <td className="w-16">
+                                  {sequentialNumber++}
+                                </td>{" "}
+                                {/* Increment the counter */}
+                                <td className="w-64">
+                                  {categoryData.category_name}
+                                </td>
+                                {Object.keys(categoryData.data).map(
+                                  (month, monthIndex) => (
+                                    <td key={monthIndex} className="w-32">
+                                      {categoryData.data[month]}
+                                    </td>
+                                  )
+                                )}
+                                <td className="w-24">
+                                  {categoryData.data.total}
+                                </td>
+                              </tr>
+                            )
+                          )}
+                          <tr key={groupIndex} className="brown-row">
+                            <td className="w-[1px]"></td>
+                            <td className="w-16">{sequentialNumber++}</td>{" "}
+                            {/* Increment the counter */}
+                            <td className="w-64">{groupData.group_name}</td>
+                            {Object.keys(groupData.total_month).map(
+                              (month, monthIndex) => (
+                                <td key={monthIndex} className="w-32">
+                                  {groupData.total_month[month]}
+                                </td>
+                              )
+                            )}
+                            <td className="w-24">
+                              {groupData.total_month.total}
+                            </td>
+                          </tr>
+                        </React.Fragment>
                       ))}
-
                       <tr className="bg-main-theme h-[0px] py-0 my-0">
                         <td colSpan={100}></td>
                       </tr>

@@ -26,6 +26,8 @@ export default function Input_balance_from_previous_year({
       No: 2,
       category_name: "John Doe",
       amount: "100",
+      Account_category_name: "John Doe",
+      Amount: "100",
     },
     {
       No: 3,
@@ -92,12 +94,12 @@ export default function Input_balance_from_previous_year({
 
   useEffect(() => {
     if (visible) {
-      API.getDataYearly(selectedTime.getFullYear(), setData_year)
+      API.getDataYearly(year, setData_year)
     }
     else {
       setData_year([])
     }
-  }, [visible])
+  }, [visible, year])
 
   function addComma(number) {
     if (!number) return number
@@ -120,12 +122,12 @@ export default function Input_balance_from_previous_year({
           </span>
         )}
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm w-full table-fixed">
+          <table id="invoiceTable" className="text-sm">
             <thead>
               <tr>
                 <th className="w-[1px]"></th>
-                <th className="w-16">No</th>
-                <th className="w-72">
+                <th className="w-[3px]">No</th>
+                <th className="w-[100px]">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
                 <th className="w-full">
@@ -145,7 +147,7 @@ export default function Input_balance_from_previous_year({
                     {index + 1}
                   </td>
                   <td
-                    className="w-72 overflow-x-auto overflow-scroll"
+                    className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
                     {rowData_year.category_name}

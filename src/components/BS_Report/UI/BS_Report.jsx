@@ -382,16 +382,16 @@ const BS_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[600px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
-                  <table id="invoiceTable" className="ttext-sm w-full table-fixed">
+                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
+                  <table id="invoiceTable" className="text-sm">
                     <thead>
                       <tr>
                         <th className="w-[1px]"></th>
-                        <th className="w-16">No</th>
-                        <th className="w-64">
+                        <th className="w-[2px]">No</th>
+                        <th className="w-[100px]">
                           {t("header_table_PL_BS.name")}
                         </th>
-                        <th className="w-32">
+                        <th className="w-[10px]">
                           {selectedYearExport.getFullYear() - 1}
                         </th>
                         {Array.from({ length: 12 }).map((_, monthIndex) => {
@@ -401,13 +401,13 @@ const BS_Report = () => {
                             Math.floor((monthIndex + 3) / 12);
 
                           return (
-                            <th key={monthIndex} className="w-32">
+                            <th key={monthIndex} className="w-[10px]">
                               {`${displayMonth}/${displayYear}`}
                             </th>
                           );
                         })}
 
-                        <th className="w-24">
+                        <th className="w-[10px]">
                           {t("header_table_PL_BS.total")}
                         </th>
                         <th className="w-[1px]"></th>

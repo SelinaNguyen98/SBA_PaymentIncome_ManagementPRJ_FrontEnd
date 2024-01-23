@@ -145,7 +145,7 @@ export default function SideBar() {
   return (
     <div className="flex flex-row bg-main-theme h-full overflow-auto">
       <div
-        className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E] ${
+        className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]  ${
           isHiddenSidebar ? "hidden" : ""
         }`}
       >

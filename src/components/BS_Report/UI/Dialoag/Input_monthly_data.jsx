@@ -99,17 +99,12 @@ export default function InputMonthlyData({
 
   useEffect(() => {
     if (visible) {
-      API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
-      API.getDataMonthly(selectedTime.getFullYear(), selectedTime.getMonth() + 1, setData_month)
+      API.getExchangeRate(month, year, setExchangeRate)
+      API.getDataMonthly(year, month, setData_month)
     } else {
       setData_month([])
     }
   }, [visible, selectedTime])
-
-  useEffect(() => {
-    console.log(data_month)
-    console.log(exchangeRate)
-  }, [data_month,exchangeRate])
 
   const handleChange = (e) => {
     setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
@@ -121,7 +116,7 @@ export default function InputMonthlyData({
   }
   return (
     <Modal visible={visible}>
-      <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[600px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
+      <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
         {isInputMonthlyData ? (
           // Display if the translation contains "INPUT MONTHLY DATA FOR"
           <span className="uppercase py-1 mx-auto my-3 px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
@@ -168,15 +163,15 @@ export default function InputMonthlyData({
           </Button>
         </div>
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm w-full table-fixed">
+          <table id="invoiceTable" className="text-sm">
             <thead>
               <tr>
                 <th className="w-[1px]"></th>
-                <th className="w-16">No</th>
-                <th className="w-72">
+                <th className="w-[3px]">No</th>
+                <th className="w-[100px]">
                   {t_translate("form_input_monthly_data_BS.title_table_name")}
                 </th>
-                <th className="w-96">
+                <th className="w-[10px]">
                   {t_translate("form_input_monthly_data_BS.title_table_amount")}
                 </th>
                 <th className="w-[1px]"></th>
@@ -186,21 +181,25 @@ export default function InputMonthlyData({
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              {data_month?.balance_sheet?.map((rowData_month, index) => (
+              {data_month?.balance_sheet?.map((rowData_month, index) => 
+              (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
+                  <td className="w-[3px]" name="tb_no"></td>
+                    {index + 1}
                   <td className="w-[3px]" name="tb_no">
                     {index + 1}
                   </td>
                   <td
-                    className="w-64 overflow-x-auto overflow-scroll"
+                    className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
                   >
+                    {rowData_month.category_name}
                     {rowData_month.category_name}
                   </td>
 
                   <td
-                    className="w-96 editable-cell"
+                    className="w-[10px] editable-cell"
                     name="tb_Amount"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
@@ -215,7 +214,8 @@ export default function InputMonthlyData({
 
                   <td className="w-[1px]"></td>
                 </tr>
-              ))}
+              )
+              )}
 
               <tr className="bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
@@ -226,7 +226,7 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveMonthly(selectedTime.getMonth() + 1, selectedTime.getFullYear(), data_month, showToast)
+              API.saveMonthly(month, year, data_month, showToast)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >

@@ -20,4 +20,5 @@ export const callAPI_GetAnalytics = async (month, year) => {
   } catch (error) {
     throw error;
   }
+
 };

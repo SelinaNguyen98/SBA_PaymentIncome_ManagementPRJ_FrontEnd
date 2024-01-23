@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
 
 import { useForm } from "react-hook-form";
@@ -23,7 +24,9 @@ export default function EditPaymentForm({
     register,
     handleSubmit,
     setValue,
+    // eslint-disable-next-line no-unused-vars
     setError,
+     // eslint-disable-next-line no-unused-vars
     getValues,
     formState: { errors },
   } = useForm();
@@ -58,7 +61,6 @@ export default function EditPaymentForm({
     invoice: invoicePayment?.invoice,
     pay: invoicePayment?.pay,
     category_id: invoicePayment?.category?.id,
-    // cost: formatNumberSeparator(invoicePayment?.cost),
     cost: formatNumberSeparator(invoicePayment?.cost.toString()),
   };
 
@@ -85,6 +87,7 @@ export default function EditPaymentForm({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+       // eslint-disable-next-line no-unused-vars
       const response = await updatePayment(data);
       triggerData();
       cancel()
