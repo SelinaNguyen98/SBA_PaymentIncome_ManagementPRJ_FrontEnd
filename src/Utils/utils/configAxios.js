@@ -8,6 +8,7 @@ export const paths = {
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
   PL_REPORT:"getDataPL",
+  GROUP:"groups"
   CATEGORY: "categories"
   GET_ORDER_MONTH_YEAR: "orders",
   DELETE_ORDER: "orders",
