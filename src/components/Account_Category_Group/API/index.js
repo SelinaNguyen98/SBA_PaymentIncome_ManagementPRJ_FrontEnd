@@ -5,13 +5,14 @@ import { paths } from "../../../Utils/utils/configAxios"
 //const API_BASE_URL = 'http://127.0.0.1:8000/api'; // 
 
 //const api = axios.create({
- // baseURL: `${API_BASE_URL}/invoice`, 
- // headers: {
-  //  'Content-Type': 'application/json',
+// baseURL: `${API_BASE_URL}/invoice`, 
+// headers: {
+//  'Content-Type': 'application/json',
 //  },
 //});
 
 export const callAPI_GetAllGroup = async (page) => {
+  // eslint-disable-next-line no-useless-catch
   try {
     const response = await axios.get(paths.GROUP, {
       params: {
@@ -25,16 +26,16 @@ export const callAPI_GetAllGroup = async (page) => {
 }
 
 //export const fetchInvoiceData = async (category, searchTerm) => {
-  //try {
-    //const response = await api.get('/', {
-      //params: {
-        //category,
-        //searchTerm,
-     // },
-    //});
-    //return response.data;
-  //} catch (error) {
-    //console.error('Error fetching invoice data:', error);
-    //throw error;
-  //}
+//try {
+//const response = await api.get('/', {
+//params: {
+//category,
+//searchTerm,
+// },
+//});
+//return response.data;
+//} catch (error) {
+//console.error('Error fetching invoice data:', error);
+//throw error;
+//}
 //};
