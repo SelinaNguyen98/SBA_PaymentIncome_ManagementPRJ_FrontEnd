@@ -1,4 +1,4 @@
-import axios from "axios";
+lopimport axios from "axios";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
 
@@ -8,6 +8,7 @@ export const paths = {
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
   PL_REPORT:"getDataPL",
+  CATEGORY: "categories"
   GET_ORDER_MONTH_YEAR: "orders",
   DELETE_ORDER: "orders",
   CREATE_ORDER:"orders",
