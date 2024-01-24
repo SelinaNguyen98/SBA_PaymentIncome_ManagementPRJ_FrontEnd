@@ -88,7 +88,7 @@ export default function AddOrderForm({
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
-                defaultValue={format(new Date(), 'dd-MM-yyyy')}
+                // defaultValue={format(new Date(), 'dd-MM-yyyy')}
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
