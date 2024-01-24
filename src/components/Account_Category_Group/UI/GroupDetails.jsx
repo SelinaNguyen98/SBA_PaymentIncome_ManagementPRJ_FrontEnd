@@ -5,14 +5,19 @@ import { useTranslation } from "react-i18next";
 import "./styles.css";
 import { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
-import InvoiceDetailFooter from "../../Account_Category/UI/InvoicDetailFooter/InvoiceDetailFooter";
 import { getGroup} from "../Controller";
+import InvoiceDetailFooter from "./InvoiceDetailFooter";
+import Pagination from "../../../Utils/Pagination";
 
 export default function GroupDetails() {
   const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
-  const [selectedOption, setSelectedOption] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [idExRate, setIdRate] = useState(null);
+
+  const triggerData = () => {
+    setDataChangeTrigger(!dataChangeTrigger);
+  };
+  const { showToast } = useContext(AppContext);
 
   const [state, setState] = useState({
     isShowConfirmModal: false,
@@ -23,19 +28,84 @@ export default function GroupDetails() {
     isShowNoAcptEdit: false,
   });
 
+  
+
+  // Pagination state
+  const [paginationState, setPaginationState] = useState({
+    currentPage: 1,
+    totalPage: 1,
+  });
+
+  // Callback function for page change
+  const changePage = (newPage) => {
+    fetchGroup(newPage);
+  };
+
+  useEffect(() => {
+    fetchGroup(1); // Fetch initial data on component mount
+  }, []);
+
+  // Fetch group data with pagination
+  async function fetchGroup(page) {
+    try {
+      const response = await getGroup(page);
+      if (!response || !response.groups) {
+        console.error("Invalid response format:", response);
+        return;
+      }
+
+      const { groups, pagination } = response;
+
+      const totalPage = pagination?.total_pages || 0;
+
+      // Update pagination state
+      setPaginationState({
+        currentPage: page,
+        totalPage: totalPage,
+      });
+
+      // Update table data
+      setStateTable({
+        dataTable: response,
+        totalPage: totalPage,
+      });
+    } catch (error) {
+      // Handle errors
+      console.error("Error fetching group data:", error);
+    }
+  }
+
+  // Render pagination component
+  const renderPagination = () => {
+    return (
+      <Pagination
+        currentPage={paginationState.currentPage}
+        totalPage={paginationState.totalPage}
+        onPageChange={changePage}
+      />
+    );
+  };
   const [stateTable, setStateTable] = useState({
     page: 1,
-    totalPage: 0,
-    dataTable: null,
+    totalPage: 1,
+    dataTable: [],
+    selectedRowData: null,
   });
+  
   const {
     totalPage,
     dataTable,
+    selectedRowData,
     page,
   } = stateTable;
+  
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
-
+    
+  // const { isShowEditModal, isShowDeleteModal } = states;
+  const updateState = (data) =>
+  setStateControl(() => ({ ...stateControl, ...data }));  const [selectedOption, setSelectedOption] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const handleOptionChange = (event) => {
     const newSelectedOption = event.target.value;
 
@@ -53,16 +123,15 @@ export default function GroupDetails() {
     try{
       fetchGroup()
     }catch(error){
-console.log(error);
+      console.log(error);
     }
   }, []);
 
   async function fetchGroup() {
     try {
       const response = await getGroup(page);
-      console.log('Category API response:', response);
-  
-      if (!response || !response.groups) {
+      console.log(response);
+       if (!response || !response.groups) {
         console.error('Invalid response format:', response);
         return;
       }
@@ -72,8 +141,8 @@ console.log(error);
       const totalPage = pagination?.total_pages || 0;
   
       updateStateTable({
-        dataTable: groups,
-        totalPage: totalPage,
+        dataTable: response,
+        totalPage: response?.pagination?.total_pages,
       });
     } catch (error) {
       if (error.isAxiosError) {
@@ -83,6 +152,27 @@ console.log(error);
         // Other types of errors
         console.error('Error fetching category data:', error);
       }
+    }
+
+    useEffect(() => {
+      console.log("Filter change effect");
+      console.log(page);
+      isFilterApplied.current = true;
+      updateStateTable({ page: 1 });
+    },[page]);
+  
+    useEffect(() => {
+      if (isFilterApplied.current && page !== 1) {
+        return;
+      }
+  
+      console.log("Main effect");
+      
+    }, [page]);
+  
+    function changePage(page) {
+      isFilterApplied.current = false;
+      updateStateTable({ page: page });
     }
   }
   
@@ -101,55 +191,47 @@ console.log(error);
     { label: t("titlePage.accountCategoryGroup"), value: "account" },
     { label: t("titlePage.reportType"), value: "report" },
   ];
-  const filterCategories1 = [
-    { label: t("titlePage.allCandidates"), value: "allCandidates" },
-    { label: t("titlePage.accountCategoryGroup"), value: "account" },
-    { label: t("titlePage.reportType"), value: "report" },
-    { label: "typeXX", value: "typeXX" },
-    { label: "typeYY", value: "typeYY" },
-    { label: "typeXY", value: "typeXY" },
-  ];
+  
   const renderSearchInput = () => {
+    const commonStyle = {
+      width: "400px",
+      height: "50px",
+      borderRadius: "0px 10px 10px 0px",
+      border: "1px solid #ccc",
+    };
+  
     if (selectedOption === "report") {
+      const uniqueValues = [...new Set(dataTable?.groups?.map((group) => group.report_type))];
+      const options = uniqueValues.map((value, index) => (
+        <option key={index} value={value}>
+          {value}
+        </option>
+      ));
+  
       return (
         <select
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{
-            width: "400px",
-            height: "50px",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "0px 10px 10px 0px",
-            border: "1px solid #ccc",
-          }}
+          style={{ ...commonStyle, backgroundColor: "white", color: "black" }}
         >
-          {filterCategories1.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
+          {options}
         </select>
       );
     } else if (selectedOption === "account") {
+      const uniqueValues = [...new Set(dataTable?.groups?.map((group) => group.name))];
+      const options = uniqueValues.map((value, index) => (
+        <option key={index} value={value}>
+          {value}
+        </option>
+      ));
+  
       return (
         <select
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{
-            width: "400px",
-            height: "50px",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "0px 10px 10px 0px",
-            border: "1px solid #ccc",
-          }}
+          style={{ ...commonStyle, backgroundColor: "white", color: "black" }}
         >
-          {filterCategories1.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
+          {options}
         </select>
       );
     } else {
@@ -159,26 +241,74 @@ console.log(error);
           value={searchTerm}
           onChange={handleSearchChange}
           placeholder={t("titlePage.searchPlaceholder")}
-          style={{
-            width: "400px",
-            height: "50px",
-            borderRadius: "0px 10px 10px 0px",
-            border: "1px solid #ccc",
-          }}
+          style={{ ...commonStyle, backgroundColor: "white", color: "black" }}
         />
       );
     }
   };
-  //const fetchData = async () => {
-    //try {
-      //const invoiceData = await getInvoiceData(selectedOption, searchTerm);
-      // Handle the data as needed in your component
-      //console.log('Fetched invoice data:', invoiceData);
-    //} catch (error) {
-      // Handle error, e.g., display an error message to the user
-      //console.error('Error fetching invoice data:', error);
-    //}
-  //};
+
+  const renderTable = () => {
+    // Check if dataTable is defined and has a 'groups' property
+    if (!dataTable || !dataTable.groups) {
+      return <p>No data available</p>; // Or any other appropriate message or UI
+    }
+  
+    // Filter the data based on the selected value
+    const filteredData = dataTable.groups.filter((group) => {
+      if (selectedOption === "report") {
+        return group.report_type.toLowerCase().includes(searchTerm.toLowerCase());
+      } else if (selectedOption === "account") {
+        return group.name.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      // If no specific option is selected, display all rows that match the search term
+      return (
+        group.report_type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        group.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+  
+    return (
+      <table id="invoiceTable" className="w-full">
+        {/* ... Your existing table structure ... */}
+        <thead>
+          {/* ... Your existing table header ... */}
+          <tr>
+          <th className="w-[5%]"></th>
+          <th className="w-[30%] ">{t("titlePage.thNO")}</th>
+          <th className="w-[30%]">{t("titlePage.thReport")}</th>
+          <th className="w-[30%]">{t("titlePage.thGroup")}</th>
+          <th className="w-[5%]"></th>
+        </tr>
+        </thead>
+        <tbody>
+          {/* First row is like padding-top */}
+          <tr className="">
+            <td colSpan={100}></td>
+          </tr>
+          {/* Map through the filtered data instead of all groups */}
+          {filteredData.map((group, index) => (
+            <tr key={index}>
+              <td className=" w-[5%]"></td>
+              <td name="tb_no">{group?.id}</td>
+              <td name="tb_report">{group?.report_type}</td>
+              <td name="tb_group">{group?.name}</td>
+              <td className=" w-[5%]"></td>
+            </tr>
+          ))}
+          {/* Last row is like padding-bottom */}
+          <tr className="">
+            <td colSpan={100}></td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+  
+
+  const tableContainerStyle = {
+    height: "700px", // Adjust the height as needed
+  };
+
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
     <div
@@ -271,46 +401,11 @@ console.log(error);
               </div>
             </div>
           {/* control area */}
-          <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
-           <table id="invoiceTable" className="w-full">
-              <thead>
-                <tr>
-                  <th className=" w-[5%]"></th>
-                  <th className="w-[30%] ">{t("titlePage.thNO")}</th>
-                  <th className="w-[30%]">{t("titlePage.thReport")}</th>
-                  <th className="w-[30%]">{t("titlePage.thGroup")}</th>
-                  <th className=" w-[5%]"></th>
-                </tr>
-              </thead>
-              <tbody>
-  {/* First row is like padding-top */}
-  <tr className="">
-                <td colSpan={100}></td>
-              </tr>
-  {dataTable?.map((group, index) => (
-    <tr key={index}>
-      <td className=" w-[5%]"></td>
-      <td name="tb_no">
-        {group?.id}
-      </td>
-      <td name="tb_report">
-        {group?.report_type}
-      </td>
-      <td name="tb_group">
-        {group?.name}
-      </td>
-      <td className=" w-[5%]"></td>
-      
-    </tr>
-  ))}
-  {/* Last row is like padding-bottom */}
-  <tr className="">
-                <td colSpan={100}></td>
-              </tr>
-  </tbody>
-            </table>
-            <InvoiceDetailFooter />
-            </div>
+          <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]" style={tableContainerStyle}>
+           {renderTable()}
+           <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
+{renderPagination()}</div>
+          </div>
           </div>
         </div>
       </div>

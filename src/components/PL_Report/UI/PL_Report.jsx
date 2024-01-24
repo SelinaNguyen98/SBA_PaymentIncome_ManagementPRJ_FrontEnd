@@ -6,7 +6,6 @@ import "../Style/style.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
 import { getPaymentsByYearAndMonths } from "../Controller";
-import * as XLSX from "xlsx";
 const PL_Report = () => {
   let sequentialNumber = 1;
   let sequentialNumber_excel = 1;
