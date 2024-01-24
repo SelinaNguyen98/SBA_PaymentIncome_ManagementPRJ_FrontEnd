@@ -90,10 +90,10 @@ export const callAPI_Get_Payment_Order = async (month, year, page) => {
   }
 };
 
-export const callAPI_Delete_Payment_Order = async (orderIds) => {
+export const callAPI_Delete_Payment_Order = async (paymentIds) => {
   try {
-    const response = await axios.delete(paths.DELETE_ORDER, {
-      data: { id: orderIds },
+    const response = await axios.delete(paths.PAYMENT_ORDERS, {
+      data: { id: paymentIds },
     });
     return response.data;
   } catch (error) {
@@ -105,7 +105,7 @@ export const callAPI_Delete_Payment_Order = async (orderIds) => {
 export const callApi_Create_Payment_Order = async (formData) => {
   try {
     console.log("formData", formData);
-    const response = await axios.post(paths.CREATE_ORDER, formData);
+    const response = await axios.post(paths.PAYMENT_ORDERS, formData);
     return response.data;
   } catch (error) {
     throw error;
@@ -115,7 +115,61 @@ export const callApi_Create_Payment_Order = async (formData) => {
 export const callApi_Update_Payment_Order = async (formData) => {
   try {
     const response = await axios.put(
-      paths.UPDATE_ORDER + `/${formData.id}`,
+      paths.PAYMENT_ORDERS + `/${formData.id}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//Outsourcing
+
+export const callAPI_Get_Outsourcing = async (month, year, page) => {
+  try {
+    // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
+    const response = await axios.get(paths.OUTSOURCING, {
+      params: {
+        month,
+        year,
+        page,
+      },
+    });
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const callAPI_Delete_Outsourcing = async (outsourcingIds) => {
+  try {
+    const response = await axios.delete(paths.OUTSOURCING, {
+      data: { id: outsourcingIds },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const callApi_Create_Outsourcing = async (formData) => {
+  try {
+    console.log("formData", formData);
+    const response = await axios.post(paths.OUTSOURCING, formData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const callApi_Update_Outsourcing = async (formData) => {
+  try {
+    const response = await axios.put(
+      paths.OUTSOURCING + `/${formData.id}`,
       formData
     );
     return response.data;

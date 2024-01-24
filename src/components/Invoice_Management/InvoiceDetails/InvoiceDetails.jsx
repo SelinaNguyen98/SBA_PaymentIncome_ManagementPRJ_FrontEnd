@@ -212,10 +212,9 @@ export default function InvoiceDetails() {
     try {
       if (selectedRows.length !== 0) {
         console.log(selectedRows);
-        // eslint-disable-next-line no-unused-vars
         const response = await deleteInvoiceByIds(selectedRows);
         // updateStateTable({ selectedRows: [] });
-       setSelectedRows([]);
+        setSelectedRows([]);
 
         if (page != 1) {
           changePage(1);
