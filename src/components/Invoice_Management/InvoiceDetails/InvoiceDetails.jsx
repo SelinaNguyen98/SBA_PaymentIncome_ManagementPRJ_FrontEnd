@@ -393,8 +393,7 @@ export default function InvoiceDetails() {
                       <input
                         type="checkbox"
                         checked={selectedListRowsData[index]}
-                        onChange={() => handleRowCheckboxChange_Invoice(index)}
-                      />
+                        onChange={() => handleRowCheckboxChange_Invoice(index)} />
                     </td>
 
                     {/* DATA MAIN*/}
@@ -403,10 +402,7 @@ export default function InvoiceDetails() {
                       <input
                         className="text-center"
                         readOnly
-                        value={
-                          (invoicePayment?.payment_date || "").split(" ")[0]
-                        }
-                      />
+                        value={(invoicePayment?.payment_date || "").split(" ")[0]} />
                     </td>
                     <td name="tb_name">
                       <input readOnly value={invoicePayment?.name} />
@@ -433,8 +429,7 @@ export default function InvoiceDetails() {
                       <input
                         readOnly
                         value={invoicePayment?.pay}
-                        className="text-center"
-                      />
+                        className="text-center" />
                     </td>
                     <td name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm  ">
@@ -445,7 +440,7 @@ export default function InvoiceDetails() {
                             updateStateTable({
                               selectedRowData: invoicePayment,
                             });
-                          }}
+                          } }
                           width="19"
                           height="19"
                           viewBox="0 0 19 19"
@@ -455,13 +450,11 @@ export default function InvoiceDetails() {
                         >
                           <path
                             d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
-                            fill="#FFC107"
-                          />
+                            fill="#FFC107" />
                           <path
                             d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
                             fill="black"
-                            fillOpacity="0.2"
-                          />
+                            fillOpacity="0.2" />
                         </svg>
                         <div className=" border border-gray-400 mx-0.5 "></div>
 
@@ -471,7 +464,7 @@ export default function InvoiceDetails() {
                             updateStateTable({
                               selectedRowData: invoicePayment,
                             });
-                          }}
+                          } }
                           className=" cursor-pointer"
                           width="19"
                           height="19"
@@ -481,13 +474,11 @@ export default function InvoiceDetails() {
                         >
                           <path
                             d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
-                            fill="#F44336"
-                          />
+                            fill="#F44336" />
                           <path
                             d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
                             fill="black"
-                            fillOpacity="0.2"
-                          />
+                            fillOpacity="0.2" />
                         </svg>
                       </div>
                     </td>

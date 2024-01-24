@@ -1,13 +1,15 @@
 // frontend/src/controllers/invoiceController.js
-import * as API from '../API/';
+import * as API from "../API/";
+import { callAPI_GetAllGroup } from "../API";
 
-export const getInvoiceData = async (category, searchTerm) => {
+export const getGroup = async (page) => {
   try {
-    const invoiceData = await invoiceApi.fetchInvoiceData(category, searchTerm);
+    const response = await callAPI_GetAllGroup(
+      page
+    );
     // You can perform additional actions with the data if needed
-    return invoiceData;
+    return response;
   } catch (error) {
-    console.error('Error getting invoice data:', error);
     throw error;
   }
 };
