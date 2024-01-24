@@ -1,4 +1,3 @@
-
 /* eslint-disable no-useless-catch */
 // Controller.js
 import { formatNumberHasDot } from "../../../../Utils/utils/maths";
@@ -19,7 +18,17 @@ export const getPaymentsByYearAndMonths = async (month, year, page) => {
 
 export const deletePaymentById = async (id) => {
   try {
-    const response = await API.callApi_deletePaymentByID(id);
+    const response = await API.callAPI_DeleteListInvoice([id]);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const deleteInvoiceByIds = async (invoiceIds) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const response = await API.callAPI_DeleteListInvoice(invoiceIds);
     return response;
   } catch (error) {
     throw error;
@@ -87,6 +96,4 @@ export const updatePayment = async (formData) => {
   } catch (error) {
     throw error;
   }
-
 };
-

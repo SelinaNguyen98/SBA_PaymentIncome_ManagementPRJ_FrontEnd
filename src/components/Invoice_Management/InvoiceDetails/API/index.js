@@ -35,6 +35,18 @@ export const callApi_deletePaymentByID = async (ids) => {
   }
 };
 
+export const callAPI_DeleteListInvoice = async (invoiceIds) => {
+  try {
+    const response = await axios.delete(paths.PAYMENT, {
+      data: { id: invoiceIds },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
   // eslint-disable-next-line no-useless-catch
   try {
