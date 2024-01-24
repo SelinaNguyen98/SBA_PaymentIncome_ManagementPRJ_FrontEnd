@@ -89,20 +89,22 @@ export default function InvoiceDetails() {
   // Bao gom tong so trang, page, du lieu table dang duoc chon
   const [stateTable, setStateTable] = useState({
     page: 1,
-    totalPage: 0,
-    dataTable: null,
+    totalPage: 1,
+    dataTable: [],
     selectedRowData: null, // single delete
-    selectedListRowsData: [],
-    isSelectedAllDataInvoice: false,
+    //selectedListRowsData: [], //selectedRows_Order
+   // isSelectedAllDataInvoice: false, //selectAllPages_Order
     // idExRate: null,
   });
-
+  const [selectedListRowsData, setSelectedListRowsData] = useState([]);
+  const [isSelectedAllDataInvoice, setIsSelectedAllDataInvoice] = useState([false]);
+  const [selectedInvoicIds, setSelectedInvoiceIds] = useState([]); 
   const {
     totalPage,
     dataTable,
     selectedRowData,
-    selectedListRowsData,
-    isSelectedAllDataInvoice,
+    //selectedListRowsData,
+    //isSelectedAllDataInvoice,
     page,
   } = stateTable;
 
@@ -111,20 +113,48 @@ export default function InvoiceDetails() {
 
   /// Handle Checkbox funtion
   const handleRowCheckboxChange_Invoice = (index) => {
+    console.log(dataTable.payments[index].id)
+    const invoiceId = dataTable.payments[index].id;
+    console.log(selectedListRowsData);
     const newSelectedRows = [...selectedListRowsData];
     newSelectedRows[index] = !newSelectedRows[index];
-    updateStateTable({ selectedListRowsData: newSelectedRows });
+    setSelectedListRowsData(newSelectedRows);
+    setSelectedInvoiceIds((prevSelectedInvoiceIds) => {
+      if (newSelectedRows[index]) {
+        return [...prevSelectedInvoiceIds, invoiceId];
+      } else {
+        return prevSelectedInvoiceIds.filter((id) => id !== invoiceId);
+      }
+    });
   };
 
-  const handleSelectAllCheckboxChange_Invoice = () => {
-    const tmpIsSelectedAllDataInvoice = !isSelectedAllDataInvoice;
 
-    const newSelectedRows = new Array(dataTable?.payments.length).fill(
-      tmpIsSelectedAllDataInvoice
+   const handleSelectAllCheckboxChange_Invoice = () => {
+    // Use the current page to determine the index in the array
+    const pageIndex = page - 1;
+
+    setIsSelectedAllDataInvoice((prevSelectAllPages) => {
+      const newSelectAllPages = [...prevSelectAllPages];
+      newSelectAllPages[pageIndex] = !newSelectAllPages[pageIndex];
+      return newSelectAllPages;
+    });
+
+    const newSelectedRows = new Array(dataTable.length).fill(
+      !isSelectedAllDataInvoice[pageIndex]
     );
-    updateStateTable({
-      isSelectedAllDataInvoice: tmpIsSelectedAllDataInvoice,
-      selectedListRowsData: newSelectedRows,
+    setSelectedListRowsData(newSelectedRows);
+
+    setSelectedInvoiceIds((prevSelectedInvoiceIds) => {
+      if (!isSelectedAllDataInvoice[pageIndex]) {
+        // If selecting all, concatenate all order IDs from the current page
+        const currentPageInvoiceIds = dataTable.payments.map((invoice) => invoice.id);
+        return [...prevSelectedInvoiceIds, ...currentPageInvoiceIds];
+      } else {
+        // If deselecting all, remove all order IDs from the current page
+        return prevSelectedInvoiceIds.filter(
+          (id) => !dataTable.payments.map((invoice) => invoice.id).includes(id)
+        );
+      }
     });
   };
 
@@ -151,6 +181,14 @@ export default function InvoiceDetails() {
         dataTable: response,
         totalPage: response?.pagination?.total_pages,
       });
+       // Check and update selectedRows_Order based on selectedOrderIds
+       const newSelectedRows = new Array(response.orders.length).fill(false);
+       response.orders.forEach((invoice, index) => {
+         if (selectedListRowsData.includes(invoice.id)) {
+           newSelectedRows[index] = true;
+         }
+       });
+       setSelectedListRowsData(newSelectedRows);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -159,15 +197,14 @@ export default function InvoiceDetails() {
 
   const handleDelete = async () => {
     try {
-      if (selectedRowData?.id == null || selectedRowData?.id == undefined)
-        throw new Error("");
-      const response = await deletePaymentById(selectedRowData?.id);
-
+      console.log(selectedInvoicIds);
+      const response = await deletePaymentById(selectedInvoicIds);
+      setSelectedInvoiceIds([])
       // 1. Kiem tra du lieu co phai trang cuoi cung hay khong
       //    1.1 neu dau tien  cua trang >1 thi  set page ve page - 1
       //    1.2 nê dau tien cua trang 1 thi set ve 1
       // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
-
+      fetchInvoices();
       // if(dataTable?.payments.length == 1 && page >= totalPage &&  )
       if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
         changePage(page - 1);
@@ -178,6 +215,9 @@ export default function InvoiceDetails() {
       updateState({ isShowConfirmModal: false });
       showToast.success("Delete  successfully!");
       console.log(response);
+      updateState({
+        page: 1,
+      });
     } catch (error) {
       console.log(error);
     } finally {
@@ -187,6 +227,7 @@ export default function InvoiceDetails() {
 
   useEffect(() => {
     console.log("Filter change effect");
+    console.log(page);
     isFilterApplied.current = true;
     updateStateTable({ page: 1 });
   }, [selectedDate]);
@@ -198,7 +239,7 @@ export default function InvoiceDetails() {
 
     console.log("Main effect");
     fetchInvoices();
-  }, [selectedDate, page, dataChangeTrigger]);
+  }, [selectedDate, page, dataChangeTrigger,selectedInvoicIds]);
 
   function changePage(page) {
     isFilterApplied.current = false;
@@ -303,7 +344,7 @@ export default function InvoiceDetails() {
               <th className="w-[2%] py-2 rounded-l-[10px]">
                 <input
                   type="checkbox"
-                  checked={isSelectedAllDataInvoice}
+                  checked={isSelectedAllDataInvoice[page - 1]}
                   onChange={handleSelectAllCheckboxChange_Invoice}
                 />
               </th>
@@ -487,9 +528,7 @@ export default function InvoiceDetails() {
                         <svg
                           onClick={() => {
                             updateState({ isShowConfirmModal: true });
-                            updateStateTable({
-                              selectedRowData: invoicePayment,
-                            });
+                            handleRowCheckboxChange_Invoice(index);
                           }}
                           className=" cursor-pointer"
                           width="19"
@@ -558,6 +597,7 @@ export default function InvoiceDetails() {
               </Button>
               <Button
                 onClick={() => {
+                  setSelectedInvoiceIds([]);
                   updateState({ isShowConfirmModal: false });
                 }}
                 className={

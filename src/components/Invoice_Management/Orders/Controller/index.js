@@ -73,3 +73,17 @@ export const updateOrder = async (formData) => {
     throw error;
   }
 };
+
+//Payment
+export const getPaymentByYearAndMonths = async (selectedDate, current_page) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const month = selectedDate.getMonth() + 1; // Months are 0-indexed
+    const year = selectedDate.getFullYear();
+    
+    const response = await API.callAPI_Get_Payment_Order(month, year, current_page);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};

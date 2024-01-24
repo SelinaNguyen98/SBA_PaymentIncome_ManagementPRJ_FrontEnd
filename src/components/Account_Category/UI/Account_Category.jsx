@@ -125,7 +125,7 @@ export default function Account_Category() {
   };
 
   return (
-    <div className={`grid grid-cols-12  bg-main-theme`}>
+    <div className={`grid grid-cols-12  bg-main-theme h-screen`}>
       <div
         id="contentInvoiceDetail"
         className={` relative bg-main-theme pb-5 col-span-full`}
