@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createOrderSchema } from "../../../../../Utils/validation/rulesYup";
 import { createOrder } from "../../Controller";
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 // eslint-disable-next-line no-unused-vars
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
@@ -88,7 +88,7 @@ export default function AddOrderForm({
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
-                defaultValue={format(new Date(), 'dd-MM-yyyy')}
+                // defaultValue={format(new Date(), 'dd-MM-yyyy')}
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}

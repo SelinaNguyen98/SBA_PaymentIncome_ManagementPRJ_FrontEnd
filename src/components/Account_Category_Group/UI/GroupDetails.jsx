@@ -3,15 +3,38 @@ import "../../../Utils/style.css";
 import NavHeader from "../../NavHeader";
 import { useTranslation } from "react-i18next";
 import "./styles.css";
-import { useState } from "react";
-// eslint-disable-next-line no-unused-vars
-import Pagination2 from "./Pagination/Pagination";
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../../Utils/contexts/app.context";
 import InvoiceDetailFooter from "../../Account_Category/UI/InvoicDetailFooter/InvoiceDetailFooter";
+import { getGroup} from "../Controller";
 
-export default function InvoiceDetails() {
+export default function GroupDetails() {
+  const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
   const [selectedOption, setSelectedOption] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+
+  const [state, setState] = useState({
+    isShowConfirmModal: false,
+    isShowFormNewPayment: false,
+    isShowEditModal: false,
+    isShowDeleteModal: false,
+    isShowAcptDelete: false,
+    isShowNoAcptEdit: false,
+  });
+
+  const [stateTable, setStateTable] = useState({
+    page: 1,
+    totalPage: 0,
+    dataTable: null,
+  });
+  const {
+    totalPage,
+    dataTable,
+    page,
+  } = stateTable;
+  const updateStateTable = (dataTable) =>
+    setStateTable(() => ({ ...stateTable, ...dataTable }));
 
   const handleOptionChange = (event) => {
     const newSelectedOption = event.target.value;
@@ -25,6 +48,46 @@ export default function InvoiceDetails() {
     // Add any other logic you need based on the selected option
     // ...
   };
+
+  useEffect(() => {
+    try{
+      fetchGroup()
+    }catch(error){
+console.log(error);
+    }
+  }, []);
+
+  async function fetchGroup() {
+    try {
+      const response = await getGroup(page);
+      console.log('Category API response:', response);
+  
+      if (!response || !response.groups) {
+        console.error('Invalid response format:', response);
+        return;
+      }
+  
+      const { groups, pagination } = response;
+  
+      const totalPage = pagination?.total_pages || 0;
+  
+      updateStateTable({
+        dataTable: groups,
+        totalPage: totalPage,
+      });
+    } catch (error) {
+      if (error.isAxiosError) {
+        // AxiosError details
+        console.error('AxiosError:', error.toJSON());
+      } else {
+        // Other types of errors
+        console.error('Error fetching category data:', error);
+      }
+    }
+  }
+  
+  
+
   const handleSearchChange = (event) => {
     // Update the search term state
     setSearchTerm(event.target.value);
@@ -106,6 +169,16 @@ export default function InvoiceDetails() {
       );
     }
   };
+  //const fetchData = async () => {
+    //try {
+      //const invoiceData = await getInvoiceData(selectedOption, searchTerm);
+      // Handle the data as needed in your component
+      //console.log('Fetched invoice data:', invoiceData);
+    //} catch (error) {
+      // Handle error, e.g., display an error message to the user
+      //console.error('Error fetching invoice data:', error);
+    //}
+  //};
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
     <div
@@ -199,9 +272,7 @@ export default function InvoiceDetails() {
             </div>
           {/* control area */}
           <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
-            <div className=" w-full overflow-auto col-span-12 lg:col-span-3 flex  justify-end items-end"></div>
-            {/* table data */}
-            <table id="invoiceTable" className=" w-full ">
+           <table id="invoiceTable" className="w-full">
               <thead>
                 <tr>
                   <th className=" w-[5%]"></th>
@@ -212,41 +283,38 @@ export default function InvoiceDetails() {
                 </tr>
               </thead>
               <tbody>
-                {/* First row is like padding-top */}
-                <tr className="">
-                  <td colSpan={100}></td>
-                </tr>
-                {Array(10)
-                  .fill(0)
-                  .map((_, index) => (
-                    <tr key={index}>
-                      {/* First column of each row is like padding-left */}
-                      <td className=" w-[5%]"></td>
-
-                      {/* DATA MAIN*/}
-                      <td className=" w-[30%]" name="tb_no">
-                        404
-                      </td>
-                      <td className=" w-[30%]" name="tb_report">
-                        not found
-                      </td>
-                      <td className=" w-[30%]" name="tb_group">
-                        404
-                      </td>
-                      {/* Last column of each row is like padding-right */}
-                      <td className=" w-[5%]"></td>
-                    </tr>
-                  ))}
-                {/* Last row is like padding-bottom */}
-                <tr className=" bg-main-theme h-[0px] py-0 my-0">
-                  <td colSpan={100}></td>
-                </tr>
-              </tbody>
+  {/* First row is like padding-top */}
+  <tr className="">
+                <td colSpan={100}></td>
+              </tr>
+  {dataTable?.map((group, index) => (
+    <tr key={index}>
+      <td className=" w-[5%]"></td>
+      <td name="tb_no">
+        {group?.id}
+      </td>
+      <td name="tb_report">
+        {group?.report_type}
+      </td>
+      <td name="tb_group">
+        {group?.name}
+      </td>
+      <td className=" w-[5%]"></td>
+      
+    </tr>
+  ))}
+  {/* Last row is like padding-bottom */}
+  <tr className="">
+                <td colSpan={100}></td>
+              </tr>
+  </tbody>
             </table>
             <InvoiceDetailFooter />
+            </div>
           </div>
         </div>
       </div>
-    </div>  </div>  </div>
+    </div> 
+    </div>
   );
 }

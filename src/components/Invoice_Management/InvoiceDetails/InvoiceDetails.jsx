@@ -109,7 +109,9 @@ export default function InvoiceDetails() {
     dataTable,
     selectedRowData,
     // selectedRows,
+    // eslint-disable-next-line no-unused-vars
     selectedListRowsData,
+    // eslint-disable-next-line no-unused-vars
     isSelectedAllDataInvoice,
     page,
   } = stateTable;

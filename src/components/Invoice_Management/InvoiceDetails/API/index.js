@@ -20,11 +20,14 @@ export const callAPI_GetPaymentsYearAndMonths = async (month, year, page) => {
   }
 };
 
-export const callApi_deletePaymentByID = async (id) => {
+export const callApi_deletePaymentByID = async (ids) => {
   // eslint-disable-next-line no-useless-catch
   try {
+    console.log(ids);
     // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
-    const response = await axios.delete(paths.PAYMENT + "/" + id);
+    const response = await axios.delete(paths.PAYMENT , {
+      data: { id: ids },
+    });
     // console.log(response.data);
     return response.data;
   } catch (error) {

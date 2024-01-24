@@ -10,7 +10,7 @@ export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   cancel,
   // eslint-disable-next-line react/prop-types
-  selectedTime,
+  selectedTime, showToast,
 }) {
   const { t } = useTranslation();
   const t_translate = t;
@@ -83,9 +83,10 @@ export default function InputMonthlyData({
     },
   ]);
   const [exchangeRate, setExchangeRate] = useState({
-    JPY: '',
-    USD: '',
+    jpy: '',
+    usd: '',
   })
+
   // Extract month and year from selectedTime
   // eslint-disable-next-line react/prop-types
   const month = selectedTime.getMonth() + 1; // Months are zero-based
@@ -98,23 +99,21 @@ export default function InputMonthlyData({
 
   useEffect(() => {
     if (visible) {
-      // eslint-disable-next-line react/prop-types
-      API.getExchangeRate(selectedTime.getMonth() + 1, selectedTime.getFullYear(), setExchangeRate)
-      // eslint-disable-next-line react/prop-types
-      API.getDataMonthly(selectedTime.getFullYear(), selectedTime.getMonth() + 1, setData_month)
+      API.getExchangeRate(month, year, setExchangeRate)
+      API.getDataMonthly(year, month, setData_month)
+    } else {
+      setData_month([])
     }
   }, [visible, selectedTime])
 
-  useEffect(() => {
-    console.log(data_month)
-    console.log(exchangeRate)
-  }, [data_month,exchangeRate])
-
   const handleChange = (e) => {
-    console.log(e)
     setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
   }
-
+  function addComma(number) {
+    if (!number) return number
+    number = number.toString().replaceAll(',', '')
+    return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  }
   return (
     <Modal visible={visible}>
       <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
@@ -138,20 +137,18 @@ export default function InputMonthlyData({
             <div className="font-medium items-center justify-center">
               JPY
               <input
-                type="number"
                 className="ml-4 bg-white mx-2 min-w-[150px] shadow-sm rounded-md p-1"
                 name="jpy"
-                value={exchangeRate?.jpy}
+                value={addComma(exchangeRate?.jpy)}
                 onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="font-medium items-center  justify-center">
               USD
               <input
-                type="number"
                 className="bg-white mx-2 min-w-[150px] shadow-sm rounded-md p-1"
                 name="usd"
-                value={exchangeRate?.usd}
+                value={addComma(exchangeRate?.usd)}
                 onChange={(e) => handleChange(e)}
               />
             </div>
@@ -160,7 +157,7 @@ export default function InputMonthlyData({
             className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
             data-modal-target="crud-modal"
             data-modal-toggle="crud-modal"
-            onClick={() => API.createOrUpdateExchangeRate(exchangeRate)}
+            onClick={() => API.createOrUpdateExchangeRate(exchangeRate, showToast)}
           >
             {t_translate("button.save")}
           </Button>
@@ -184,12 +181,13 @@ export default function InputMonthlyData({
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              {data_month?.balance_sheet?.map((rowData_month, index) => (
+              {data_month?.balance_sheet?.map((rowData_month, index) => 
+              (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
-                  <td className="w-[3px]" name="tb_no">
-                    {index + 1}
-                  </td>
+                  <td className="w-[3px]" name="tb_no">{index + 1}</td>
+                    
+                 
                   <td
                     className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
@@ -202,18 +200,19 @@ export default function InputMonthlyData({
                     name="tb_Amount"
                     contentEditable="true"
                     suppressContentEditableWarning={true}
-                    onBlur={(e) => {
-                      const newData =data_month.balance_sheet;
-                      newData[index].amount = e.target.innerText;
+                    onKeyUp={(e) => {
+                      const newData = data_month.balance_sheet;
+                      newData[index].amount = addComma(e.target.innerText);
                       setData_month({ ...data_month, newData });
                     }}
                   >
-                    {rowData_month.amount}
+                    {addComma(rowData_month.amount)}
                   </td>
 
                   <td className="w-[1px]"></td>
                 </tr>
-              ))}
+              )
+              )}
 
               <tr className="bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
@@ -224,15 +223,16 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              // eslint-disable-next-line react/prop-types
-              API.saveMonthly(selectedTime.getMonth() + 1, selectedTime.getFullYear(), data_month)
+              API.saveMonthly(month, year, data_month, showToast)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >
             {t_translate("button.save")}
           </Button>
           <Button
-            onClick={cancel}
+            onClick={
+              cancel
+            }
             className="border-red-500 bg-white border-2 py-2 min-w-[150px]"
           >
             <span className="text-red-500 uppercase">

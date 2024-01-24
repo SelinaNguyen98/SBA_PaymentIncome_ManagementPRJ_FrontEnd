@@ -2,7 +2,7 @@
 import * as API from "../API";
 import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 // eslint-disable-next-line no-unused-vars
-import { format } from 'date-fns';
+// import { format } from 'date-fns';
 
 export const getOrderByYearAndMonths = async (selectedDate, current_page) => {
   // eslint-disable-next-line no-useless-catch
@@ -68,6 +68,20 @@ export const updateOrder = async (formData) => {
     console.log( "formData/" , formData);
     const response = await API.callApi_updateOrder(formData);
 
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//Payment
+export const getPaymentByYearAndMonths = async (selectedDate, current_page) => {
+  // eslint-disable-next-line no-useless-catch
+  try {
+    const month = selectedDate.getMonth() + 1; // Months are 0-indexed
+    const year = selectedDate.getFullYear();
+    
+    const response = await API.callAPI_Get_Payment_Order(month, year, current_page);
     return response;
   } catch (error) {
     throw error;
