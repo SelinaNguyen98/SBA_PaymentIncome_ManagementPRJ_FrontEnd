@@ -4,23 +4,22 @@ import { useTranslation } from "react-i18next";
 import Pagination from "../../../../Utils/Pagination";
 import {
   // eslint-disable-next-line no-unused-vars
-  formatFloatToCustomString,
-  formatNumberSeparator,
+  formatInputToFloatStringSeparator,
 } from "../../../../Utils/utils/maths";
 
 // eslint-disable-next-line react/prop-types
 export default function InvoiceDetailFooter({
   // eslint-disable-next-line react/prop-types
   changePage,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   page,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   totalPage,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   totalUSD,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   totalVND,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   totalJPY,
 }) {
   // eslint-disable-next-line react/prop-types
@@ -40,7 +39,7 @@ export default function InvoiceDetailFooter({
           <input
             className=" bg-main-theme w-[150px] ml-2 px-2 "
             readOnly
-            value={formatNumberSeparator(totalJPY.toString())}
+            value={formatInputToFloatStringSeparator(totalJPY.toString())}
           ></input>
         </div>
         <div className=" inline-flex mx-3 ">
@@ -51,7 +50,7 @@ export default function InvoiceDetailFooter({
           <input
             className=" bg-main-theme w-[150px] ml-2 px-2 "
             readOnly
-            value={formatNumberSeparator(totalVND.toString())}
+            value={formatInputToFloatStringSeparator(totalVND.toString())}
           ></input>
         </div>
         <div className=" inline-flex mx-3 ">
@@ -62,7 +61,7 @@ export default function InvoiceDetailFooter({
           <input
             className=" bg-main-theme w-[150px] ml-2 px-2 "
             readOnly
-            value={formatNumberSeparator(totalUSD.toString())}
+            value={formatInputToFloatStringSeparator(totalUSD.toString())}
           ></input>
         </div>
       </div>
