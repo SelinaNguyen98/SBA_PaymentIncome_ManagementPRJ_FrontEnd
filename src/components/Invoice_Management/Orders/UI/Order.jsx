@@ -1160,6 +1160,8 @@ const Order = () => {
     fetchData();
   }, [selectedDate, currentPage_Order, selectedOrderIds]);
 
+
+
   //Payment
   const [dataPayment, setDataPayment] = useState([]);
   const [selectedRows_Payment, setSelectedRows_Payment] = useState([]);
@@ -1264,6 +1266,9 @@ const Order = () => {
 
     fetchData();
   }, [selectedDate, currentPage_Payment, selectedPaymentIds]);
+
+
+  
 
   return (
        <div className="">

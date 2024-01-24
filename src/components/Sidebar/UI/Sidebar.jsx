@@ -11,6 +11,8 @@ import Popover from "../../../Utils/Popover";
 import { PiTranslateFill } from "react-icons/pi";
 import classNames from "classnames";
 import { useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
 export default function SideBar() {
   const [isHiddenSidebar, setIsHiddenSidebar] = useState(false);
   const handleToggleSidebar = () => {
@@ -31,6 +33,10 @@ export default function SideBar() {
   // const customProp = location.state?.customProp || "top1";
   const [activeButton, setActiveButton] = useState("invoiceDetails");
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const isMobile = screenWidth <= 850;
+
+  const refUl = useRef(null);
+  const navigate = useNavigate();
   const [isHiddenInvoiceManagement, setIsHiddenInvoiceManagement] =
     useState(true);
   const handleResize = () => {
@@ -40,22 +46,29 @@ export default function SideBar() {
   useEffect(() => {
     const dbh = async () => {
       const token = localStorage.getItem("token");
-     console.log(token);
+      console.log(token);
       if (!token) {
         navigate("/");
         return;
       }
-      const currentPath = location.pathname;
-
-      if (
-        currentPath.includes("/home/InvoiceDetails") ||
-        currentPath.includes("/home/Account_Annalytics") ||
-        currentPath.includes("/home/Order")
-      ) {
-        setIsHiddenInvoiceManagement(false);
-      } else {
-        setIsHiddenInvoiceManagement(true);
+      switch (location.pathname) {
+        case "/home/InvoiceDetails":
+          setActiveButton("invoiceDetails");
+          setIsHiddenInvoiceManagement(false);
+          break;
+        case "/home/Account_Annalytics":
+          setActiveButton("accountAnalytics");
+          setIsHiddenInvoiceManagement(false);
+          break;
+        case "/home/Order":
+          setActiveButton("orders");
+          setIsHiddenInvoiceManagement(false);
+          break;
+        default:
+          setIsHiddenInvoiceManagement(true);
+          break;
       }
+
       window.addEventListener("resize", handleResize);
       return () => {
         window.removeEventListener("resize", handleResize);
@@ -63,11 +76,6 @@ export default function SideBar() {
     };
     dbh();
   }, [location.pathname]);
-
-  const isMobile = screenWidth <= 850;
-
-  const refUl = useRef(null);
-  const navigate = useNavigate();
 
   const selectOption = (e) => {
     for (let el of refUl.current.children) {
@@ -155,7 +163,11 @@ export default function SideBar() {
         </div>
         <ul className="flex flex-col gap-8" ref={refUl}>
           <li
-            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
+              (location.pathname === "/home/Account_Category"|| location.pathname === "/home")
+                ? "bg-yellow-400 text-black"
+                : "text-white"
+            }`}
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-file-lines "></i>
@@ -163,7 +175,11 @@ export default function SideBar() {
             {t(`title.accountCategory`)}
           </li>
           <li
-            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
+              location.pathname === "/home/Account_Category_Group"
+                ? "bg-yellow-400 text-black"
+                : "text-white"
+            }`}
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-table-cells-large"></i>
@@ -171,7 +187,11 @@ export default function SideBar() {
             {t(`title.accountCategoryGroup`)}
           </li>
           <li
-            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
+              (location.pathname === "/home/InvoiceDetails"|| location.pathname === "/home/Account_Annalytics" || location.pathname === "/home/Order")
+                ? "bg-yellow-400 text-black"
+                : "text-white"
+            }`}
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-regular fa-credit-card"></i>
@@ -179,7 +199,11 @@ export default function SideBar() {
             {t(`title.Invoice_Management`)}
           </li>
           <li
-            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
+              location.pathname === "/home/PL_Report"
+                ? "bg-yellow-400 text-black"
+                : "text-white"
+            }`}
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-book-open"></i>
@@ -187,7 +211,11 @@ export default function SideBar() {
             {t(`title.PL_report`)}
           </li>
           <li
-            className="text-white mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer"
+            className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
+              location.pathname === "/home/BS_Report"
+                ? "bg-yellow-400 text-black"
+                : "text-white"
+            }`}
             onClick={(e) => selectOption(e)}
           >
             <i className="fa-solid fa-book-open"></i>
@@ -324,7 +352,7 @@ export default function SideBar() {
                                   {
                                     "bg-yellow-bold":
                                       activeButton === buttonName,
-                                  }
+                                  },
                                 )}
                                 onClick={(e) => {
                                   selectOption_Invoice(e);
@@ -354,7 +382,7 @@ export default function SideBar() {
                       key={buttonName}
                       className={classNames(
                         `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm ${
-                          activeButton === buttonName
+                          (activeButton === buttonName)
                             ? "bg-yellow "
                             : "bg-white"
                         }`,
