@@ -386,7 +386,7 @@ const BS_Report = () => {
                 {/* table data */}
                 <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full relative">
                   <table id="BSreport" className="text-sm">
-                    <thead className="sticky top-0 bg-white z-50 w-full">
+                    <thead className="sticky top-0 bg-white z-4 w-full">
                       <tr>
                         <th className="w-[1px]"></th>
                         <th className="w-[2px]">No</th>
