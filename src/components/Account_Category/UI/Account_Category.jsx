@@ -11,13 +11,15 @@ import { AppContext } from "../../../Utils/contexts/app.context";
 import Modal from "../../../Utils/Modal";
 import NewCategory from "./NewCategory/NewCategory";
 import EditCategory from "./EditCategory/EditCategory";
-import { deleteCategory, getCategory } from "../Controller";
+import { deleteCategory, getCategory, getGroupCategory } from "../Controller";
+import Pagination from "../../../Utils/Pagination";
 
 export default function Account_Category() {
   const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
   const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
   const { showToast } = useContext(AppContext);
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
 
   const [state, setState] = useState({
     isShowConfirmModal: false,
@@ -32,7 +34,7 @@ export default function Account_Category() {
     isShowConfirmModal,
     isShowFormNewCategory,
     isShowEditModal,
-    isShowDeleteModal,
+    // isShowDeleteModal,
     isShowAcptDelete,
     isShowNoAcptEdit,
   } = state;
@@ -41,34 +43,47 @@ export default function Account_Category() {
     page: 1,
     totalPage: 0,
     dataTable: null,
-    selectedRowData: null, // single delete
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
   });
   const {
     totalPage,
     dataTable,
-    selectedRowData,
     selectedListRowsData,
     isSelectedAllDataInvoice,
     page,
   } = stateTable;
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
-    const isFilterApplied = useRef(false);
-    function changePage(page) {
-      isFilterApplied.current = false;
-      updateStateTable({ page: page });
-    }
+  const isFilterApplied = useRef(false);
+  function changePage(page) {
+    isFilterApplied.current = false;
+    updateStateTable({ page: page });
+  }
   // const { isShowEditModal, isShowDeleteModal } = states;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
   const [selectedOption, setSelectedOption] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [selectedRows_Category, setSelectedRows_Category] = useState([]);
+  const [currentPage_Category, setCurrentPage_Category] = useState(1);
+  const [totalPages_Category, setTotalPages_Category] = useState(1);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  const [dataCategory, setDataCategory] = useState([]);
+  const [selectAllPages_Category, setSelectAllPages_Category] = useState([
+    false,
+  ]);
+  const handleChangePage_Category = (newPage) => {
+    setCurrentPage_Category(newPage);
+  };
 
   const handleDelete = async () => {
     try {
       if (selectedRowData?.id == null || selectedRowData?.id == undefined)
-        throw new Error("");
+        // throw new Error("");
+
+        return;
+
       const response = await deleteCategory(selectedRowData?.id);
 
       // 1. Kiem tra du lieu co phai trang cuoi cung hay khong
@@ -77,47 +92,77 @@ export default function Account_Category() {
       // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
 
       // if(dataTable?.payments.length == 1 && page >= totalPage &&  )
-      if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
-        changePage(page - 1);
-        return;
-      }
-      setDataChangeTrigger(!dataChangeTrigger);
+      // if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
+      //   changePage(page - 1);
+      //   return;
+      // }
+      // setDataChangeTrigger(!dataChangeTrigger);
 
-      updateState({ isShowConfirmModal: false });
-      showToast("Delete  successfully!");
+      // updateStateTable({ isShowAcptDelete: false });
+      showToast.success("Delete  successfully!");
       console.log(response);
     } catch (error) {
+      if (
+        error.response.data.message == "The category has generated transactions"
+      ) {
+        setIsShowDeleteModal(true);
+      }
       console.log(error);
     } finally {
-      updateState({ isShowConfirmModal: false });
+      updateState({ isShowAcptDelete: false });
     }
   };
 
+
   useEffect(() => {
-    try{
-      fetchCategory()
-    }catch(error){
-console.log(error);
+    try {
+      fetchCategory();
+      fetchGetCategoriesPL();
+    } catch (error) {
+      console.log(error);
     }
-  }, []);
+  }, [currentPage_Category]);
 
   const fetchCategory = async () => {
     try {
-      const response = await getCategory(
-        page
-      );
-console.log(response);
-      // if (page > response?.pagination?.total_pages)
-      //   changePage(response?.pagination?.total_pages - 1);
-      updateStateTable({
-        dataTable: response,
-        totalPage: response?.pagination?.total_pages,
-      });
+      const response = await getCategory(currentPage_Category);
       console.log(response);
+
+      if (response.orders === null) {
+        setTotalPages_Category(1);
+        setCurrentPage_Category(1);
+      } else {
+        setDataCategory((prevData) => {
+          console.log("Previous Data:", prevData);
+          return response.categories || [];
+        });
+        setTotalPages_Category(response.pagination.total_pages);
+      }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchCategoryByReport = async () => {
+    try {
+      const response = await getCategory(currentPage_Category );
+      console.log(response);
+
+      if (response.orders === null) {
+        setTotalPages_Category(1);
+        setCurrentPage_Category(1);
+      } else {
+        setDataCategory((prevData) => {
+          console.log("Previous Data:", prevData);
+          return response.categories || [];
+        });
+        setTotalPages_Category(response.pagination.total_pages);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
 
   function handleSelectAll() {
     const selectAllCheckbox = document.getElementById("selectAllCheckbox");
@@ -146,42 +191,80 @@ console.log(response);
 
   const filterCategories = [
     { label: t("titlePage.allCandidates"), value: "allCandidates" },
-    { label: t("titlePage.accountCategory"), value: "account" },
+    // { label: t("titlePage.accountCategory"), value: "account" },
     { label: t("titlePage.thGroup"), value: "group" },
     { label: t("titlePage.reportType"), value: "report" },
   ];
-  const filterCategories1 = [
-    { label: t("titlePage.allCandidates"), value: "allCandidates" },
-    { label: t("titlePage.accountCategory"), value: "account" },
-    { label: t("titlePage.thGroup"), value: "group" },
-    { label: t("titlePage.reportType"), value: "report" },
-  ];
+  // const filterCategories1 = [
+  //   { label: t("titlePage.allCandidates"), value: "allCandidates" },
+  //   { label: t("titlePage.accountCategory"), value: "account" },
+  //   { label: t("titlePage.thGroup"), value: "group" },
+  //   { label: t("titlePage.reportType"), value: "report" },
+  // ];
+
+  const [filer, setFilter] =useState(null)
+  const [groups, setGroups] = useState([]);
+  const fetchGetCategoriesPL = async () => {
+    try {
+      const response = await getGroupCategory();
+      setGroups(response.groups);
+      console.log(response.groups);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const renderSearchInput = () => {
-    if (selectedOption === "report" || selectedOption === "account" || selectedOption === "group") {
-      return (
-        <select
-          value={searchTerm}
-          onChange={handleSearchChange}
-          style={{
-            width: "35vw",
-            height: "50px",
-            backgroundColor: "white",
-            color: "black",
-            borderRadius: "0px 10px 10px 0px",
-            border: "1px solid #ccc",
-          }}
-        >
-          {filterCategories1.map((category) => (
-            <option key={category.value} value={category.value}>
-              {category.label}
-            </option>
-          ))}
-        </select>
-      );
-    } 
-     else {
-      return (
-        <input
+    switch (selectedOption) {
+      case "report": {
+        return (
+          <select
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{
+              width: "35vw",
+              height: "50px",
+              backgroundColor: "white",
+              color: "black",
+              borderRadius: "0px 10px 10px 0px",
+              border: "1px solid #ccc",
+            }}
+          >
+            <option value={"pl"}>Profit and Loss Report</option>
+            <option value={"bs"}>Balance Sheet Report</option>
+          </select>
+        );
+      }
+      
+      case "group": {
+        return (
+          <select
+            value={searchTerm}
+            onChange={handleSearchChange}
+            style={{
+              width: "35vw",
+              height: "50px",
+              backgroundColor: "white",
+              color: "black",
+              borderRadius: "0px 10px 10px 0px",
+              border: "1px solid #ccc",
+            }}
+          >
+             <option value="" disabled></option>
+                {groups.map((group, index) => {
+                  return (
+                    <option value={group?.id} key={index} >
+                      {group?.name}
+                    </option>
+                  );
+                })}
+          </select>
+        );
+      }
+
+      case "allCandidates" : {
+        return(
+          <input
           type="text"
           value={searchTerm}
           onChange={handleSearchChange}
@@ -195,8 +278,53 @@ console.log(response);
             display: "block",
           }}
         />
-      );
+        )
+      }
     }
+
+    // if (
+    //   selectedOption === "report" ||
+    //   selectedOption === "account" ||
+    //   selectedOption === "group"
+    // ) {
+    //   return (
+    //     <select
+    //       value={searchTerm}
+    //       onChange={handleSearchChange}
+    //       style={{
+    //         width: "35vw",
+    //         height: "50px",
+    //         backgroundColor: "white",
+    //         color: "black",
+    //         borderRadius: "0px 10px 10px 0px",
+    //         border: "1px solid #ccc",
+    //       }}
+    //     >
+    //       {filterCategories1.map((category) => (
+    //         <option key={category.value} value={category.value}>
+    //           {category.label}
+    //         </option>
+    //       ))}
+    //     </select>
+    //   );
+    // } else {
+    //   return (
+    //     <input
+    //       type="text"
+    //       value={searchTerm}
+    //       onChange={handleSearchChange}
+    //       placeholder={t("titlePage.searchPlaceholder")}
+    //       style={{
+    //         padding: "8px 30px 8px 10px",
+    //         width: "35vw",
+    //         height: "50px",
+    //         borderRadius: "0 10px 10px 0",
+    //         border: "1px solid #ccc",
+    //         display: "block",
+    //       }}
+    //     />
+    //   );
+    // }
   };
 
   return (
@@ -207,7 +335,9 @@ console.log(response);
       >
         <div
           id="contentInvoiceDetail"
-          className={`relative bg-main-theme pb-5     ${isShowAsideFilter ? "col-span-10" : "col-span-full"}`}
+          className={`relative bg-main-theme pb-5     ${
+            isShowAsideFilter ? "col-span-10" : "col-span-full"
+          }`}
         ></div>
 
         {/* Lable */}
@@ -224,52 +354,75 @@ console.log(response);
             />
           </svg>
           <div
-            style={{display: "inline-block",fontWeight: "bold", paddingRight: "20px"}}
+            style={{
+              display: "inline-block",
+              fontWeight: "bold",
+              paddingRight: "20px",
+            }}
           ></div>
           {t("titlePage.accountCategory")}&nbsp;
-          <div style={{ display: "inline-block", marginLeft: "50px",position: "relative" }}></div>
-          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
-          <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-          <select
-            id="categoryFilter"
-            value={selectedOption}
-            onChange={handleOptionChange}
+          <div
             style={{
-              width: "200px",
-              height: "50px",
-              backgroundColor: "midnightblue",
-              color: "white",
-              borderRadius: "10px 0px 0px 10px",
+              display: "inline-block",
+              marginLeft: "50px",
+              position: "relative",
+            }}
+          ></div>
+          {/* <div style={{ display: "flex", alignItems: "center" }}> */}
+          <div
+            style={{
+              position: "relative",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            {filterCategories.map((category) => (
-              <option
-                key={category.value}
-                value={category.value}
-                style={{
-                  backgroundColor:
-                    selectedOption === category.value ? "white" : "white",
-                  color: "black",
-                }}
-              >
-                {category.label}
-              </option>
-            ))}
-          </select>
-          {/* </div> */}
-          <div style={{ position: "relative", display: "inline-block" }}>
-            {renderSearchInput()}
+            <select
+              id="categoryFilter"
+              value={selectedOption}
+              onChange={handleOptionChange}
+              style={{
+                width: "200px",
+                height: "50px",
+                backgroundColor: "midnightblue",
+                color: "white",
+                borderRadius: "10px 0px 0px 10px",
+              }}
+            >
+              {filterCategories.map((category) => (
+                <option
+                  key={category.value}
+                  value={category.value}
+                  style={{
+                    backgroundColor:
+                      selectedOption === category.value ? "white" : "white",
+                    color: "black",
+                  }}
+                >
+                  {category.label}
+                </option>
+              ))}
+            </select>
+            {/* </div> */}
+            <div style={{ position: "relative", display: "inline-block" }}>
+              {renderSearchInput()}
             </div>
+            
             <span
               style={{
                 position: "absolute",
                 top: "50%",
                 right: "10px",
                 transform: "translateY(-50%)",
-                cursor: "pointer",    
+                cursor: "pointer",
               }}
             >
-              {selectedOption === "report"? "": selectedOption === "account"? "": selectedOption === "group"? "": "🔍"}
+              {selectedOption === "report"
+                ? ""
+                : selectedOption === "account"
+                ? ""
+                : selectedOption === "group"
+                ? ""
+                : "🔍"}
             </span>
           </div>
         </div>
@@ -348,8 +501,8 @@ console.log(response);
                 <td colSpan={100}></td>
               </tr>
 
-              {dataTable?.categories && 
-                dataTable?.categories.map((category, index) => (
+              {dataCategory &&
+                dataCategory.map((category, index) => (
                   <tr key={index}>
                     <td className=" w-[1%]"></td>
 
@@ -363,12 +516,18 @@ console.log(response);
                     <td
                       className=" w-[4%] border-none custom-no-border"
                       name="tb_name"
-                    >{category?.id}</td>
+                    >
+                      {category?.id}
+                    </td>
                     <td className=" w-[30%]" name="tb_name">
-                      <input readOnly value={category?.name} style={{ backgroundColor: '#E3EDF9' }} />
+                      <input
+                        readOnly
+                        value={category?.name}
+                        style={{ backgroundColor: "#E3EDF9" }}
+                      />
                     </td>
                     <td className=" w-[28%]" name="tb_group">
-                      {category?.group_id}
+                      {category?.group_name}
                     </td>
                     <td className=" w-[28%]" name="tb_report">
                       {category?.report_type}
@@ -377,13 +536,15 @@ console.log(response);
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
                         <button
                           onClick={() => {
-                            if (1) {
-                              updateState({ isShowEditModal: true });
-                              // updateStateTable({ selectedRowData: category });
-                            } else {
-                              updateState({ isShowNoAcptEdit: true });
-                              // updateStateTable({ selectedRowData: category });
-                            }
+                            setSelectedRowData(category);
+                            updateState({ isShowEditModal: true });
+                            // if (1) {
+                            //   updateState({ isShowEditModal: true });
+                            //   // updateStateTable({ selectedRowData: category });
+                            // } else {
+                            //   updateState({ isShowNoAcptEdit: true });
+                            //   // updateStateTable({ selectedRowData: category });
+                            // }
                           }}
                         >
                           <svg
@@ -408,13 +569,15 @@ console.log(response);
                         <button
                           className=""
                           onClick={() => {
-                            if (0) {
-                              updateState({ isShowDeleteModal: true });
-                              updateStateTable({ selectedRowData: category })
-                            } else {
-                              updateState({ isShowAcptDelete: true });
-                              updateStateTable({ selectedRowData: category })
-                            }
+                            setSelectedRowData(category);
+                            updateState({ isShowAcptDelete: true });
+                            // if (0) {
+                            //   updateState({ isShowDeleteModal: true });
+                            //   updateStateTable({ selectedRowData: category })
+                            // } else {
+                            //   updateState({ isShowAcptDelete: true });
+                            //   updateStateTable({ selectedRowData: category })
+                            // }
                           }}
                         >
                           <svg
@@ -445,7 +608,12 @@ console.log(response);
               </tr>
             </tbody>
           </table>
-          <InvoiceDetailFooter />  
+          {/* <InvoiceDetailFooter />   */}
+          <Pagination
+            changePage={handleChangePage_Category}
+            page={currentPage_Category}
+            totalPage={totalPages_Category}
+          />
         </div>
 
         {isShowConfirmModal && (
@@ -455,7 +623,14 @@ console.log(response);
                 {t("notification_account_category.titleDeleteCategory")}
               </span>
               <div className="text-center pt-5 px-2 font-bold text-sm">
-                <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.deleteCategory").replace("1", "<br />") }} />
+                <p
+                  className="text-red-600 mb-0"
+                  dangerouslySetInnerHTML={{
+                    __html: t(
+                      "notification_account_category.deleteCategory"
+                    ).replace("1", "<br />"),
+                  }}
+                />
               </div>
 
               <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -476,118 +651,136 @@ console.log(response);
             </div>
           </Modal>
         )}
-        
+
         {isShowDeleteModal && (
-            <Modal visible={isShowDeleteModal}>
-              <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
-                <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-                  {t("notification_account_category.titleDeleteCategory")}
-                </span>
-                <div className="text-center pt-5 px-2 font-bold text-sm">
-                  <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.delete1Category").replace("1", "<br />") }} />
-                </div>
-
-                <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-                  <Button
-                    onClick={() => {
-                      updateState({ isShowDeleteModal: false });
-                    }}
-                    className={" border-red-500 bg-white border-2   py-2 px-6"}
-                  >
-                    <span className=" text-red-500  ml-1 font-medium uppercase">
-                      OK
-                    </span>
-                  </Button>
-                </div>
+          <Modal visible={isShowDeleteModal}>
+            <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
+              <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+                {t("notification_account_category.titleDeleteCategory")}
+              </span>
+              <div className="text-center pt-5 px-2 font-bold text-sm">
+                <p
+                  className="text-red-600 mb-0"
+                  dangerouslySetInnerHTML={{
+                    __html: t(
+                      "notification_account_category.delete1Category"
+                    ).replace("1", "<br />"),
+                  }}
+                />
               </div>
-            </Modal>
-          )}
-        
+
+              <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+                <Button
+                  onClick={() => {
+                    // updateState({ isShowDeleteModal: false });
+                    setIsShowDeleteModal(false);
+                  }}
+                  className={" border-red-500 bg-white border-2   py-2 px-6"}
+                >
+                  <span className=" text-red-500  ml-1 font-medium uppercase">
+                    OK
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {isShowAcptDelete && (
-            <Modal visible={isShowAcptDelete}>
-              <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
-                <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-                  {t("notification_account_category.titleDeleteCategory")}
-                </span>
-                <div className="text-center pt-5 px-2 font-bold text-sm">
-                  <p className="text-red-600 mb-0">
-                    {t("notification_account_category.acptDeleteCategory")}
-                  </p>
-                </div>
-
-                <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-                  <Button
-                    onClick={() => handleDelete() 
-                      // updateState({ isShowAcptDelete: false });
-                    }
-                    className={" border-red-500 bg-red border-2   py-2 px-6"}
-                  >
-                    <span className=" text-white-500 ml-1 font-medium uppercase">
-                      {t("button.confirm")}
-                    </span>
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      updateState({ isShowAcptDelete: false });
-                    }}
-                    className={" border-red-500 bg-white border-2   py-2 px-6"}
-                  >
-                    <span className=" text-red-500  ml-1 font-medium uppercase">
-                      {t("button.cancel")}
-                    </span>
-                  </Button>
-                </div>
+          <Modal visible={isShowAcptDelete}>
+            <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
+              <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+                {t("notification_account_category.titleDeleteCategory")}
+              </span>
+              <div className="text-center pt-5 px-2 font-bold text-sm">
+                <p className="text-red-600 mb-0">
+                  {t("notification_account_category.acptDeleteCategory")}
+                </p>
+                {/* {selectedRowData.id} */}
               </div>
-            </Modal>
-          )}
-        
+
+              <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+                <Button
+                  onClick={
+                    () => handleDelete()
+                    // updateState({ isShowAcptDelete: false });
+                  }
+                  className={" border-red-500 bg-red border-2   py-2 px-6"}
+                >
+                  <span className=" text-white-500 ml-1 font-medium uppercase">
+                    {t("button.confirm")}
+                  </span>
+                </Button>
+                <Button
+                  onClick={() => {
+                    updateState({ isShowAcptDelete: false });
+                  }}
+                  className={" border-red-500 bg-white border-2   py-2 px-6"}
+                >
+                  <span className=" text-red-500  ml-1 font-medium uppercase">
+                    {t("button.cancel")}
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {isShowFormNewCategory && (
           <NewCategory
-          visible={isShowFormNewCategory}
-          cancel={() => {
-            updateState({ isShowFormNewCategory: false });
-          }}
-        />
+            visible={isShowFormNewCategory}
+            cancel={() => {
+              updateState({ isShowFormNewCategory: false });
+            }}
+          />
         )}
-        
-        {isShowNoAcptEdit && (
-            <Modal visible={isShowNoAcptEdit}>
-              <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
-                <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-                  {t("notification_account_category.titleEditCategory")}
-                </span>
-                <div className="text-center pt-5 px-2 font-bold text-sm">
-                  <p className="text-red-600 mb-0" dangerouslySetInnerHTML={{ __html: t("notification_account_category.editCategory").replace("1", "<br />") }} />
-                </div>
 
-                <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-                  <Button
-                    onClick={() => {
-                      updateState({ isShowNoAcptEdit: false });
-                    }}
-                    className={" border-red-500 bg-white border-2   py-2 px-6"}
-                  >
-                    <span className=" text-red-500  ml-1 font-medium uppercase">
-                      OK
-                    </span>
-                  </Button>
-                </div>
+        {isShowNoAcptEdit && (
+          <Modal visible={isShowNoAcptEdit}>
+            <div className=" bg-white m-2 py-4 px-5 border-red-500 border-[3px] rounded-2xl  flex  flex-col  ">
+              <span className=" uppercase mx-auto px-auto text-center bg-white-500/80 py-1 px-2 text-red-500 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+                {t("notification_account_category.titleEditCategory")}
+              </span>
+              <div className="text-center pt-5 px-2 font-bold text-sm">
+                <p
+                  className="text-red-600 mb-0"
+                  dangerouslySetInnerHTML={{
+                    __html: t(
+                      "notification_account_category.editCategory"
+                    ).replace("1", "<br />"),
+                  }}
+                />
               </div>
-            </Modal>
-          )}
-        
+
+              <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
+                <Button
+                  onClick={() => {
+                    updateState({ isShowNoAcptEdit: false });
+                  }}
+                  className={" border-red-500 bg-white border-2   py-2 px-6"}
+                >
+                  <span className=" text-red-500  ml-1 font-medium uppercase">
+                    OK
+                  </span>
+                </Button>
+              </div>
+            </div>
+          </Modal>
+        )}
+
         {isShowEditModal && (
           <EditCategory
-          invoicePayment={selectedRowData}
-          visible={isShowEditModal}
-          cancel={() => {
-            updateState({ 
-              isShowEditModal: false,
-              selectedRowData: null 
-            });
-          }}
-        />
-        )} 
+            // invoicePayment={selectedRowData}
+            category={selectedRowData}
+            visible={isShowEditModal}
+            cancel={() => {
+              updateState({
+                isShowEditModal: false,
+                // selectedRowData: null
+              });
+            }}
+          />
+        )}
       </div>
     </div>
   );

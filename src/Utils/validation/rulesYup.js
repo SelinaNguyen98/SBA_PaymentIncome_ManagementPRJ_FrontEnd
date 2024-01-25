@@ -20,6 +20,11 @@ export const createOrderSchema = yup
   })
   .required();
 
+  export const createCategorySchema = yup
+  .object()
+  .shape({
+    name: yup.string().required("Name là bắt buộc"),
+    group_id: yup.string().required("Account Category Group là bắt buộc"),
 export const createPaymentOrderSchema = yup
   .object()
   .shape({
