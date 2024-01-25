@@ -31,6 +31,7 @@ import {
 import "./style.css";
 
 const Order = () => {
+  const controller = new AbortController();
   const { showToast } = useContext(AppContext);
   const { t } = useTranslation();
   const t_order = t;
@@ -226,6 +227,7 @@ const Order = () => {
     };
 
     fetchData();
+    return () => { controller.abort() }
   }, [selectedDate, currentPage_Order, selectedOrderIds]);
 
   //Payment
@@ -345,6 +347,7 @@ const Order = () => {
     };
 
     fetchData();
+    return () => { controller.abort() }
   }, [selectedDate, currentPage_Payment, selectedPaymentIds]);
 
   //Outsourcing
@@ -470,6 +473,7 @@ const Order = () => {
     };
 
     fetchData();
+    return () => { controller.abort() }
   }, [selectedDate, currentPage_Outsourcing, selectedOutsourcingIds]);
 
   return (
@@ -1311,7 +1315,7 @@ const Order = () => {
             isShowFormEditOrder: false,
             selectedRowOrder_Edit: null,
           });
-          fetchData_Order();
+          //fetchData_Order();
         }}
       />
       <EditPaymentManagementForm
@@ -1325,7 +1329,7 @@ const Order = () => {
             isShowFormEditPayment: false,
             selectedRowPayment_Edit: null,
           });
-          fetchData_Payment();
+          //fetchData_Payment();
         }}
       />
       <EditOutsourcingForm
@@ -1339,7 +1343,7 @@ const Order = () => {
             isShowFormEditOutsourcing: false,
             selectedRowOutsourcing_Edit: null,
           });
-          fetchData_Outsourcing();
+          //fetchData_Outsourcing();
         }}
       />
       <DeleteOrder
