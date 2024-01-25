@@ -20,3 +20,21 @@ export const createOrderSchema = yup
   })
   .required();
 
+export const createPaymentOrderSchema = yup
+  .object()
+  .shape({
+    payment_date: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
+  })
+  .required();
+
+export const createOutsourcingSchema = yup
+  .object()
+  .shape({
+    outsourced_date: yup.string().required("Value can not be null!"),
+    outsourced_project: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
+  })
+  .required();
