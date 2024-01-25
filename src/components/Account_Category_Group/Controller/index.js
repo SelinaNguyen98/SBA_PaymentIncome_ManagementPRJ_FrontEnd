@@ -1,13 +1,12 @@
 // frontend/src/controllers/invoiceController.js
 import * as API from "../API/";
-import { callAPI_GetAllGroup } from "../API";
-
-export const getGroup = async (page) => {
+export const getGroup = async (page, name = null, report_type = null) => {
   try {
-    const response = await callAPI_GetAllGroup(
-      page
+    const response = await API.callAPI_GetAllGroup(
+      page,
+      name,
+      report_type
     );
-    // You can perform additional actions with the data if needed
     return response;
   } catch (error) {
     throw error;
