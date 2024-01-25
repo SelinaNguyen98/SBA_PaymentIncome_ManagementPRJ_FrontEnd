@@ -282,6 +282,12 @@ export default function Account_Category() {
       }
     }
 
+    // const filteredData = dataTable?.group.filer((group) => {
+    //   if(selectedOption == "report" {
+    //     return group.report_type.toLowerCase
+    //   })
+    // })
+
     // if (
     //   selectedOption === "report" ||
     //   selectedOption === "account" ||
