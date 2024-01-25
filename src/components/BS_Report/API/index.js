@@ -30,14 +30,16 @@ export function getAllTable(year, setData, controller) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     axios.get(`${API_BASE_URL}/getDataBS`, {
-        signal: controller.signal
-    },
-        {
-            params: {
-                y: year
-            }
+        signal: controller.signal,
+        params: {
+            y: year
+        }
+    }
+    )
+        .then(response => {
+            console.log(response.data)
+            setData(response.data)
         })
-        .then(response => setData(response.data))
 }
 
 // Get tabe monthly khi Bấm nút input
