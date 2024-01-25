@@ -1,0 +1,140 @@
+/* tbody {
+  height: calc(100vh - 310px);
+  table-layout: fixed;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-style: hidden;
+}
+
+thead,
+tbody tr {
+  
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+} */
+
+/* tbody {
+  height: calc(100vh - 310px);
+  table-layout: fixed;
+  display: block;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-style: hidden;
+}
+
+tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+} */
+
+#invoiceDetailTable {
+  margin-top: 8px;
+  width: 100%;
+
+  border: hidden;
+}
+
+#invoiceDetailTable thead {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+#invoiceDetailTable thead th {
+  background-color: #e3edf9;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* #invoiceDetailTable tbody tr:not(:nth-child(1)):not(:last-child) {
+  height: 50px;
+} */
+
+/* #invoiceDetailTable tbody tr:last-child {
+  height: calc(100% - (50px * (n-1)));
+  height: 100%;
+} */
+
+/* border-radius = top left, top right, bottom right, bottom left */
+/* curves the top left */
+/* curves the top right */
+#invoiceDetailTable th:first-child {
+  border-radius: 10px 0 0 10px;
+}
+
+#invoiceDetailTable th:last-child {
+  border-radius: 0 10px 10px 0;
+}
+/* //////////////////////////////////// */
+
+#invoiceDetailTable thead::after {
+  background-color: white;
+  line-height: 0.5rem;
+  content: ".";
+  color: white;
+  display: block;
+}
+
+/* #invoiceDetailTable tbody tr, */
+#invoiceDetailTable tbody td {
+  padding-left: 10px;
+  padding-right: 4px;
+  background-color: #e3edf9;
+  text-align: center;
+  border: 1px solid gray;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+#invoiceDetailTable tbody td input {
+  outline: none;
+  background-color: transparent; /* Thay #your-main-theme-color bằng màu chủ đề của bạn */
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 1537px) {
+  #invoiceDetailTable tbody tr,
+  #invoiceDetailTable tbody td {
+    font-size: 18px;
+    padding: 10px;
+  }
+
+  #invoiceDetailTable thead th {
+    /* padding-top: 1rem;
+    padding-bottom: 1rem; */
+    font-size: 16px;
+  }
+}
+
+/** border body doc trai tren, phai tren
+  xoa border row dau tien
+  */
+#invoiceDetailTable tr:nth-child(1) td:first-child {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding: 5px !important;
+}
+
+/** border body doc trai duoi, phai duoi
+  xoa border row dau cuoi
+  */
+#invoiceDetailTable tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 5px !important;
+}
+
+/* xoa di border o dau va cuoi moi hanmh */
+#invoiceDetailTable tr td:first-child,
+#invoiceDetailTable tr td:last-child {
+  border-style: hidden;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}

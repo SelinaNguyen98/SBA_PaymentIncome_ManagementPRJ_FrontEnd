@@ -1,0 +1,44 @@
+/* .modalRoot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.container {
+  height: 100%;
+  margin-top: 50px;
+  outline: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  opacity: 1;
+}
+
+.confirm {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 5px;
+}
+.title {
+  text-align: center;
+  margin-bottom: 2rem;
+} */
+
+.modalContainer {
+  max-height: 90vh; /* Set a maximum height for the modal container */
+  overflow-y: auto; /* Enable vertical scrolling if needed */
+}
