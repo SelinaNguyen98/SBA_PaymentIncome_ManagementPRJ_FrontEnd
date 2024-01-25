@@ -5,10 +5,10 @@ import Button from "../../../../Utils/Button";
 import { AppContext } from "../../../../Utils/contexts/app.context";
 import { createExChangeRate, getExChangeRateByMonthYear } from "../Controller";
 import {
-   // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   formatFloatToCustomString,
   formatInputToFloatStringSeparator,
-   // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-unused-vars
   formatNumberSeparator,
 } from "../../../../Utils/utils/maths";
 
@@ -121,6 +121,7 @@ export default function ExRateComponent({
             number={jpy}
             setNumber={(value) => updateFormRate({ jpy: value })}
           />
+          USD
           <InputNumber
             number={usd}
             setNumber={(value) => updateFormRate({ usd: value })}

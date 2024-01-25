@@ -15,7 +15,7 @@ export default function EditPaymentForm({
   invoicePayment,
   selectedDate,
   exchangeRateId,
-  triggerData,
+  ok
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
@@ -89,8 +89,7 @@ export default function EditPaymentForm({
     try {
        // eslint-disable-next-line no-unused-vars
       const response = await updatePayment(data);
-      triggerData();
-      cancel()
+      ok()
     } catch (error) {
       console.log(error);
     }

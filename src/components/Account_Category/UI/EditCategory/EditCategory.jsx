@@ -27,7 +27,7 @@ export default function EditCategory({ visible, cancel, category,ok }) {
       const response = await  editCategory(data);
       console.log(response);
       // changeFirstPage();
-      cancel()
+      ok()
     } catch (error) {
       // console.log(error);
       if(
@@ -37,6 +37,7 @@ export default function EditCategory({ visible, cancel, category,ok }) {
       ) {setIsShowNoAcptEdit(true)}
     }
   });
+
   const existingData = {
     // eslint-disable-next-line react/prop-types
     id: category?.id,

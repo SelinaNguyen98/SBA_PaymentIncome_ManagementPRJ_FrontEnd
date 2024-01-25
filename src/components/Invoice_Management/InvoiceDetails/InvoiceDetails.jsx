@@ -651,13 +651,18 @@ export default function InvoiceDetails() {
           selectedDate={selectedDate}
           exchangeRateId={idExRate}
           cancel={() => {
+            updateState({
+              isShowFormEditPayment: false,
+              selectedRowData: null,
+            });
+          }}
+          ok={() => {
             fetchInvoices(page);
             updateState({
               isShowFormEditPayment: false,
               selectedRowData: null,
             });
           }}
-          triggerData={() => {}}
         />
       )}
 

@@ -30,7 +30,7 @@ export default function NewCategory({ visible, cancel, ok }) {
       const response = await  createCategory(data);
       console.log(response);
       // changeFirstPage();
-      cancel()
+      ok()
     } catch (error) {
       console.log(error);
     }
