@@ -25,5 +25,21 @@ export const createOrderSchema = yup
   .shape({
     name: yup.string().required("Name là bắt buộc"),
     group_id: yup.string().required("Account Category Group là bắt buộc"),
+export const createPaymentOrderSchema = yup
+  .object()
+  .shape({
+    payment_date: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
+  })
+  .required();
+
+export const createOutsourcingSchema = yup
+  .object()
+  .shape({
+    outsourced_date: yup.string().required("Value can not be null!"),
+    outsourced_project: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
   })
   .required();

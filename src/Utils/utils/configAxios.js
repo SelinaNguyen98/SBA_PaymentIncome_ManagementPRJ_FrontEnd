@@ -7,16 +7,18 @@ export const paths = {
   GET_PAYMENTS_MONTH_YEAR: "payments",
   PAYMENT: "payments",
   EXCHAGE_RATE: "exchangeRate",
-  PL_REPORT:"getDataPL",
+  PL_REPORT: "getDataPL",
+  GROUP: "groups",
   CATEGORY: "categories",
   GET_ORDER_MONTH_YEAR: "orders",
   DELETE_ORDER: "orders",
-  CREATE_ORDER:"orders",
-  UPDATE_ORDER:"orders",
+  CREATE_ORDER: "orders",
+  UPDATE_ORDER: "orders",
   categoriesPL: "categories",
   ANALYTICS: "analytics",
   PAYMENT_ORDERS: "payment_orders",
   GROUPCATEGORY: "groups"
+  OUTSOURCING:"outsourcing",
 };
 
 // Request interceptor to attach the authentication token to each request

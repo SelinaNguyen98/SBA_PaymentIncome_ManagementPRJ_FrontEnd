@@ -28,6 +28,11 @@ export default function AddOrderForm({
   changeFirstPage,
 }) {
   const t_add_order = t;
+  const [formData, setFormData] = useState({
+    order_date: "",
+    company_name: "",
+    vnd: 0,
+  });
   const {
     register,
     handleSubmit,
@@ -36,6 +41,14 @@ export default function AddOrderForm({
     setError,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createOrderSchema) });
+  const resetForm = () => {
+    setFormData({
+      payment_date: "",
+      company_name: "",
+      vnd: 0,
+    });
+    
+  };
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
     setValue("exchange_rate_id", exchangeRateId);
@@ -45,6 +58,8 @@ export default function AddOrderForm({
       changeFirstPage();
     } catch (error) {
       console.log(error);
+    } finally{
+      resetForm();
     }
   });
 
@@ -68,7 +83,11 @@ export default function AddOrderForm({
     setValue("user_id", localStorage.getItem("user_id") || 1);
     setValue("exchange_rate_id", exchangeRateId);
   }, [selectedDate, setValue]);
-
+  useEffect(() => {
+    setValue("order_date", formData.order_date);
+    setValue("company_name", formData.company_name);
+    setValue("vnd", formData.vnd);
+  }, [formData, setValue]);
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
