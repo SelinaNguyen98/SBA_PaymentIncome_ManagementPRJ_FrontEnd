@@ -144,7 +144,26 @@ export default function GroupDetails() {
       await fetchData();
       console.log(dataTable);
     };
-    setParameters_name(searchTerm)
+    switch (searchTerm) {
+      case "PL_Report":
+        setParameters_name(null);
+        setParameters_report("pl");
+        fetchData();
+        break;
+      case "BS_Report":
+        setParameters_name(null);
+        setParameters_report("bs");
+        fetchData();
+        break;
+      case "allCandidates":
+        setParameters_report(null);
+        setSearchTerm(null);
+        fetchData();
+        break;
+      default:
+        setParameters_name(searchTerm);
+        break;
+    }
     fetchData_Group();
     console.log(searchTerm);
   }, [currentPage, Parameters_name, Parameters_report,searchTerm]);
