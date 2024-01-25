@@ -16,7 +16,9 @@ export const paths = {
   UPDATE_ORDER: "orders",
   categoriesPL: "categories",
   ANALYTICS: "analytics",
-  PAYMENT_ORDERS: "payment_orders"
+  PAYMENT_ORDERS: "payment_orders",
+  GROUPCATEGORY: "groups"
+  OUTSOURCING:"outsourcing",
 };
 
 // Request interceptor to attach the authentication token to each request

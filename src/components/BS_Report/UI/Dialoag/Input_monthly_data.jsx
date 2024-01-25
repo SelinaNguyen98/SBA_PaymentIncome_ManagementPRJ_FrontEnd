@@ -162,7 +162,7 @@ export default function InputMonthlyData({
             {t_translate("button.save")}
           </Button>
         </div>
-        <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+        <div className="max-h-[400px]  max-[1000px]:h-[300px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
           <table id="invoiceTable" className="text-sm">
             <thead>
               <tr>
