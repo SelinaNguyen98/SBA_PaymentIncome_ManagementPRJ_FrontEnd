@@ -39,7 +39,8 @@
     "input_monthly_data": "月毎野データ入力",
     "input_balance_from_previous_year": "前年度繰越入力",
     "Login": "ログイン",
-    "Log_out": "ログアウト"
+    "Log_out": "ログアウト",
+    "Select_all":"すべて選択！"
   },
   "header_table_order": {
     "order_date": "受注日",
