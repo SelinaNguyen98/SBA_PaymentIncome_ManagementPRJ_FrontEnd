@@ -3,11 +3,12 @@
 import { callAPI_GetAllCategory, callApi_createCategory, callApi_editCategory, callApi_getGroupCategory } from "../API";
 import { callAPI_deleteByID } from "../API";
 
- export const getCategory = async (page) => {
+ export const getCategory = async (page, newfilter) => {
    // eslint-disable-next-line no-useless-catch
    try {
      const response = await callAPI_GetAllCategory(
-       page
+       page,
+       newfilter
      );
      return response;
    } catch (error) {

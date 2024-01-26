@@ -2,9 +2,7 @@
 /* eslint-disable no-unused-vars */
 import "../../../Utils/style.css";
 import { useTranslation } from "react-i18next";
-
 import Button from "../../../Utils/Button";
-import InvoiceDetailFooter from "./InvoicDetailFooter/InvoiceDetailFooter";
 import "./styles.css";
 import { useContext, useEffect, useState, useRef } from "react";
 import { AppContext } from "../../../Utils/contexts/app.context";
@@ -14,13 +12,17 @@ import EditCategory from "./EditCategory/EditCategory";
 import { deleteCategory, getCategory, getGroupCategory } from "../Controller";
 import Pagination from "../../../Utils/Pagination";
 
+const feild = {
+  allCandidates: "allCandidates",
+  report: "report",
+  group: "group",
+};
+
 export default function Account_Category() {
-  const { isShowAsideFilter } = useContext(AppContext);
+  // const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
-  const [dataChangeTrigger, setDataChangeTrigger] = useState(false);
   const { showToast } = useContext(AppContext);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
-
   const [state, setState] = useState({
     isShowConfirmModal: false,
     isShowFormNewCategory: false,
@@ -34,7 +36,6 @@ export default function Account_Category() {
     isShowConfirmModal,
     isShowFormNewCategory,
     isShowEditModal,
-    // isShowDeleteModal,
     isShowAcptDelete,
     isShowNoAcptEdit,
   } = state;
@@ -46,13 +47,14 @@ export default function Account_Category() {
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
   });
-  const {
-    totalPage,
-    dataTable,
-    selectedListRowsData,
-    isSelectedAllDataInvoice,
-    page,
-  } = stateTable;
+  // const {
+  //   totalPage,
+  //   dataTable,
+  //   selectedListRowsData,
+  //   isSelectedAllDataInvoice,
+  //   page,
+  // } = stateTable;
+  
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
   const isFilterApplied = useRef(false);
@@ -60,20 +62,25 @@ export default function Account_Category() {
     isFilterApplied.current = false;
     updateStateTable({ page: page });
   }
-  // const { isShowEditModal, isShowDeleteModal } = states;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState("allCandidates");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const [selectedRows_Category, setSelectedRows_Category] = useState([]);
+  // const [selectedRows_Category, setSelectedRows_Category] = useState([]);
   const [currentPage_Category, setCurrentPage_Category] = useState(1);
   const [totalPages_Category, setTotalPages_Category] = useState(1);
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
+  // const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
   const [dataCategory, setDataCategory] = useState([]);
-  const [selectAllPages_Category, setSelectAllPages_Category] = useState([
-    false,
-  ]);
-  const handleChangePage_Category = (newPage) => {
+
+  const [filer, setFilter] = useState({
+    name: null,
+    group_id: null,
+    report_type: null,
+    search: null,
+  });
+
+  const handleChangePage_Category = (newPage, filer) => {
+    fetchCategory(newPage, filer);
     setCurrentPage_Category(newPage);
   };
 
@@ -81,7 +88,6 @@ export default function Account_Category() {
     try {
       if (selectedRowData?.id == null || selectedRowData?.id == undefined)
         // throw new Error("");
-
         return;
 
       const response = await deleteCategory(selectedRowData?.id);
@@ -91,15 +97,17 @@ export default function Account_Category() {
       //    1.2 nê dau tien cua trang 1 thi set ve 1
       // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
 
-      // if(dataTable?.payments.length == 1 && page >= totalPage &&  )
-      // if (page == totalPage && dataTable?.payments.length == 1 && page != 1) {
-      //   changePage(page - 1);
+      // if(dataCategory.length == 1 && currentPage_Category >= totalPages_Category &&  )
+      // if (currentPage_Category == totalPages_Category && dataCategory.length == 1 && currentPage_Category != 1) {
+      //   handleChangePage_Category(currentPage_Category - 1);
       //   return;
       // }
-      // setDataChangeTrigger(!dataChangeTrigger);
-
-      // updateStateTable({ isShowAcptDelete: false });
+      if (currentPage_Category == totalPages_Category && dataCategory.length == 1 && currentPage_Category != 1) {
+        handleChangePage_Category(currentPage_Category - 1);
+        return;
+    }
       showToast.success("Delete  successfully!");
+      trigger()
       console.log(response);
     } catch (error) {
       if (
@@ -113,96 +121,57 @@ export default function Account_Category() {
     }
   };
 
+  const [triggerData, setTriggerData] = useState(false)
+
+  const trigger = () => {
+    setTriggerData((prev)=> !prev) 
+  }
 
   useEffect(() => {
     try {
-      fetchCategory();
+      fetchCategory(currentPage_Category, "");
       fetchGetCategoriesPL();
     } catch (error) {
       console.log(error);
     }
-  }, [currentPage_Category]);
+  }, [currentPage_Category, triggerData]);
 
-  const fetchCategory = async () => {
+  const fetchCategory = async (newPage, filer) => {
     try {
-      const response = await getCategory(currentPage_Category);
-      console.log(response);
+      const response = await getCategory(newPage || 1, filer);
 
-      if (response.orders === null) {
-        setTotalPages_Category(1);
-        setCurrentPage_Category(1);
-      } else {
-        setDataCategory((prevData) => {
-          console.log("Previous Data:", prevData);
-          return response.categories || [];
-        });
-        setTotalPages_Category(response.pagination.total_pages);
-      }
+      setDataCategory(response.categories || []);
+      setTotalPages_Category(response.pagination.total_pages);
     } catch (error) {
+      setTotalPages_Category(1);
+      setCurrentPage_Category(1);
       console.log(error);
     }
   };
 
-  const fetchCategoryByReport = async () => {
-    try {
-      const response = await getCategory(currentPage_Category );
-      console.log(response);
+  // const handleOptionChange = (event) => {
+  //   const newSelectedOption = event.target.value;
+  //   // Reset the search term when a new option is selected
+  //   setSearchTerm("");
+  //   // Update the selected option state
+  //   setSelectedOption(newSelectedOption);
+  //   // Add any other logic you need based on the selected option
+  //   // ...
+  // };
+  // const handleSearchChange = (event) => {
+  //   // Update the search term state
+  //   setSearchTerm(event.target.value);
+  //   // Add any other logic you need based on the search term
+  //   // ...
+  // };
 
-      if (response.orders === null) {
-        setTotalPages_Category(1);
-        setCurrentPage_Category(1);
-      } else {
-        setDataCategory((prevData) => {
-          console.log("Previous Data:", prevData);
-          return response.categories || [];
-        });
-        setTotalPages_Category(response.pagination.total_pages);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-
-  function handleSelectAll() {
-    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
-    const checkboxes = document.querySelectorAll('input[name="tb_no"]');
-
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = selectAllCheckbox.checked;
-    });
-  }
-
-  const handleOptionChange = (event) => {
-    const newSelectedOption = event.target.value;
-    // Reset the search term when a new option is selected
-    setSearchTerm("");
-    // Update the selected option state
-    setSelectedOption(newSelectedOption);
-    // Add any other logic you need based on the selected option
-    // ...
-  };
-  const handleSearchChange = (event) => {
-    // Update the search term state
-    setSearchTerm(event.target.value);
-    // Add any other logic you need based on the search term
-    // ...
-  };
-
-  const filterCategories = [
-    { label: t("titlePage.allCandidates"), value: "allCandidates" },
-    // { label: t("titlePage.accountCategory"), value: "account" },
-    { label: t("titlePage.thGroup"), value: "group" },
-    { label: t("titlePage.reportType"), value: "report" },
-  ];
-  // const filterCategories1 = [
+  // const filterCategories = [
   //   { label: t("titlePage.allCandidates"), value: "allCandidates" },
-  //   { label: t("titlePage.accountCategory"), value: "account" },
   //   { label: t("titlePage.thGroup"), value: "group" },
   //   { label: t("titlePage.reportType"), value: "report" },
   // ];
 
-  const [filer, setFilter] =useState(null)
+  // const [filer, setFilter] =useState(null)
   const [groups, setGroups] = useState([]);
   const fetchGetCategoriesPL = async () => {
     try {
@@ -214,21 +183,86 @@ export default function Account_Category() {
     }
   };
 
+  const handleOptionChange = (event) => {
+    const newSelectedOption = event.target.value;
+    let newFilter = {
+      name: null,
+      group_name: null,
+      report_type: null,
+      search: null,
+    };
+    // Reset the search term when a new option is selected
+    setSearchTerm("");
+    // Update the selected option state
+    setSelectedOption(newSelectedOption);
+
+    switch (newSelectedOption) {
+      case feild.report: {
+        newFilter = {
+          name: null,
+          group_name: null,
+          report_type: "pl",
+          search: null,
+        };
+        break;
+      }
+    }
+
+    setFilter(newFilter);
+    handleChangePage_Category(1, newFilter);
+  };
+
+  const handleOptionReportChange = (event) => {
+    const reportType = event.target.value;
+    console.log(reportType);
+    let newFilter = {
+      name: null,
+      group_id: null,
+      report_type: reportType,
+      search: null,
+    };
+
+    setFilter(newFilter);
+    handleChangePage_Category(1, newFilter);
+  };
+
+  const handleOptionGroupChange = (event) => {
+    const groupId = event.target.value;
+    console.log(groupId);
+    let newFilter = {
+      name: null,
+      group_id: groupId,
+      report_type: null,
+      search: null,
+    };
+
+    // Reset the search term when a new option is selected
+    setFilter(newFilter);
+    handleChangePage_Category(1, newFilter);
+  };
+
+  const handleClickSearch = () => {
+    let newFilter = {
+      name: null,
+      group_id: null,
+      report_type: null,
+      search: searchTerm,
+    };
+
+    // Reset the search term when a new option is selected
+    setFilter(newFilter);
+    handleChangePage_Category(1, newFilter);
+  };
+
+  
   const renderSearchInput = () => {
     switch (selectedOption) {
       case "report": {
         return (
           <select
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{
-              width: "35vw",
-              height: "50px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "0px 10px 10px 0px",
-              border: "1px solid #ccc",
-            }}
+            onChange={handleOptionReportChange}
+            className=" outline-none w-[35vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
+            focus-within:shadow-md transition-shadow duration-250 "
           >
             <option value={"pl"}>Profit and Loss Report</option>
             <option value={"bs"}>Balance Sheet Report</option>
@@ -239,98 +273,47 @@ export default function Account_Category() {
       case "group": {
         return (
           <select
-            value={searchTerm}
-            onChange={handleSearchChange}
-            style={{
-              width: "35vw",
-              height: "50px",
-              backgroundColor: "white",
-              color: "black",
-              borderRadius: "0px 10px 10px 0px",
-              border: "1px solid #ccc",
-            }}
+            onChange={handleOptionGroupChange}
+            className=" outline-none w-[35vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
+            focus-within:shadow-md transition-shadow duration-250 "
           >
-             <option value="" disabled></option>
-                {groups.map((group, index) => {
-                  return (
-                    <option value={group?.id} key={index} >
-                      {group?.name}
-                    </option>
-                  );
-                })}
+            <option value="" disabled></option>
+            {groups.map((group, index) => {
+              return (
+                <option value={group?.id} key={index}>
+                  {group?.name}
+                </option>
+              );
+            })}
           </select>
         );
       }
 
-      case "allCandidates" : {
-        return(
-          <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          placeholder={t("titlePage.searchPlaceholder")}
-          style={{
-            padding: "8px 30px 8px 10px",
-            width: "35vw",
-            height: "50px",
-            borderRadius: "0 10px 10px 0",
-            border: "1px solid #ccc",
-            display: "block",
-          }}
-        />
-        )
+      case "allCandidates" :
+      case "" :  
+      {
+        return (
+          <div
+            className=" w-[35vw] h-[50px] pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
+            focus-within:shadow-md transition-shadow duration-250 "
+          >
+            <input
+              type="text"
+              className=" flex-1 outline-none  "
+              value={searchTerm}
+              onChange={(event) => setSearchTerm(event.target.value)}
+              placeholder={t("titlePage.searchPlaceholder")}
+            />
+            <button
+              className=" ml-auto w-[50px] transition-transform hover:scale-125 "
+              onClick={handleClickSearch}
+            >
+              🔍
+            </button>
+          </div>
+        );
       }
     }
-
-    // const filteredData = dataTable?.group.filer((group) => {
-    //   if(selectedOption == "report" {
-    //     return group.report_type.toLowerCase
-    //   })
-    // })
-
-    // if (
-    //   selectedOption === "report" ||
-    //   selectedOption === "account" ||
-    //   selectedOption === "group"
-    // ) {
-    //   return (
-    //     <select
-    //       value={searchTerm}
-    //       onChange={handleSearchChange}
-    //       style={{
-    //         width: "35vw",
-    //         height: "50px",
-    //         backgroundColor: "white",
-    //         color: "black",
-    //         borderRadius: "0px 10px 10px 0px",
-    //         border: "1px solid #ccc",
-    //       }}
-    //     >
-    //       {filterCategories1.map((category) => (
-    //         <option key={category.value} value={category.value}>
-    //           {category.label}
-    //         </option>
-    //       ))}
-    //     </select>
-    //   );
-    // } else {
-    //   return (
-    //     <input
-    //       type="text"
-    //       value={searchTerm}
-    //       onChange={handleSearchChange}
-    //       placeholder={t("titlePage.searchPlaceholder")}
-    //       style={{
-    //         padding: "8px 30px 8px 10px",
-    //         width: "35vw",
-    //         height: "50px",
-    //         borderRadius: "0 10px 10px 0",
-    //         border: "1px solid #ccc",
-    //         display: "block",
-    //       }}
-    //     />
-    //   );
-    // }
   };
 
   return (
@@ -339,12 +322,12 @@ export default function Account_Category() {
         id="contentInvoiceDetail"
         className={` relative bg-main-theme pb-5 col-span-full`}
       >
-        <div
+        {/* <div
           id="contentInvoiceDetail"
           className={`relative bg-main-theme pb-5     ${
             isShowAsideFilter ? "col-span-10" : "col-span-full"
           }`}
-        ></div>
+        ></div> */}
 
         {/* Lable */}
         <div className="mt-1 px-6 flex flex-shrink-0 items-center ">
@@ -394,42 +377,43 @@ export default function Account_Category() {
                 borderRadius: "10px 0px 0px 10px",
               }}
             >
-              {filterCategories.map((category) => (
                 <option
-                  key={category.value}
-                  value={category.value}
+                  key={1}
+                  value={"allCandidates"}
                   style={{
                     backgroundColor:
-                      selectedOption === category.value ? "white" : "white",
+                      selectedOption === "allCandidates" ? "white" : "white",
                     color: "black",
                   }}
                 >
-                  {category.label}
+                  {t("titlePage.allCandidates")}
                 </option>
-              ))}
+                <option
+                  key={2}
+                  value={"group"}
+                  style={{
+                    backgroundColor: selectedOption === "group" ? "white" : "white",
+                    color: "black",
+                  }}
+                >
+                  {t("titlePage.thGroup")}
+                </option>
+                <option
+                  key={3}
+                  value={"report"}
+                  style={{
+                    backgroundColor:
+                      selectedOption === "report" ? "white" : "white",
+                    color: "black",
+                  }}
+                >
+                  {t("titlePage.reportType")}
+                </option>
             </select>
             {/* </div> */}
             <div style={{ position: "relative", display: "inline-block" }}>
               {renderSearchInput()}
             </div>
-            
-            <span
-              style={{
-                position: "absolute",
-                top: "50%",
-                right: "10px",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-              }}
-            >
-              {selectedOption === "report"
-                ? ""
-                : selectedOption === "account"
-                ? ""
-                : selectedOption === "group"
-                ? ""
-                : "🔍"}
-            </span>
           </div>
         </div>
 
@@ -456,7 +440,7 @@ export default function Account_Category() {
               {t("button.add")}
             </Button>
 
-            <Button
+            {/* <Button
               onClick={() => {
                 updateState({ isShowConfirmModal: true });
               }}
@@ -477,7 +461,7 @@ export default function Account_Category() {
               }
             >
               {t("button.delete")}
-            </Button>
+            </Button> */}
           </div>
 
           {/* table data */}
@@ -486,12 +470,12 @@ export default function Account_Category() {
               <tr>
                 <th className=" w-[1%]"></th>
                 <th className=" w-[1%]">
-                  <input
+                  {/* <input
                     type="checkbox"
                     className=""
                     id="selectAllCheckbox"
                     onClick={handleSelectAll}
-                  />
+                  /> */}
                 </th>
                 <th className=" w-[4%]">{t("titlePage.thNO")}</th>
                 <th className=" w-[30%]">{t("titlePage.thName")}</th>
@@ -517,7 +501,7 @@ export default function Account_Category() {
                       className="text-left w-[1%] border-r-0 custom-no-border"
                       name="tb_no"
                     >
-                      <input type="checkbox" name="tb_no" />
+                      {/* <input type="checkbox" name="tb_no" /> */}
                     </td>
                     <td
                       className=" w-[4%] border-none custom-no-border"
@@ -536,7 +520,12 @@ export default function Account_Category() {
                       {category?.group_name}
                     </td>
                     <td className=" w-[28%]" name="tb_report">
-                      {category?.report_type}
+                      {category?.report_type == "pl"
+                          ? "Profit and Loss Report"
+                          : null}
+                        {category?.report_type == "bs"
+                          ? "Balance Sheet Report"
+                          : null}
                     </td>
                     <td className=" w-[16%]" name="tb_action">
                       <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
@@ -544,13 +533,6 @@ export default function Account_Category() {
                           onClick={() => {
                             setSelectedRowData(category);
                             updateState({ isShowEditModal: true });
-                            // if (1) {
-                            //   updateState({ isShowEditModal: true });
-                            //   // updateStateTable({ selectedRowData: category });
-                            // } else {
-                            //   updateState({ isShowNoAcptEdit: true });
-                            //   // updateStateTable({ selectedRowData: category });
-                            // }
                           }}
                         >
                           <svg
@@ -577,13 +559,6 @@ export default function Account_Category() {
                           onClick={() => {
                             setSelectedRowData(category);
                             updateState({ isShowAcptDelete: true });
-                            // if (0) {
-                            //   updateState({ isShowDeleteModal: true });
-                            //   updateStateTable({ selectedRowData: category })
-                            // } else {
-                            //   updateState({ isShowAcptDelete: true });
-                            //   updateStateTable({ selectedRowData: category })
-                            // }
                           }}
                         >
                           <svg
@@ -616,7 +591,7 @@ export default function Account_Category() {
           </table>
           {/* <InvoiceDetailFooter />   */}
           <Pagination
-            changePage={handleChangePage_Category}
+            changePage={(value) => handleChangePage_Category(value, filer)}
             page={currentPage_Category}
             totalPage={totalPages_Category}
           />
@@ -634,7 +609,7 @@ export default function Account_Category() {
                   dangerouslySetInnerHTML={{
                     __html: t(
                       "notification_account_category.deleteCategory"
-                    ).replace("1", "<br />"),
+                    ).replace("1", "<br />"), 
                   }}
                 />
               </div>
@@ -737,6 +712,12 @@ export default function Account_Category() {
             visible={isShowFormNewCategory}
             cancel={() => {
               updateState({ isShowFormNewCategory: false });
+              trigger()
+            }}
+            ok={() => {
+              handleChangePage_Category(1, filer);
+              updateState({ isShowFormNewCategory: false });
+              // trigger()
             }}
           />
         )}
@@ -784,7 +765,12 @@ export default function Account_Category() {
                 isShowEditModal: false,
                 // selectedRowData: null
               });
+              trigger()
             }}
+              ok={() => {
+                handleChangePage_Category( currentPage_Category, filer);
+                updateState({ isShowEditModal: false });
+                }}
           />
         )}
       </div>
