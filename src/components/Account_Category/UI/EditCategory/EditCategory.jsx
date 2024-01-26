@@ -70,7 +70,9 @@ export default function EditCategory({ visible, cancel, category,ok }) {
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
         <span className=" uppercase  py-1 mx-auto my-3 px-12 text-center bg-white-500/80    font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
+
           {t("notification_account_category.titleEditCategory")}
+
         </span>
 
         <form className="px-4 mt-5" onSubmit={onSubmit}>
@@ -118,7 +120,6 @@ export default function EditCategory({ visible, cancel, category,ok }) {
               </div>
             </div>
           </div>
-
           <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             type="submit"

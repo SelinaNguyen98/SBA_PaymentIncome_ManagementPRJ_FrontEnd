@@ -3,12 +3,18 @@
 import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 import * as API from "../API";
 
-export const getPaymentsByYearAndMonths = async (month, year, page) => {
+export const getPaymentsByYearAndMonths = async (
+  month,
+  year,
+  page,
+  controller
+) => {
   try {
     const response = await API.callAPI_GetPaymentsYearAndMonths(
       month,
       year,
-      page
+      page,
+      controller
     );
     return response;
   } catch (error) {
@@ -35,11 +41,12 @@ export const deleteInvoiceByIds = async (invoiceIds) => {
   }
 };
 
-export const getExChangeRateByMonthYear = async (month, year) => {
+export const getExChangeRateByMonthYear = async (month, year, controller) => {
   try {
     const response = await API.callApi_getExchagerateByMonthAndYear(
       month,
-      year
+      year,
+      controller
     );
     return [response.status, response.data];
   } catch (error) {

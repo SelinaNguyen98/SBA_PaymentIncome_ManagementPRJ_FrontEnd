@@ -13,7 +13,6 @@ import {
 } from "../../../../Utils/utils/maths";
 
 export default function ExRateComponent({
-  
   // eslint-disable-next-line react/prop-types
   t,
   // eslint-disable-next-line react/prop-types
@@ -22,6 +21,7 @@ export default function ExRateComponent({
   triggerData,
   // eslint-disable-next-line react/prop-types
   updateParentIdExRate,
+  controller,
 }) {
   const [dataFormExRate, setFormExRate] = useState({
     idExRate: null,
@@ -57,7 +57,7 @@ export default function ExRateComponent({
           idExRate
         );
         console.log(response);
-        updateParentIdExRate(response?.id || null);
+        updateParentIdExRate(idExRate || response?.id || null);
 
         showToast.success(response?.message);
         triggerData();
@@ -72,7 +72,8 @@ export default function ExRateComponent({
         // eslint-disable-next-line react/prop-types
         selectedDate.getMonth() + 1,
         // eslint-disable-next-line react/prop-types
-        selectedDate.getFullYear()
+        selectedDate.getFullYear(),
+        controller
       );
       console.log(response);
       // Khong co gia tri duoc lay ta

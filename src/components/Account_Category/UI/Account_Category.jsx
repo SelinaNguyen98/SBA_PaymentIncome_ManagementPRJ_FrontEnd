@@ -12,17 +12,20 @@ import EditCategory from "./EditCategory/EditCategory";
 import { deleteCategory, getCategory, getGroupCategory } from "../Controller";
 import Pagination from "../../../Utils/Pagination";
 
+
 const feild = {
   allCandidates: "allCandidates",
   report: "report",
   group: "group",
 };
 
+
 export default function Account_Category() {
   // const { isShowAsideFilter } = useContext(AppContext);
   const { t } = useTranslation();
   const { showToast } = useContext(AppContext);
   const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+
   const [state, setState] = useState({
     isShowConfirmModal: false,
     isShowFormNewCategory: false,
@@ -36,6 +39,7 @@ export default function Account_Category() {
     isShowConfirmModal,
     isShowFormNewCategory,
     isShowEditModal,
+
     isShowAcptDelete,
     isShowNoAcptEdit,
   } = state;
@@ -47,7 +51,16 @@ export default function Account_Category() {
     selectedListRowsData: [],
     isSelectedAllDataInvoice: false,
   });
+
   
+  const {
+    totalPage,
+    dataTable,
+    selectedListRowsData,
+    isSelectedAllDataInvoice,
+    page,
+  } = stateTable;
+
   const updateStateTable = (dataTable) =>
     setStateTable(() => ({ ...stateTable, ...dataTable }));
   const isFilterApplied = useRef(false);
@@ -55,10 +68,12 @@ export default function Account_Category() {
     isFilterApplied.current = false;
     updateStateTable({ page: page });
   }
+
   const updateState = (data) => setState(() => ({ ...state, ...data }));
   const [selectedOption, setSelectedOption] = useState("allCandidates");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRowData, setSelectedRowData] = useState(null);
+
   // const [selectedRows_Category, setSelectedRows_Category] = useState([]);
   const [currentPage_Category, setCurrentPage_Category] = useState(1);
   const [totalPages_Category, setTotalPages_Category] = useState(1);
@@ -74,6 +89,7 @@ export default function Account_Category() {
 
   const handleChangePage_Category = (newPage, filer) => {
     fetchCategory(newPage, filer);
+
     setCurrentPage_Category(newPage);
   };
 
@@ -81,6 +97,7 @@ export default function Account_Category() {
     try {
       if (selectedRowData?.id == null || selectedRowData?.id == undefined)
         // throw new Error("");
+
         return;
 
       const response = await deleteCategory(selectedRowData?.id);
@@ -89,6 +106,7 @@ export default function Account_Category() {
       //    1.1 neu dau tien  cua trang >1 thi  set page ve page - 1
       //    1.2 nê dau tien cua trang 1 thi set ve 1
       // 2. Kiem tra neu khong phai dong dau tien thi loafd lai vs dataTriger thay doi
+
 
       // if(dataCategory.length == 1 && currentPage_Category >= totalPages_Category &&  )
       // if (currentPage_Category == totalPages_Category && dataCategory.length == 1 && currentPage_Category != 1) {
@@ -101,6 +119,7 @@ export default function Account_Category() {
     }
       showToast.success("Delete  successfully!");
       trigger()
+
       console.log(response);
     } catch (error) {
       if (
@@ -123,17 +142,22 @@ export default function Account_Category() {
   useEffect(() => {
     try {
       fetchCategory(currentPage_Category, "");
+
       fetchGetCategoriesPL();
     } catch (error) {
       console.log(error);
     }
+
   }, [currentPage_Category, triggerData]);
+
 
   const fetchCategory = async (newPage, filer) => {
     try {
       const response = await getCategory(newPage || 1, filer);
       setDataCategory(response.categories || []);
       setTotalPages_Category(response.pagination.total_pages);
+
+
     } catch (error) {
       setTotalPages_Category(1);
       setCurrentPage_Category(1);
@@ -141,16 +165,30 @@ export default function Account_Category() {
     }
   };
 
+
   const [groups, setGroups] = useState([]);
   const fetchGetCategoriesPL = async () => {
     try {
       const response = await getGroupCategory();
       setGroups(response.groups);
       console.log(response.groups);
+
     } catch (error) {
       console.log(error);
     }
   };
+
+
+
+  function handleSelectAll() {
+    const selectAllCheckbox = document.getElementById("selectAllCheckbox");
+    const checkboxes = document.querySelectorAll('input[name="tb_no"]');
+
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = selectAllCheckbox.checked;
+    });
+  }
+
 
   const handleOptionChange = (event) => {
     const newSelectedOption = event.target.value;
@@ -207,6 +245,7 @@ export default function Account_Category() {
     handleChangePage_Category(1, newFilter);
   };
 
+
   const handleClickSearch = () => {
     let newFilter = {
       name: null,
@@ -220,14 +259,17 @@ export default function Account_Category() {
   };
 
   
+
   const renderSearchInput = () => {
     switch (selectedOption) {
       case "report": {
         return (
           <select
+
             onChange={handleOptionReportChange}
             className=" outline-none w-[35vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
             focus-within:shadow-md transition-shadow duration-250 "
+
           >
             <option value={"pl"}>Profit and Loss Report</option>
             <option value={"bs"}>Balance Sheet Report</option>
@@ -238,6 +280,7 @@ export default function Account_Category() {
       case "group": {
         return (
           <select
+
             onChange={handleOptionGroupChange}
             className=" outline-none w-[35vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
             focus-within:shadow-md transition-shadow duration-250 "
@@ -250,9 +293,11 @@ export default function Account_Category() {
                 </option>
               );
             })}
+
           </select>
         );
       }
+
 
       case "allCandidates" :
       case "" :  
@@ -277,8 +322,53 @@ export default function Account_Category() {
             </button>
           </div>
         );
+
       }
     }
+
+    // if (
+    //   selectedOption === "report" ||
+    //   selectedOption === "account" ||
+    //   selectedOption === "group"
+    // ) {
+    //   return (
+    //     <select
+    //       value={searchTerm}
+    //       onChange={handleSearchChange}
+    //       style={{
+    //         width: "35vw",
+    //         height: "50px",
+    //         backgroundColor: "white",
+    //         color: "black",
+    //         borderRadius: "0px 10px 10px 0px",
+    //         border: "1px solid #ccc",
+    //       }}
+    //     >
+    //       {filterCategories1.map((category) => (
+    //         <option key={category.value} value={category.value}>
+    //           {category.label}
+    //         </option>
+    //       ))}
+    //     </select>
+    //   );
+    // } else {
+    //   return (
+    //     <input
+    //       type="text"
+    //       value={searchTerm}
+    //       onChange={handleSearchChange}
+    //       placeholder={t("titlePage.searchPlaceholder")}
+    //       style={{
+    //         padding: "8px 30px 8px 10px",
+    //         width: "35vw",
+    //         height: "50px",
+    //         borderRadius: "0 10px 10px 0",
+    //         border: "1px solid #ccc",
+    //         display: "block",
+    //       }}
+    //     />
+    //   );
+    // }
   };
 
   return (
@@ -292,7 +382,9 @@ export default function Account_Category() {
           className={`relative bg-main-theme pb-5     ${
             isShowAsideFilter ? "col-span-10" : "col-span-full"
           }`}
+
         ></div> */}
+
 
         {/* Lable */}
         <div className="mt-1 px-2.5 flex flex-shrink-0 items-center ">
@@ -323,20 +415,24 @@ export default function Account_Category() {
               position: "relative",
             }}
           ></div>
+
           {/* <div style={{ display: "flex", alignItems: "center" }}> */}
           <div
             style={{
               position: "relative",
               display: "flex",
               alignItems: "center",
+
               width: "60%", // Adjust the width as needed
               maxWidth: "400px"
+
             }}
           >
             <select
               id="categoryFilter"
               value={selectedOption}
               onChange={handleOptionChange}
+
               style={{
                 width: "40%",
                 height: "50px",
@@ -382,6 +478,7 @@ export default function Account_Category() {
             <div style={{ position: "relative", display: "inline-block", width: "0%" }}>
               {renderSearchInput()}
             </div>
+
           </div>
         </div>
 
@@ -501,6 +598,7 @@ export default function Account_Category() {
                           onClick={() => {
                             setSelectedRowData(category);
                             updateState({ isShowEditModal: true });
+
                           }}
                         >
                           <svg
@@ -565,6 +663,7 @@ export default function Account_Category() {
               totalPage={totalPages_Category}
             />
           </div>
+
         </div>
 
         {isShowConfirmModal && (
@@ -580,6 +679,8 @@ export default function Account_Category() {
                     __html: t(
                       "notification_account_category.deleteCategory"
                     ).replace("1", "<br />"), 
+
+
                   }}
                 />
               </div>
@@ -648,6 +749,7 @@ export default function Account_Category() {
                   {t("notification_account_category.acptDeleteCategory")}
                 </p>
                 {/* {selectedRowData.id} */}
+
               </div>
 
               <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
@@ -673,6 +775,7 @@ export default function Account_Category() {
                   </span>
                 </Button>
               </div>
+
             </div>
           </Modal>
         )}
@@ -688,6 +791,7 @@ export default function Account_Category() {
               handleChangePage_Category(1, filer);
               updateState({ isShowFormNewCategory: false });
               // trigger()
+
             }}
           />
         )}
@@ -735,6 +839,7 @@ export default function Account_Category() {
                 isShowEditModal: false,
                 // selectedRowData: null
               });
+
               trigger()
             }}
               ok={() => {

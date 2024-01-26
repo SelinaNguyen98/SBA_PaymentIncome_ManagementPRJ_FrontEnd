@@ -1,14 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../Utils/Button";
-import "../../../Utils/style.css";
 import "../UI/index.css"
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
-import "../../Invoice_Management/InvoiceDetails/styles.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import "../../../Utils/style.css";
 import Form_InputMonthlyData from "./Dialoag/Input_monthly_data";
 import Form_InputBalanceYeatData from "./Dialoag/Input_balance_from_previous_year";
 import * as API from "../API/index"
@@ -289,8 +286,11 @@ const BS_Report = () => {
 
   const controller = new AbortController();
   useEffect(() => {
-    API.getAllTable(selectedYearExport.getFullYear(), setDataBS,controller)
-    return () => { controller.abort() }
+    API.getAllTable(selectedYearExport.getFullYear(), setDataBS, controller)
+    return () => {
+      controller.abort()
+      setDataBS([])
+    }
   }, [selectedYearExport])
   let idx = 1
 
@@ -384,9 +384,9 @@ const BS_Report = () => {
                   </div>
                 </div>
                 {/* table data */}
-                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full">
-                  <table id="invoiceTable" className="text-sm">
-                    <thead>
+                <div className="max-h-[500px] max-[700px]:max-h-[450px] overflow-y-auto overflow-x-auto mt-4 text-sm w-full relative">
+                  <table id="BSreport" className="text-sm">
+                    <thead className="sticky top-0 bg-white z-4 w-full">
                       <tr>
                         <th className="w-[1px]"></th>
                         <th className="w-[2px]">No</th>
@@ -414,6 +414,7 @@ const BS_Report = () => {
                         </th>
                         <th className="w-[1px]"></th>
                       </tr>
+                      <tr id="td-mt"></tr>
                     </thead>
 
                     <tbody className="">

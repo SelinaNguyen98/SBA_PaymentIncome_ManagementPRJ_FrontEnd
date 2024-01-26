@@ -39,7 +39,8 @@
     "input_monthly_data": "INPUT MONTHLY DATA",
     "input_balance_from_previous_year": "INPUT BALANCE FROM PREVIOUS YEAR",
     "Login": "Login",
-    "Log_out": "Log out"
+    "Log_out": "Log out",
+    "Select_all":"Select all!"
   },
   "header_table_order": {
     "order_date": "Order date",
