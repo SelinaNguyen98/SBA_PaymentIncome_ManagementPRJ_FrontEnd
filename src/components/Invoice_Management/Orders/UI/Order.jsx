@@ -474,25 +474,15 @@ const Order = () => {
     return () => { controller.abort() }
   }, [currentPage_Outsourcing, selectedOutsourcingIds]);
   
-
-  const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  };
-  const debouncedFetchData = debounce(async () => {
-    await fetchExchangeRate();
-    fetchData_Order();
-    fetchData_Payment();
-    fetchData_Outsourcing();
-  }, 100); // Adjust the delay as needed
-  
   useEffect(() => {
-    debouncedFetchData();
+    const fetchData = async () => {
+      await fetchExchangeRate();
+      fetchData_Order();
+      fetchData_Payment();
+      fetchData_Outsourcing();
+    };
+    fetchData();
+    return () => { controller.abort() }
   }, [selectedDate]);
 
   return (
