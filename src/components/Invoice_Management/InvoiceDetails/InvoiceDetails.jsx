@@ -208,8 +208,10 @@ export default function InvoiceDetails() {
 
   useEffect(() => {
     console.log("First render");
-    fetchInvoices(1);
 
+    setTimeout(() => {
+    fetchInvoices(1);
+  }, 1000);
     return () => {
       controller.abort();
     };

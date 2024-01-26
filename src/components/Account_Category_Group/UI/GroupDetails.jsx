@@ -27,7 +27,7 @@ export default function GroupDetails() {
   const handleSearchChange = (event) => {
     const newSearchTerm = event.target.value;
     setSearchTerm(newSearchTerm);
-  
+
     switch (newSearchTerm) {
       case "PL_Report":
         setParameters_name(null);
@@ -140,34 +140,45 @@ export default function GroupDetails() {
   };
 
   useEffect(() => {
-    const fetchData_Group = async () => {
-      await fetchData();
-      console.log(dataTable);
-    };
-    switch (searchTerm) {
-      case "PL_Report":
-        setParameters_name(null);
-        setParameters_report("pl");
-        fetchData();
-        break;
-      case "BS_Report":
-        setParameters_name(null);
-        setParameters_report("bs");
-        fetchData();
-        break;
-      case "allCandidates":
-        setParameters_report(null);
-        setSearchTerm(null);
-        fetchData();
-        break;
-      default:
-        setParameters_name(searchTerm);
-        break;
-    }
-    fetchData_Group();
-    console.log(searchTerm);
-  }, [currentPage, Parameters_name, Parameters_report,searchTerm]);
+    const controller = new AbortController();
 
+    const fetchData_Group = async () => {
+      try {
+        const response = await getGroup(
+          currentPage,
+          Parameters_name,
+          Parameters_report
+        );
+
+        if (response && response.pagination) {
+          if (response.groups === null) {
+            setTotalPages(1);
+            setCurrentPage(1);
+          } else {
+            setDataOrder((prevData) => response.groups || []);
+            setTotalPages(response.pagination.total_pages);
+          }
+        } else {
+          console.error("Invalid response format:", response);
+          setDataOrder([]);
+          setTotalPages(1);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setDataOrder([]);
+        setTotalPages(1);
+      }
+    };
+
+    // Check if any relevant variable has changed
+    if (currentPage || Parameters_name || Parameters_report || searchTerm) {
+      fetchData_Group();
+    }
+
+    return () => {
+      controller.abort();
+    };
+  }, [currentPage, Parameters_name, Parameters_report, searchTerm]);
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
       <div
@@ -269,7 +280,7 @@ export default function GroupDetails() {
                 </div>
               </div>
               {/* control area */}
-              <div className="ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
+              <div className="relative h-[700px] ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
                 <table id="invoiceTable" className="w-full">
                   <thead>
                     <tr>
@@ -305,7 +316,7 @@ export default function GroupDetails() {
                     </tr>
                   </tbody>
                 </table>
-                <div className="flex-1 flex justify-end mt-5">
+                <div className="absolute bottom-0 right-0 mb-4 mr-4">
                   <Pagination
                     changePage={handleChangePage}
                     page={currentPage}

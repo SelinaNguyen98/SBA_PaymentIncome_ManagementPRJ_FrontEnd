@@ -221,14 +221,13 @@ const Order = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchExchangeRate();
       console.log(state.dataExRate);
       fetchData_Order();
     };
 
     fetchData();
     return () => { controller.abort() }
-  }, [selectedDate, currentPage_Order, selectedOrderIds]);
+  }, [currentPage_Order, selectedOrderIds]);
 
   //Payment
   const [dataPayment, setDataPayment] = useState([]);
@@ -341,14 +340,14 @@ const Order = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      await fetchExchangeRate();
       console.log(state.dataExRate);
       fetchData_Payment();
     };
 
     fetchData();
     return () => { controller.abort() }
-  }, [selectedDate, currentPage_Payment, selectedPaymentIds]);
+  }, [currentPage_Payment, selectedPaymentIds]);
+
 
   //Outsourcing
   const [dataOutsourcing, setDataOutsourcing] = useState([]);
@@ -467,14 +466,34 @@ const Order = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
-      await fetchExchangeRate();
       console.log(state.dataExRate);
       fetchData_Outsourcing();
     };
 
     fetchData();
     return () => { controller.abort() }
-  }, [selectedDate, currentPage_Outsourcing, selectedOutsourcingIds]);
+  }, [currentPage_Outsourcing, selectedOutsourcingIds]);
+  
+
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+  const debouncedFetchData = debounce(async () => {
+    await fetchExchangeRate();
+    fetchData_Order();
+    fetchData_Payment();
+    fetchData_Outsourcing();
+  }, 100); // Adjust the delay as needed
+  
+  useEffect(() => {
+    debouncedFetchData();
+  }, [selectedDate]);
 
   return (
     <div className="">
@@ -563,7 +582,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="max-h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -811,7 +830,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="max-h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -1062,7 +1081,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="max-h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
