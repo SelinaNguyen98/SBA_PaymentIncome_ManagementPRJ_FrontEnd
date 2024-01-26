@@ -4,7 +4,7 @@ import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
-export default function DeletePaymentManagement({ visible, cancel, t }) {
+export default function DeletePaymentManagement({ visible, cancel, t, deletePayment }) {
   const t_delete = t;
   return (
     <Modal visible={visible}>
@@ -18,12 +18,12 @@ export default function DeletePaymentManagement({ visible, cancel, t }) {
         </div>
 
         <div className="flex items-center justify-center space-x-5  px-4 mt-6 mb-7 ">
-          <Button onClick={() => {}} className={" bg-red py-2 px-6"}>
+          <Button onClick={deletePayment} className={" bg-red border-red-500 border-2 py-2 px-6 min-w-[120px]"}>
             {t_delete("button.confirm")}
           </Button>
           <Button
             onClick={cancel}
-            className={" border-red-500 bg-white border-2 py-2 min-w-[150px] "}
+            className={"border-red-500 bg-white border-2 py-2 px-6 min-w-[12px] "}
           >
             <span className=" text-red-500  uppercase ">
               {" "}

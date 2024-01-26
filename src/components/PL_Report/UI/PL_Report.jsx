@@ -76,14 +76,16 @@ const PL_Report = () => {
 
   const formatNumber = (number) => {
     const roundedNumber = parseFloat(number).toFixed(2);
-    const numberWithCommas = roundedNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    const numberWithCommas = roundedNumber
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     const [integerPart, decimalPart] = numberWithCommas.split(".");
     const formattedNumber = decimalPart
-        ? `${integerPart}.${decimalPart}`
-        : numberWithCommas;
+      ? `${integerPart}.${decimalPart}`
+      : numberWithCommas;
 
     return formattedNumber;
-};
+  };
 
   const exportToExcel = () => {
     const titleRow = [t("title.PL_report")]; // Add title row
@@ -195,9 +197,12 @@ const PL_Report = () => {
                     </div>
                   </div>
                 </div>
-                <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-                  <table id="Table" className="text-sm w-full table-fixed">
-                    <thead>
+                <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
+                  <table
+                    id="Table"
+                    className="max-h-[500px] text-sm w-full table-fixed"
+                  >
+                    <thead className="sticky top-0 bg-white z-50 w-full">
                       <tr>
                         <th className="w-[1px]"></th>
                         <th className="w-16">No</th>
@@ -220,9 +225,15 @@ const PL_Report = () => {
                         </th>
                         <th className="w-[1px]"></th>
                       </tr>
+                      <tr className=" ">
+                        <td
+                          colSpan={100}
+                          className=" h-2 bg-white border border-main-theme "
+                        ></td>
+                      </tr>
                     </thead>
                     <tbody className="">
-                      <tr className="bg-main-theme h-[0px] py-0 my-0">
+                      <tr className="bg-white h-[0px] py-0 my-0">
                         <td colSpan={100}></td>
                       </tr>
                       {dataBS.map((groupData, groupIndex) => (

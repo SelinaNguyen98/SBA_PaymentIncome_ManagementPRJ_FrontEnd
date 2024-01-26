@@ -21,10 +21,29 @@ export const createOrderSchema = yup
   })
   .required();
 
+
   export const createCategorySchema = yup
   .object()
   .shape({
     name: yup.string().required("Name is mandatory"),
     group_id: yup.string().required("Account Category Group is mandatory"),
+
+export const createPaymentOrderSchema = yup
+  .object()
+  .shape({
+    payment_date: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
+  })
+  .required();
+
+export const createOutsourcingSchema = yup
+  .object()
+  .shape({
+    outsourced_date: yup.string().required("Value can not be null!"),
+    outsourced_project: yup.string().required("Value can not be null!"),
+    company_name: yup.string().required("Value can not be null!"),
+    vnd: yup.string().required(),
+
   })
   .required();

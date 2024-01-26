@@ -287,8 +287,10 @@ const BS_Report = () => {
     updateState({ isShowForm_InputBalanceFromPreviousYear: true });
   };
 
+  const controller = new AbortController();
   useEffect(() => {
-    API.getAllTable(selectedYearExport.getFullYear(), setDataBS)
+    API.getAllTable(selectedYearExport.getFullYear(), setDataBS,controller)
+    return () => { controller.abort() }
   }, [selectedYearExport])
   let idx = 1
 

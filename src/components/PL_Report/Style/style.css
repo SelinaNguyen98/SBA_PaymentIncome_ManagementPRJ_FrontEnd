@@ -55,14 +55,14 @@
   }
   /* //////////////////////////////////// */
   
-  #Table thead::after {
+  /* #Table thead::after {
     background-color: white;
     line-height: 0.5rem;
     content: ".";
     color: white;
     display: block;
   }
-  
+   */
   /* #Table tbody tr, */
   #Table tbody td {
     padding-left:   10px ;

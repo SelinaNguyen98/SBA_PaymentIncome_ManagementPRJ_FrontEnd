@@ -26,10 +26,12 @@ function valiNumber(val) {
     }
 }
 // get data bS ở năm đó, gọi ở useEffect tại màn hình BO1
-export function getAllTable(year, setData) {
+export function getAllTable(year, setData, controller) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
-    axios.get(`${API_BASE_URL}/getDataBS`,
+    axios.get(`${API_BASE_URL}/getDataBS`, {
+        signal: controller.signal
+    },
         {
             params: {
                 y: year
