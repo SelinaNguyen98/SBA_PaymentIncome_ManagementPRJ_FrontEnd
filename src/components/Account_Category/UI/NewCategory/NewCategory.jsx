@@ -24,7 +24,7 @@ export default function NewCategory({ visible, cancel, ok }) {
     formState: { errors },
   } = useForm({resolver: yupResolver(createCategorySchema)});
   const onSubmit = handleSubmit(async (data) => {
-    console.log("Dsdds",data);
+    // console.log("Dsdds",data);
     // setValue();
     try {
       const response = await  createCategory(data);
@@ -60,7 +60,7 @@ export default function NewCategory({ visible, cancel, ok }) {
 
         <form className="px-4 mt-5" onSubmit={onSubmit}>
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
-            <label className="lg:col-span-3">{t("name")}</label>
+            <label className="lg:col-span-3">{t("notification_account_category.name")}</label>
             <div className=" lg:col-span-9 ml-3">
               <input
                 type="text"
@@ -76,7 +76,7 @@ export default function NewCategory({ visible, cancel, ok }) {
           </div>
 
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
-            <label className="lg:col-span-3">{t("group_id")}</label>
+            <label className="lg:col-span-3">{t("titlePage.accountCategoryGroup")}</label>
             <div className=" lg:col-span-9 ml-3">
             <select
                 {...register("group_id")}
@@ -123,20 +123,20 @@ export default function NewCategory({ visible, cancel, ok }) {
   );
 }
 
-const InputCustomComponent = ({ label, children }) => {
-  return (
-    <div className=" grid lg:grid-cols-12  gap-y-2 mb-4">
-      <label className="lg:col-span-3">{label}</label>
-      <div className=" lg:col-span-9 ml-3">
-        {React.createElement(
-          children.type,
-          {
-            ...children.props,
-            className: `${children.props.className} w-full py-1 rounded-sm px-2 `,
-          },
-          children.props.children
-        )}
-      </div>
-    </div>
-  );
-};
+// const InputCustomComponent = ({ label, children }) => {
+//   return (
+//     <div className=" grid lg:grid-cols-12  gap-y-2 mb-4">
+//       <label className="lg:col-span-3">{label}</label>
+//       <div className=" lg:col-span-9 ml-3">
+//         {React.createElement(
+//           children.type,
+//           {
+//             ...children.props,
+//             className: `${children.props.className} w-full py-1 rounded-sm px-2 `,
+//           },
+//           children.props.children
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
