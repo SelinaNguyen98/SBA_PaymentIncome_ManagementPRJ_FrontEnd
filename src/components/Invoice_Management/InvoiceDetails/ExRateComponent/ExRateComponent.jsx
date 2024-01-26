@@ -121,6 +121,7 @@ export default function ExRateComponent({
             number={jpy}
             setNumber={(value) => updateFormRate({ jpy: value })}
           />
+          USD
           <InputNumber
             number={usd}
             setNumber={(value) => updateFormRate({ usd: value })}
