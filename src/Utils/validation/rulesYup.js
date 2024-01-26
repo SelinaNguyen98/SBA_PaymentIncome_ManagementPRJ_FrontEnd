@@ -1,5 +1,6 @@
 import * as yup from "yup";
 
+
 export const createPaymentSchema = yup
   .object()
   .shape({
@@ -20,11 +21,15 @@ export const createOrderSchema = yup
   })
   .required();
 
+
+
   export const createCategorySchema = yup
   .object()
   .shape({
-    name: yup.string().required("Name là bắt buộc"),
-    group_id: yup.string().required("Account Category Group là bắt buộc"),  })
+    name: yup.string().required("Name is mandatory"),
+    group_id: yup.string().required("Account Category Group is mandatory"),
+
+
 export const createPaymentOrderSchema = yup
   .object()
   .shape({
@@ -41,5 +46,6 @@ export const createOutsourcingSchema = yup
     outsourced_project: yup.string().required("Value can not be null!"),
     company_name: yup.string().required("Value can not be null!"),
     vnd: yup.string().required(),
+
   })
   .required();
