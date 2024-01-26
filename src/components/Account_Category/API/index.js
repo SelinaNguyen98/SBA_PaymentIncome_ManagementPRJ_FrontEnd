@@ -3,11 +3,12 @@
 import axios from "axios";
 import { paths } from "../../../Utils/utils/configAxios";
 
-export const callAPI_GetAllCategory = async (page) => {
+export const callAPI_GetAllCategory = async (page, filter) => {
   try {
     const response = await axios.get(paths.CATEGORY, {
       params: {
         page,
+        ...filter
       },
     });
     return response.data;
