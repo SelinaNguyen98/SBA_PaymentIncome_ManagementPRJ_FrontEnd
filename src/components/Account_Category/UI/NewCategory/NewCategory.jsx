@@ -25,6 +25,8 @@ export default function NewCategory({ visible, cancel, ok }) {
   } = useForm({resolver: yupResolver(createCategorySchema)});
   const onSubmit = handleSubmit(async (data) => {
     // console.log("Dsdds",data);
+
+
     // setValue();
     try {
       const response = await  createCategory(data);

@@ -3,16 +3,29 @@
 import axios from "axios";
 import { paths } from "../../../../Utils/utils/configAxios";
 
-export const callAPI_GetPaymentsYearAndMonths = async (month, year, page) => {
+export const callAPI_GetPaymentsYearAndMonths = async (
+  month,
+  year,
+  page,
+  controller
+) => {
   try {
     // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
-    const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, {
-      params: {
-        month,
-        year,
-        page,
-      },
-    });
+    const { signal } = controller;
+    const response = await axios.get(
+      paths.GET_PAYMENTS_MONTH_YEAR,
+      // {
+      //   signal: controller.signal,
+      // },
+      {
+        params: {
+          month,
+          year,
+          page,
+        },
+        signal,
+      }
+    );
     // console.log(response.data);
     return response.data;
   } catch (error) {
@@ -46,15 +59,21 @@ export const callAPI_DeleteListInvoice = async (invoiceIds) => {
   }
 };
 
-
-export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
+export const callApi_getExchagerateByMonthAndYear = async (
+  month,
+  year,
+  controller
+) => {
   // eslint-disable-next-line no-useless-catch
   try {
+    const { signal } = controller;
+
     const response = await axios.get(paths.EXCHAGE_RATE, {
       params: {
         month,
         year,
       },
+      signal,
     });
     // console.log(response.data);
     return response;
@@ -74,7 +93,6 @@ export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
 //     throw error;
 //   }
 // };
-
 
 export const callApi_createExchagerateByMonthAndYear = async (
   monthYear,
@@ -130,5 +148,4 @@ export const callApi_updatePayment = async (formData) => {
   } catch (error) {
     throw error;
   }
-
 };

@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../../Utils/style.css";
 // eslint-disable-next-line no-unused-vars
 import axios from "axios";
@@ -75,6 +75,9 @@ function Login() {
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
+  useEffect(()=>{
+    localStorage.removeItem("token");
+  },[])
   return (
     <div>
       {/* Thanh header màu xanh */}
