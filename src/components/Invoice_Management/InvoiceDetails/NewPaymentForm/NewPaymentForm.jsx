@@ -24,6 +24,7 @@ export default function NewPaymentForm({
   exchangeRateId,
     // eslint-disable-next-line react/prop-types
   changeFirstPage,
+  
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);

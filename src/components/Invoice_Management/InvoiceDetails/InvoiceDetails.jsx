@@ -650,11 +650,15 @@ export default function InvoiceDetails() {
           selectedDate={selectedDate}
           exchangeRateId={idExRate}
           cancel={() => {
-            fetchInvoices(page);
+            //fetchInvoices(page);
             updateState({
               isShowFormEditPayment: false,
               selectedRowData: null,
             });
+          }}
+          show_result={() => {
+            showToast.success("Edit successfully!");
+            fetchInvoices(page);
           }}
           triggerData={() => {}}
         />
