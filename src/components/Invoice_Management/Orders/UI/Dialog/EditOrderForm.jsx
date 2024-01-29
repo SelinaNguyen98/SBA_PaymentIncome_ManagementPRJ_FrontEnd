@@ -26,6 +26,8 @@ export default function EditOrderForm({
   selectedDate,
   // eslint-disable-next-line react/prop-types, no-unused-vars
   exchangeRateId,
+  // eslint-disable-next-line react/prop-types, no-unused-vars
+  show_result,
 }) {
   const t_add_order = t;
   const {
@@ -93,6 +95,7 @@ export default function EditOrderForm({
       const response = await updateOrder(data);
       console.log(response);
       cancel();
+      show_result();
     } catch (error) {
       console.error("Error submitting form:", error.data);
     }

@@ -1326,6 +1326,10 @@ const Order = () => {
             isShowFormEditOrder: false,
             selectedRowOrder_Edit: null,
           });
+          //fetchData_Order();
+        }}
+        show_result={()=>{
+          showToast.success("Edit successfully!");
           fetchData_Order();
         }}
       />
@@ -1340,6 +1344,10 @@ const Order = () => {
             isShowFormEditPayment: false,
             selectedRowPayment_Edit: null,
           });
+          //fetchData_Payment();
+        }}
+        show_result={()=>{
+          showToast.success("Edit successfully!");
           fetchData_Payment();
         }}
       />
@@ -1354,6 +1362,10 @@ const Order = () => {
             isShowFormEditOutsourcing: false,
             selectedRowOutsourcing_Edit: null,
           });
+          //fetchData_Outsourcing();
+        }}
+        show_result={()=>{
+          showToast.success("Edit successfully!");
           fetchData_Outsourcing();
         }}
       />
