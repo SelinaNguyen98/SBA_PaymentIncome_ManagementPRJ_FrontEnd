@@ -207,8 +207,10 @@ const Order = () => {
           setSelectedRows_Order(newSelectedRows);
           // setSelectedRow_Order([]);
         }
-      } else {
-        console.error("Invalid response format:", response);
+      }
+  
+       else {
+        console.log("Invalid response format:", response);
         setDataOrder([]);
         setTotalPages_Order(1);
       }
@@ -475,8 +477,8 @@ const Order = () => {
   }, [currentPage_Outsourcing, selectedOutsourcingIds]);
   
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchExchangeRate();
+    const fetchData = () => {
+      fetchExchangeRate();
       fetchData_Order();
       fetchData_Payment();
       fetchData_Outsourcing();
@@ -572,7 +574,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[320px] max-[1600px]:h-[230px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -590,10 +592,10 @@ const Order = () => {
                   <th className="w-32">
                     {t_order("header_table_order.Company_name")}
                   </th>
-                  <th className="w-32">JPY</th>
-                  <th className="w-32">VND</th>
-                  <th className="w-32">USD</th>
-                  <th className="w-8">
+                  <th className="w-12">JPY</th>
+                  <th className="w-24">VND</th>
+                  <th className="w-24">USD</th>
+                  <th className="w-24">
                     {t_order("header_table_order.Action")}
                   </th>
                   <th className="w-1"></th>
@@ -820,7 +822,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[320px] max-[1600px]:h-[230px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -838,10 +840,10 @@ const Order = () => {
                   <th className="w-32">
                     {t_order("header_table_order.Company_name")}
                   </th>
-                  <th className="w-32">JPY</th>
-                  <th className="w-32">VND</th>
-                  <th className="w-32">USD</th>
-                  <th className="w-8">
+                  <th className="w-24">JPY</th>
+                  <th className="w-24">VND</th>
+                  <th className="w-24">USD</th>
+                  <th className="w-24">
                     {t_order("header_table_order.Action")}
                   </th>
                   <th className="w-1"></th>
@@ -1071,7 +1073,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[350px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[320px] max-[1600px]:h-[250px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -1085,16 +1087,16 @@ const Order = () => {
                     />
                   </th>
                   <th className="w-8">No</th>
-                  <th className="w-24">
+                  <th className="w-44">
                     {t_order("header_table_order.Outsourced_project")}
                   </th>
                   <th className="w-32">
                     {t_order("header_table_order.Company_name")}
                   </th>
-                  <th className="w-32">JPY</th>
-                  <th className="w-32">VND</th>
-                  <th className="w-32">USD</th>
-                  <th className="w-8">
+                  <th className="w-24">JPY</th>
+                  <th className="w-24">VND</th>
+                  <th className="w-24">USD</th>
+                  <th className="w-24">
                     {t_order("header_table_order.Action")}
                   </th>
                   <th className="w-1"></th>

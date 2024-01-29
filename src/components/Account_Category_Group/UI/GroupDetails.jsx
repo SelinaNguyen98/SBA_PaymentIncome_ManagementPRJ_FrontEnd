@@ -280,7 +280,7 @@ export default function GroupDetails() {
                 </div>
               </div>
               {/* control area */}
-              <div className="relative h-[700px] ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
+              <div className="relative h-[700px] max-[1600px]:h-[520px] ml-4 mr-3 mt-4 pl-6 pr-3 pt-4 pb-4 bg-white rounded-[16px]">
                 <table id="invoiceTable" className="w-full">
                   <thead>
                     <tr>

@@ -247,17 +247,30 @@ const PL_Report = () => {
                                 </td>{" "}
                                 {/* Increment the counter */}
                                 <td className="w-64">
-                                  {categoryData.category_name}
+                                  <input
+                                    className="text-center"
+                                    readOnly
+                                    value={categoryData.category_name}
+                                  />
                                 </td>
                                 {Object.keys(categoryData.data).map(
                                   (month, monthIndex) => (
                                     <td key={monthIndex} className="w-32">
-                                      {categoryData.data[month]}
+                                      <input
+                                        className="text-center"
+                                        readOnly
+                                        value={categoryData.data[month]}
+                                      />
                                     </td>
                                   )
                                 )}
                                 <td className="w-24">
-                                  {categoryData.data.total}
+                                <input
+                                        className="text-center"
+                                        readOnly
+                                        value= {categoryData.data.total}
+                                      />
+                                
                                 </td>
                               </tr>
                             )

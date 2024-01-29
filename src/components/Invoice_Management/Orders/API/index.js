@@ -33,28 +33,22 @@ export const callAPI_GetOrder = async (month, year, page) => {
 };
 
 
-export const callApi_getExchagerateByMonthAndYear = async (month, year) => {
+export const callApi_getExchagerateByMonthAndYear = async (
+  month,
+  year,
+) => {
+  // eslint-disable-next-line no-useless-catch
   try {
-    // Cancel the previous request if it exists
-    cancelTokenSource.cancel("Operation canceled due to new request.");
-
-    // Create a new cancel token source
-    const newCancelTokenSource = axios.CancelToken.source();
-    cancelTokenSource = newCancelTokenSource; // Reassign using let
-
     const response = await axios.get(paths.EXCHAGE_RATE, {
-      params: { month, year },
-      cancelToken: newCancelTokenSource.token, // Set the cancel token for this request
+      params: {
+        month,
+        year,
+      },
     });
-
-    return response.data;
+    console.log(response.data);
+    return response;
   } catch (error) {
-    // Check if the request was canceled
-    if (axios.isCancel(error)) {
-      console.log("Request canceled:", error.message);
-    } else {
-      throw error;
-    }
+    throw error;
   }
 };
 
