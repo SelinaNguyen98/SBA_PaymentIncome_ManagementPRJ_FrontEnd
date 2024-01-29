@@ -96,3 +96,33 @@
   .custom-no-border {
     border: none !important;
   }
+
+    /* Các style mặc định cho container */
+.search-container {
+  position: relative;
+}
+
+/* Các style mặc định cho ô input */
+.search-input {
+  display: block;
+  width: 100%;
+  padding: 8px;
+}
+
+/* Các style mặc định cho nút search */
+.search-button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Ở kích thước màn hình nhỏ hơn 600px, ẩn phần tử */
+@media (max-width: 1000px) {
+  .search-container {
+    display: none;
+  }
+}

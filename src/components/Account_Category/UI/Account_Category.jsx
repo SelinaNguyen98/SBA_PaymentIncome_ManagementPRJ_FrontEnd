@@ -295,6 +295,7 @@ export default function Account_Category() {
         ></div> */}
 
         {/* Lable */}
+       
         <div className="mt-1 px-2.5 flex flex-shrink-0 items-center ">
           <div
             style={{
@@ -324,6 +325,7 @@ export default function Account_Category() {
             }}
           ></div>
           {/* <div style={{ display: "flex", alignItems: "center" }}> */}
+          <div className="search-container">
           <div
             style={{
               position: "relative",
@@ -383,6 +385,7 @@ export default function Account_Category() {
               {renderSearchInput()}
             </div>
           </div>
+        </div>
         </div>
 
         {/* control area */}
@@ -478,11 +481,7 @@ export default function Account_Category() {
                       {category?.id}
                     </td>
                     <td className=" w-[30%]" name="tb_name">
-                      <input
-                        readOnly
-                        value={category?.name}
-                        style={{ backgroundColor: "#E3EDF9" }}
-                      />
+                      {category?.name}
                     </td>
                     <td className=" w-[28%]" name="tb_group">
                       {category?.group_name}
