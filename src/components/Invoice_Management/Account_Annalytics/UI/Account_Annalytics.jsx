@@ -85,7 +85,7 @@ const AccountAnnalytics = () => {
                   <th className=" w-[2%] rounded-l-[10px]"></th>
                   {/* //////////////// */}
                   <th className=" w-[10%] py-2"> NO</th>
-                  <th className=" w-[26%]">Account Category</th>
+                  <th className=" w-[26%]">{t(`title.accountCategory`)}</th>
                   <th className=" w-[20%]"> JPY</th>
                   <th className=" w-[20%]"> VND</th>
                   <th className=" w-[20%]"> USD</th>

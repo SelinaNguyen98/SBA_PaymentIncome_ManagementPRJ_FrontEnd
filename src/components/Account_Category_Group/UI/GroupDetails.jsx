@@ -299,7 +299,9 @@ export default function GroupDetails() {
                     {dataTable?.map((group, index) => (
                       <tr key={index}>
                         <td className=" w-[5%]"></td>
-                        <td name="tb_no">{group?.id}</td>
+                        <td className="w-8" name="tb_no">
+                        {(currentPage - 1) * 10 + index + 1}
+                      </td>
                         <td name="tb_report">
                           {group?.report_type === "pl"
                             ? t("title.PL_report")
