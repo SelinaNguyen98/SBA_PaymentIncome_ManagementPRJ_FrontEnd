@@ -76,6 +76,11 @@ export default function InvoiceDetails() {
       console.log("Month:", month);
       console.log("Year:", year);
     }
+    const inputElement =
+                    document.getElementById("inputExRateJPY");
+                  if (inputElement) {
+                    inputElement.focus();
+                  }
     console.log("location.state");
   }, [location.state]);
 
