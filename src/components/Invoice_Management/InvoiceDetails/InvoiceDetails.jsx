@@ -379,22 +379,26 @@ export default function InvoiceDetails() {
                   onChange={() => handlePageCheckboxChange()}
                 />
               </th>
-              <th className=" w-[3%]" onClick={() => requestSort("id")}>
-                {" "}
-                NO
-              </th>
+              <th className=" w-[3%]"> NO</th>
               <th
                 className=" w-[10%]"
                 onClick={() => requestSort("payment_date")}
               >
                 {t("page_payment_detail.date")}
               </th>
-              <th className=" w-[10%]" onClick={() => requestSort("name")}>{t("page_payment_detail.name")}</th>
+              <th className=" w-[10%]" onClick={() => requestSort("name")}>
+                {t("page_payment_detail.name")}
+              </th>
               <th className=" w-[8%]"> JPY</th>
               <th className=" w-[8%]"> VND</th>
               <th className=" w-[8%]"> USD</th>
               <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
-              <th className=" w-[10%]">{t("page_payment_detail.journal")}</th>
+              <th
+                className=" w-[10%]"
+                onClick={() => requestSort("category_name")}
+              >
+                {t("page_payment_detail.journal")}
+              </th>
               <th className=" w-[16%]">{t("page_payment_detail.invoice")}</th>
               <th className=" w-[8%]" onClick={() => requestSort("pay")}>
                 {t("page_payment_detail.pay")}
@@ -439,9 +443,8 @@ export default function InvoiceDetails() {
                       className=" pl-3 pr-2 bg-main-theme text-center border border-gray-300 overflow-hidden "
                       name="tb_no"
                     >
-                      {}
-                      {/* {(page - 1) * 10 + index + 1} */}
-                      {invoicePayment?.id}
+                      {(page - 1) * 10 + index + 1}
+                      {/* {invoicePayment?.id} */}
                     </td>
                     <td
                       className="pl-3 pr-2 bg-main-theme  text-center border border-gray-300 overflow-hidden whitespace-nowrap overflow-ellipsis"
