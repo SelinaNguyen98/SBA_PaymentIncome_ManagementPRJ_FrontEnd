@@ -1,15 +1,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { editCategory, getGroupCategory } from "../../Controller";
+import { AppContext } from "../../../../Utils/contexts/app.context";
 
 
 export default function EditCategory({ visible, cancel, category,ok }) {
   const { t } = useTranslation();
+  const { showToast } = useContext(AppContext);
   const [groups, setGroups] = useState([]);
   const [isShowNoAcptEdit, setIsShowNoAcptEdit] = useState(false);
   const {
@@ -26,6 +28,7 @@ export default function EditCategory({ visible, cancel, category,ok }) {
     try {
       const response = await  editCategory(data);
       console.log(response);
+      showToast.success("Edit successfully!");
       // changeFirstPage();
       cancel()
     } catch (error) {
