@@ -226,7 +226,7 @@ export default function GroupDetails() {
               id="contentInvoiceDetail"
               className={`relative bg-main-theme pb-5 col-span-full`}
             >
-              <div className="mt-1 px-6 flex max-[1500px]:flex-col items-center ">
+              <div className="mt-1 px-6 flex items-center ">
                 <div className="flex flex-row">
                   {" "}
                   <svg
