@@ -12,6 +12,7 @@ import Modal from "../../../Utils/Modal/Modal";
 import NewPaymentForm from "./NewPaymentForm";
 import MonthYearPicker from "../../../Utils/MonthYearPicker";
 import EditPaymentForm from "./EditPaymentForm";
+import { RiExpandUpDownFill } from "react-icons/ri";
 
 import {
   formatFloatToCustomString,
@@ -93,7 +94,6 @@ export default function InvoiceDetails() {
     totalUsd: 0,
     totalCost: 0,
     totalJpy: 0,
-    // asc  || desc
   });
 
   const {
@@ -122,50 +122,19 @@ export default function InvoiceDetails() {
       : [...selectedRows, id];
 
     setSelectedRows(newSelectedRows);
-    // updateStateTable({ selectedRows: newSelectedRows });
     console.log(newSelectedRows);
   };
 
   const requestSort = (key) => {
-    // console.log(key);
-    // console.log(key);
     let direction = "asc";
     if (sortConfig.key === key) {
       // Nếu đang sắp xếp theo cùng một cột
       direction = sortConfig.direction === "asc" ? "desc" : "asc";
-      // console.log(direction)
     }
-    // let NewsortConfig = { key: key, direction: direction };
     let NewsortConfig = { key, direction };
     fetchInvoices(page, NewsortConfig);
     setSortConfig(NewsortConfig);
   };
-
-  // const requestSort = (key) => {
-  //   console.log(key);
-  //   let direction = "asc";
-  //   if (sortConfig.key === key && sortConfig.direction === "asc") {
-  //     direction = "desc";
-  //   }
-  //   let newSortCf = { key: key, direction: direction };
-  //   updateStateTable({ sortConfig: newSortCf });
-  //   fetchInvoices(page, newSortCf);
-  // };
-
-  // Hiểu rồi, nếu bạn muốn khi click vào một cột, thứ tự sắp xếp chuyển đổi giữa 'ascending' và 'descending', bạn có thể sửa hàm requestSort như sau:
-
-  // jsx
-  // Copy code
-  // const requestSort = (key) => {
-  //   let direction = 'ascending';
-
-  //   if (sortConfig.key === key) {
-  //     // Nếu đang sắp xếp theo cùng một cột
-  //     direction = sortConfig.direction === 'ascending' ? 'descending' : 'ascending';
-  //   }
-
-  //   setSortConfig({ key, direction });
-  // };
 
   const handlePageCheckboxChange = () => {
     // Lấy danh sách ID từ table của trang đó
@@ -381,10 +350,12 @@ export default function InvoiceDetails() {
               </th>
               <th className=" w-[3%]"> NO</th>
               <th
-                className=" w-[10%]"
+                className=" w-[10%] items-center justify-center"
                 onClick={() => requestSort("payment_date")}
               >
-                {t("page_payment_detail.date")}
+                <div className="">
+                  <span>{t("page_payment_detail.date")}</span>
+                </div>
               </th>
               <th className=" w-[10%]" onClick={() => requestSort("name")}>
                 {t("page_payment_detail.name")}
