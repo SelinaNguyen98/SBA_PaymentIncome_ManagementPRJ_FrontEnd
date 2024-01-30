@@ -64,6 +64,23 @@ const Order = () => {
 
     return formattedNumber;
   };
+  const formatNumberSeparator = (input) => {
+    // Convert input to a string
+    input = input.toString();
+
+    // Remove non-numeric characters from the input value
+    let numericValue = input.replace(/[^0-9]/g, "");
+
+    // Remove leading zeros
+    numericValue =
+      numericValue === "0" || numericValue === "" || numericValue === null
+        ? "0"
+        : numericValue.replace(/^0+/, "");
+
+    // Format the input value with commas as thousand separators
+    return numericValue.replace(/(\d)(?=(\d{3})+$)/g, "$1,");
+  };
+
   const [idExRate, setIdRate] = useState(false);
 
   const fetchExchangeRate = async () => {
@@ -312,9 +329,9 @@ const Order = () => {
         selectedDate,
         currentPage_Payment
       );
-  
+
       console.log("API Response:", response);
-  
+
       if (response && response.pagination) {
         if (response.payment_orders === null) {
           setTotalPages_Payment(1);
@@ -322,26 +339,30 @@ const Order = () => {
         } else {
           setDataPayment((prevData) => {
             console.log("Previous Data:", prevData);
-  
+
             // Thêm cột thứ tự vào mỗi payment_order
-            const newData = response.payment_orders.map((payment_order, index) => ({
-              ...payment_order,
-              paymentNumber: (currentPage_Payment - 1) * 5 + index + 1,
-            }));
-  
+            const newData = response.payment_orders.map(
+              (payment_order, index) => ({
+                ...payment_order,
+                paymentNumber: (currentPage_Payment - 1) * 5 + index + 1,
+              })
+            );
+
             return newData || [];
           });
-  
+
           setTotalPages_Payment(response.pagination.total_pages);
-  
+
           // Check và cập nhật selectedRows_Payment dựa trên selectedPaymentIds
-          const newSelectedRows = new Array(response.payment_orders.length).fill(false);
+          const newSelectedRows = new Array(
+            response.payment_orders.length
+          ).fill(false);
           response.payment_orders.forEach((payment_order, index) => {
             if (selectedPaymentIds.includes(payment_order.id)) {
               newSelectedRows[index] = true;
             }
           });
-  
+
           setSelectedRows_Payment(newSelectedRows);
           // setSelectedRow_Payment([]);
         }
@@ -356,7 +377,7 @@ const Order = () => {
       setTotalPages_Payment(1);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       console.log(state.dataExRate);
@@ -446,9 +467,9 @@ const Order = () => {
         selectedDate,
         currentPage_Outsourcing
       );
-  
+
       console.log("API Response:", response);
-  
+
       if (response && response.pagination) {
         if (response.outsourcing === null) {
           setTotalPages_Outsourcing(1);
@@ -456,18 +477,18 @@ const Order = () => {
         } else {
           setDataOutsourcing((prevData) => {
             console.log("Previous Data:", prevData);
-  
+
             // Thêm cột thứ tự vào mỗi outsourcing
             const newData = response.outsourcing.map((outsourcing, index) => ({
               ...outsourcing,
               outsourcingNumber: (currentPage_Outsourcing - 1) * 5 + index + 1,
             }));
-  
+
             return newData || [];
           });
-  
+
           setTotalPages_Outsourcing(response.pagination.total_pages);
-  
+
           // Check và cập nhật selectedRows_Outsourcing dựa trên selectedOutsourcingIds
           const newSelectedRows = new Array(response.outsourcing.length).fill(
             false
@@ -477,7 +498,7 @@ const Order = () => {
               newSelectedRows[index] = true;
             }
           });
-  
+
           setSelectedRows_Outsourcing(newSelectedRows);
           // setSelectedRow_Outsourcing([]);
           console.log(response.outsourcing);
@@ -493,7 +514,7 @@ const Order = () => {
       setTotalPages_Outsourcing(1);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       console.log(state.dataExRate);
@@ -675,7 +696,7 @@ const Order = () => {
                         <input
                           className="text-center"
                           readOnly
-                          value={formatNumber(rowDataOrder.vnd)}
+                          value={formatNumberSeparator(rowDataOrder.vnd)}
                         />
                       </td>
                       <td className="w-32" name="tb_usd">
@@ -898,7 +919,7 @@ const Order = () => {
                         />
                       </td>
                       <td className="w-8" name="tb_no">
-                      {rowDataPayment.paymentNumber}
+                        {rowDataPayment.paymentNumber}
                       </td>
                       <td className="w-24" name="tb_date">
                         <input
@@ -927,7 +948,7 @@ const Order = () => {
                         <input
                           className="text-center"
                           readOnly
-                          value={formatNumber(rowDataPayment.vnd)}
+                          value={formatNumberSeparator(rowDataPayment.vnd)}
                         />
                       </td>
                       <td className="w-32" name="tb_usd">
@@ -1151,7 +1172,7 @@ const Order = () => {
                         />
                       </td>
                       <td className="w-8" name="tb_no">
-                       {rowDataOutsourcing.outsourcingNumber}
+                        {rowDataOutsourcing.outsourcingNumber}
                       </td>
                       <td className="w-24" name="tb_date">
                         <input
@@ -1178,7 +1199,7 @@ const Order = () => {
                         <input
                           className="text-center"
                           readOnly
-                          value={formatNumber(rowDataOutsourcing.vnd)}
+                          value={formatNumberSeparator(rowDataOutsourcing.vnd)}
                         />
                       </td>
                       <td className="w-32" name="tb_usd">
@@ -1308,7 +1329,8 @@ const Order = () => {
           </div>
         </Modal>
       )}
-      <AddOrderForm
+      {state.isShowFormNewOrder &&
+        <AddOrderForm
         visible={state.isShowFormNewOrder}
         t={t_order}
         cancel={() => updateState({ isShowFormNewOrder: false })}
@@ -1321,7 +1343,9 @@ const Order = () => {
           fetchData_Order();
         }}
       />
-      <AddPaymentManagementForm
+      }
+      {state.isShowFormNewPayment &&
+        <AddPaymentManagementForm
         visible={state.isShowFormNewPayment}
         t={t_order}
         cancel={() => updateState({ isShowFormNewPayment: false })}
@@ -1334,7 +1358,9 @@ const Order = () => {
           fetchData_Payment();
         }}
       />
-      <AddOutsourcingForm
+      }
+      {state.isShowFormNewOutsourcing &&
+        <AddOutsourcingForm
         visible={state.isShowFormNewOutsourcing}
         t={t_order}
         cancel={() => updateState({ isShowFormNewOutsourcing: false })}
@@ -1347,7 +1373,8 @@ const Order = () => {
           fetchData_Outsourcing();
         }}
       />
-      <EditOrderForm
+      }
+      {state.isShowFormEditOrder && <EditOrderForm
         invoiceOrder={state.selectedRowOrder_Edit}
         visible={state.isShowFormEditOrder}
         t={t_order}
@@ -1364,43 +1391,47 @@ const Order = () => {
           showToast.success("Edit successfully!");
           fetchData_Order();
         }}
-      />
-      <EditPaymentManagementForm
-        invoicePayment={state.selectedRowPayment_Edit}
-        visible={state.isShowFormEditPayment}
-        t={t_order}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        cancel={() => {
-          updateState({
-            isShowFormEditPayment: false,
-            selectedRowPayment_Edit: null,
-          });
-          //fetchData_Payment();
-        }}
-        show_result={() => {
-          showToast.success("Edit successfully!");
-          fetchData_Payment();
-        }}
-      />
-      <EditOutsourcingForm
-        invoiceOutsourcing={state.selectedRowOutsourcing_Edit}
-        visible={state.isShowFormEditOutsourcing}
-        t={t_order}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        cancel={() => {
-          updateState({
-            isShowFormEditOutsourcing: false,
-            selectedRowOutsourcing_Edit: null,
-          });
-          //fetchData_Outsourcing();
-        }}
-        show_result={() => {
-          showToast.success("Edit successfully!");
-          fetchData_Outsourcing();
-        }}
-      />
+      />}
+      {state.isShowFormEditPayment && (
+        <EditPaymentManagementForm
+          invoicePayment={state.selectedRowPayment_Edit}
+          visible={state.isShowFormEditPayment}
+          t={t_order}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          cancel={() => {
+            updateState({
+              isShowFormEditPayment: false,
+              selectedRowPayment_Edit: null,
+            });
+            //fetchData_Payment();
+          }}
+          show_result={() => {
+            showToast.success("Edit successfully!");
+            fetchData_Payment();
+          }}
+        />
+      )}
+      {state.isShowFormEditOutsourcing && (
+        <EditOutsourcingForm
+          invoiceOutsourcing={state.selectedRowOutsourcing_Edit}
+          visible={state.isShowFormEditOutsourcing}
+          t={t_order}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          cancel={() => {
+            updateState({
+              isShowFormEditOutsourcing: false,
+              selectedRowOutsourcing_Edit: null,
+            });
+            //fetchData_Outsourcing();
+          }}
+          show_result={() => {
+            showToast.success("Edit successfully!");
+            fetchData_Outsourcing();
+          }}
+        />
+      )}
       <DeleteOrder
         visible={state.isShowDeleteModal_Order}
         t={t_order}

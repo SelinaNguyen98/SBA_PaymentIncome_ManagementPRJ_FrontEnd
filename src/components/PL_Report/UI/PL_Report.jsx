@@ -166,16 +166,16 @@ const PL_Report = () => {
                     </div>
                   </div>
                 </div>
-  
-                  {isLoading && (
-                    <div className="flex justify-center items-center h-full">
-                      {/* Add your loading spinner here */}
-                      <div className="loader"></div>
-                    </div>
-                  )}
-                  {/* Render table when data is available */}
-                  {!isLoading && (
-                    <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
+
+                {isLoading && (
+                  <div className="flex justify-center items-center h-full">
+                    {/* Add your loading spinner here */}
+                    <div className="loader"></div>
+                  </div>
+                )}
+                {/* Render table when data is available */}
+                {!isLoading && (
+                  <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
                     <table
                       id="Table"
                       className="max-h-[500px] text-sm w-full table-fixed"
@@ -287,8 +287,8 @@ const PL_Report = () => {
                         </tr>
                       </tbody>
                     </table>
-                    </div>
-                  )}  
+                  </div>
+                )}
               </div>
             </div>
           </div>

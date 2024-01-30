@@ -203,7 +203,7 @@ export default function InvoiceDetails() {
         totalPage: response?.pagination?.total_pages,
         totalCost: response?.total_cost || 0,
         totalJpy: response?.total_jpy || 0,
-        totalUsd: response?.total_jpy || 0,
+        totalUsd: response?.total_usd || 0,
       });
       console.log("fetchInvoices", response);
     } catch (error) {
