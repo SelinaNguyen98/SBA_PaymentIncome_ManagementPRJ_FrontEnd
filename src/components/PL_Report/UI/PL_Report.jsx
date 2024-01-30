@@ -5,7 +5,10 @@ import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
 import "../Style/style.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import { getPaymentsByYearAndMonths, getFileExportExcel_PL } from "../Controller";
+import {
+  getPaymentsByYearAndMonths,
+  getFileExportExcel_PL,
+} from "../Controller";
 import * as XLSX from "xlsx";
 const PL_Report = () => {
   let sequentialNumber = 1;
@@ -15,23 +18,25 @@ const PL_Report = () => {
 
   const [selectedYearExport, setSelectedYearExport] = useState(new Date());
   const [dataBS, setDataBS] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    getPaymentsData(selectedYearExport.getFullYear());
+    const fetchData = async () => {
+      setIsLoading(true); // Set loading to true when starting to fetch data
+      try {
+        const response = await getPaymentsByYearAndMonths(
+          selectedYearExport.getFullYear()
+        );
+        const formattedData = formatData(response);
+        setDataBS(formattedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after data is fetched (success or error)
+      }
+    };
+
+    fetchData();
   }, [selectedYearExport]);
-
-  const getPaymentsData = async (year) => {
-    try {
-      const response = await getPaymentsByYearAndMonths(year);
-      console.log(response);
-      const formattedData = formatData(response);
-      console.log(formattedData);
-      setDataBS(formattedData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
   const formatData = (rawData) => {
     rawData.sort((a, b) => a.group_id - b.group_id);
 
@@ -87,56 +92,9 @@ const PL_Report = () => {
     return formattedNumber;
   };
 
-  const exportToExcel= async (year) => {
-    // const titleRow = [t("title.PL_report")]; // Add title row
-    // const headerRow = [
-    //   "",
-    //   "No",
-    //   t("header_table_PL_BS.name"),
-    //   ...Array.from({ length: 12 }).map((_, monthIndex) => {
-    //     const displayMonth = ((monthIndex + 3) % 12) + 1;
-    //     const displayYear =
-    //       selectedYearExport.getFullYear() + Math.floor((monthIndex + 3) / 12);
-
-    //     return `${displayMonth}/${displayYear}`;
-    //   }),
-    //   t("header_table_PL_BS.total"),
-    //   "",
-    // ];
-
-    // const dataRows = dataBS.flatMap((groupData, groupIndex) => [
-    //   ...groupData.categories.map((categoryData, categoryIndex) => [
-    //     "",
-    //     sequentialNumber_excel++,
-    //     categoryData.category_name,
-    //     ...Object.keys(categoryData.data).map(
-    //       (month) => categoryData.data[month]
-    //     ),
-    //     categoryData.total,
-    //     "",
-    //   ]),
-    //   [
-    //     "",
-    //     sequentialNumber_excel++,
-    //     groupData.group_name,
-    //     ...Object.keys(groupData.total_month).map(
-    //       (month) => groupData.total_month[month]
-    //     ),
-    //     "",
-    //   ],
-    //   ["", "", "", "", "", "", ""],
-    // ]);
-    // const ws = XLSX.utils.aoa_to_sheet([titleRow, headerRow, ...dataRows]);
-
-    // const wb = XLSX.utils.book_new();
-    // XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    // XLSX.writeFile(wb, "Profit_and_Loss_Report.xlsx");
+  const exportToExcel = async (year) => {
     try {
       const response = await getFileExportExcel_PL(year);
-      //console.log(response);
-      //const formattedData = formatData(response);
-      //console.log(formattedData);
-      //setDataBS(formattedData);
     } catch (error) {
       console.error("Show Error :", error);
     }
@@ -187,7 +145,9 @@ const PL_Report = () => {
                         />
                         <Button
                           className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1 gap-2"
-                          onClick={()=>{exportToExcel(selectedYearExport.getFullYear())}}
+                          onClick={() => {
+                            exportToExcel(selectedYearExport.getFullYear());
+                          }}
                           data-modal-target="crud-modal"
                           data-modal-toggle="crud-modal"
                         >
@@ -206,115 +166,129 @@ const PL_Report = () => {
                     </div>
                   </div>
                 </div>
-                <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
-                  <table
-                    id="Table"
-                    className="max-h-[500px] text-sm w-full table-fixed"
-                  >
-                    <thead className="sticky top-0 bg-white z-50 w-full">
-                      <tr>
-                        <th className="w-[1px]"></th>
-                        <th className="w-16">No</th>
-                        <th className="w-64">{t("header_table_PL_BS.name")}</th>
-                        {Array.from({ length: 12 }).map((_, monthIndex) => {
-                          const displayMonth = ((monthIndex + 3) % 12) + 1;
-                          const displayYear =
-                            selectedYearExport.getFullYear() +
-                            Math.floor((monthIndex + 3) / 12);
+  
+                  {isLoading && (
+                    <div className="flex justify-center items-center h-full">
+                      {/* Add your loading spinner here */}
+                      <div className="loader"></div>
+                    </div>
+                  )}
+                  {/* Render table when data is available */}
+                  {!isLoading && (
+                    <div className="max-h-[500px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
+                    <table
+                      id="Table"
+                      className="max-h-[500px] text-sm w-full table-fixed"
+                    >
+                      <thead className="sticky top-0 bg-white z-50 w-full">
+                        <tr>
+                          <th className="w-[1px]"></th>
+                          <th className="w-16">No</th>
+                          <th className="w-64">
+                            {t("header_table_PL_BS.name")}
+                          </th>
+                          {Array.from({ length: 12 }).map((_, monthIndex) => {
+                            const displayMonth = ((monthIndex + 3) % 12) + 1;
+                            const displayYear =
+                              selectedYearExport.getFullYear() +
+                              Math.floor((monthIndex + 3) / 12);
 
-                          return (
-                            <th key={monthIndex} className="w-32">
-                              {`${displayMonth}/${displayYear}`}
-                            </th>
-                          );
-                        })}
+                            return (
+                              <th key={monthIndex} className="w-32">
+                                {`${displayMonth}/${displayYear}`}
+                              </th>
+                            );
+                          })}
 
-                        <th className="w-24">
-                          {t("header_table_PL_BS.total")}
-                        </th>
-                        <th className="w-[1px]"></th>
-                      </tr>
-                      <tr className=" ">
-                        <td
-                          colSpan={100}
-                          className=" h-2 bg-white border border-main-theme "
-                        ></td>
-                      </tr>
-                    </thead>
-                    <tbody className="">
-                      <tr className="bg-white h-[0px] py-0 my-0">
-                        <td colSpan={100}></td>
-                      </tr>
-                      {dataBS.map((groupData, groupIndex) => (
-                        <React.Fragment key={groupIndex}>
-                          {groupData.categories.map(
-                            (categoryData, categoryIndex) => (
-                              <tr key={`${groupIndex}-${categoryIndex}`}>
-                                <td className="w-[1px]"></td>
-                                <td className="w-16">
-                                  {sequentialNumber++}
-                                </td>{" "}
-                                {/* Increment the counter */}
-                                <td className="w-64">
-                                  <input
-                                    className="text-center"
-                                    readOnly
-                                    value={categoryData.category_name}
-                                  />
-                                </td>
-                                {Object.keys(categoryData.data).map(
-                                  (month, monthIndex) => (
-                                    <td key={monthIndex} className="w-32">
-                                      <input
-                                        className="text-center"
-                                        readOnly
-                                        value={categoryData.data[month]}
-                                      />
-                                    </td>
-                                  )
-                                )}
-                                <td className="w-24">
-                                  <input
-                                    className="text-center"
-                                    readOnly
-                                    value={categoryData.data.total}
-                                  />
-                                </td>
-                              </tr>
-                            )
-                          )}
-                          <tr key={groupIndex} className="brown-row">
-                            <td className="w-[1px]"></td>
-                            <td className="w-16">{sequentialNumber++}</td>{" "}
-                            {/* Increment the counter */}
-                            <td className="w-64">{groupData.group_name}</td>
-                            {Object.keys(groupData.total_month).map(
-                              (month, monthIndex) => (
-                                <td key={monthIndex} className="w-32">
-                                  <input
-                                    className="text-center"
-                                    readOnly
-                                    value={groupData.total_month[month]}
-                                  />
-                                </td>
+                          <th className="w-24">
+                            {t("header_table_PL_BS.total")}
+                          </th>
+                          <th className="w-[1px]"></th>
+                        </tr>
+                        <tr className=" ">
+                          <td
+                            colSpan={100}
+                            className=" h-2 bg-white border border-main-theme "
+                          ></td>
+                        </tr>
+                      </thead>
+                      <tbody className="">
+                        <tr className="bg-white h-[0px] py-0 my-0">
+                          <td colSpan={100}></td>
+                        </tr>
+                        {dataBS.map((groupData, groupIndex) => (
+                          <React.Fragment key={groupIndex}>
+                            {groupData.categories.map(
+                              (categoryData, categoryIndex) => (
+                                <tr key={`${groupIndex}-${categoryIndex}`}>
+                                  <td className="w-[1px]"></td>
+                                  <td className="w-16">
+                                    {sequentialNumber++}
+                                  </td>{" "}
+                                  {/* Increment the counter */}
+                                  <td className="w-64">
+                                    <input
+                                      className="text-center"
+                                      readOnly
+                                      value={categoryData.category_name}
+                                    />
+                                  </td>
+                                  {Object.keys(categoryData.data).map(
+                                    (month, monthIndex) => (
+                                      <td key={monthIndex} className="w-32">
+                                        <input
+                                          className="text-center"
+                                          readOnly
+                                          value={categoryData.data[month]}
+                                        />
+                                      </td>
+                                    )
+                                  )}
+                                  <td className="w-24">
+                                    <input
+                                      className="text-center"
+                                      readOnly
+                                      value={categoryData.data.total}
+                                    />
+                                  </td>
+                                </tr>
                               )
                             )}
-                            <td className="w-24">
-                              <input
-                                className="text-center"
-                                readOnly
-                                value={groupData.total_month.total}
-                              />
-                            </td>
-                          </tr>
-                        </React.Fragment>
-                      ))}
-                      <tr className="bg-main-theme h-[0px] py-0 my-0">
-                        <td colSpan={100}></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                            <tr key={groupIndex} className="brown-row">
+                              <td className="w-[1px]"></td>
+                              <td className="w-16">
+                                {sequentialNumber++}
+                              </td>{" "}
+                              {/* Increment the counter */}
+                              <td className="w-64">{groupData.group_name}</td>
+                              {Object.keys(groupData.total_month).map(
+                                (month, monthIndex) => (
+                                  <td key={monthIndex} className="w-32">
+                                    <input
+                                      className="text-center"
+                                      readOnly
+                                      value={groupData.total_month[month]}
+                                    />
+                                  </td>
+                                )
+                              )}
+                              <td className="w-24">
+                                <input
+                                  className="text-center"
+                                  readOnly
+                                  value={groupData.total_month.total}
+                                />
+                              </td>
+                            </tr>
+                          </React.Fragment>
+                        ))}
+                        <tr className="bg-main-theme h-[0px] py-0 my-0">
+                          <td colSpan={100}></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+                  )}  
               </div>
             </div>
           </div>
