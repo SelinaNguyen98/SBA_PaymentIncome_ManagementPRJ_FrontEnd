@@ -136,11 +136,11 @@ export default function Input_balance_from_previous_year({
                 <th className="w-[1px]"></th>
               </tr>
               <tr className=" ">
-                        <td
-                          colSpan={100}
-                          className=" h-2 bg-white border border-main-theme "
-                        ></td>
-                      </tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 bg-white border border-main-theme "
+                ></td>
+              </tr>
             </thead>
             <tbody className="">
               <tr className="">
@@ -160,17 +160,15 @@ export default function Input_balance_from_previous_year({
                   </td>
 
                   <td
-                    className="w-[10px] editable-cell"
+                    className="w-[10px]"
                     name="tb_amount"
-                    contentEditable="true"
-                    suppressContentEditableWarning={true}
-                    onKeyUp={(e) => {
-                      const newData = [...data_year];
-                      newData[index].amount = addComma(e.target.innerText);
-                      setData_year(newData);
-                    }}
                   >
-                    {rowData_year.amount}
+                    <input value={rowData_year.amount} onChange={(e) => {
+                      const newData = [...data_year];
+                      newData[index].amount = addComma(e.target.value);
+                      setData_year(newData);
+                    }} />
+
                   </td>
 
                   <td className="w-[1px]"></td>
@@ -187,6 +185,7 @@ export default function Input_balance_from_previous_year({
           <Button
             onClick={() => {
               API.saveYearly(data_year, showToast)
+              cancel
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >

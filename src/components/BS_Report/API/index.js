@@ -9,7 +9,7 @@ function pad2(number) {
 }
 
 const toInt = (value) => {
-    return value.toString().replaceAll(',', '')
+    return parseInt(value.toString().replaceAll(',', ''))
 }
 
 function addComma(number) {
@@ -19,7 +19,8 @@ function addComma(number) {
 }
 
 function valiNumber(val) {
-    if (/\D/.test(val)) {
+    if (/\D/.test(parseInt(val))) {
+        console.log(val)
         return false
     }
     else {
@@ -56,7 +57,6 @@ export function getDataMonthly(year, month, setData) {
         }
     )
         .then(response => {
-            console.log(response)
             if (response.data.success == true) {
                 setData(response.data)
             }
@@ -120,9 +120,10 @@ export function getExchangeRate(month, year, setExchangeRate) {
 
 // được gọi khi nhấn nút save ở exchange rate 
 export function createOrUpdateExchangeRate(exchangeRate, showToast) {
+    console.log(exchangeRate)
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
-    if (valiNumber(exchangeRate.jpy) === false || valiNumber(exchangeRate.usd) === false) {
+    if (valiNumber(toInt(exchangeRate.jpy)) === false || valiNumber(toInt(exchangeRate.usd)) === false) {
         showToast.error("Only input number")
     }
     else {
@@ -134,7 +135,7 @@ export function createOrUpdateExchangeRate(exchangeRate, showToast) {
     }
 }
 
-export function saveMonthly(month, year, data_month, showToast) {
+export function saveMonthly(month, year, data_month, showToast, setSelectedYearExport) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -151,7 +152,12 @@ export function saveMonthly(month, year, data_month, showToast) {
         axios.post(`${API_BASE_URL}/balances`, {
             month_year: year.toString() + '-' + pad2(month),
             balances: data
-        }).then(response => showToast.success(response.message), (e) => {
+        }).then(response => {
+            showToast.success(response.message)
+            const newYear = new Date(year)
+            newYear.setFullYear(year)
+            setSelectedYearExport(newYear)
+        }, (e) => {
             showToast.error("Amount is required ")
             console.log(e)
         }

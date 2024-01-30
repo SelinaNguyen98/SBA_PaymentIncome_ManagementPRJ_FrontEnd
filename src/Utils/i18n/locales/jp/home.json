@@ -36,7 +36,7 @@
     "cancel": "キャンセル",
     "confirm": "削除",
     "export": "出力",
-    "input_monthly_data": "月毎野データ入力",
+    "input_monthly_data": "月毎のデータ入力",
     "input_balance_from_previous_year": "前年度繰越入力",
     "Login": "ログイン",
     "Log_out": "ログアウト",
@@ -75,7 +75,7 @@
     "total": "集計 (JPY)"
   },
   "form_input_monthly_data_BS": {
-    "title_form": "月毎野データ入力",
+    "title_form": "月毎のデータ入力",
     "title_table_name": "勘 定 科 目",
     "title_table_amount": "金額（JPY)",
     "year": "年",

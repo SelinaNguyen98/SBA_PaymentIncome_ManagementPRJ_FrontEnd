@@ -10,7 +10,7 @@ export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   cancel,
   // eslint-disable-next-line react/prop-types
-  selectedTime, showToast,
+  selectedTime, showToast,setSelectedYearExport
 }) {
   const { t } = useTranslation();
   const t_translate = t;
@@ -108,6 +108,7 @@ export default function InputMonthlyData({
 
   const handleChange = (e) => {
     setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
+    console.log(exchangeRate)
   }
   function addComma(number) {
     if (!number) return number
@@ -177,23 +178,23 @@ export default function InputMonthlyData({
                 <th className="w-[1px]"></th>
               </tr>
               <tr className=" ">
-                        <td
-                          colSpan={100}
-                          className=" h-2 bg-white border border-main-theme "
-                        ></td>
-                      </tr>
+                <td
+                  colSpan={100}
+                  className=" h-2 bg-white border border-main-theme "
+                ></td>
+              </tr>
             </thead>
             <tbody className="">
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              {data_month?.balance_sheet?.map((rowData_month, index) => 
+              {data_month?.balance_sheet?.map((rowData_month, index) =>
               (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
                   <td className="w-[3px]" name="tb_no">{index + 1}</td>
-                    
-                 
+
+
                   <td
                     className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
                     name="tb_name"
@@ -202,17 +203,14 @@ export default function InputMonthlyData({
                   </td>
 
                   <td
-                    className="w-[10px] editable-cell"
+                    className="w-[10px]"
                     name="tb_Amount"
-                    contentEditable="true"
-                    suppressContentEditableWarning={true}
-                    onKeyUp={(e) => {
-                      const newData = data_month.balance_sheet;
-                      newData[index].amount = addComma(e.target.innerText);
-                      setData_month({ ...data_month, newData });
-                    }}
                   >
-                    {addComma(rowData_month.amount)}
+                    <input value={rowData_month.amount} onChange={(e) => {
+                      const newData = data_month.balance_sheet;
+                      newData[index].amount = addComma(e.target.value);
+                      setData_month({ ...data_month, newData });
+                    }} />
                   </td>
 
                   <td className="w-[1px]"></td>
@@ -229,7 +227,7 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveMonthly(month, year, data_month, showToast)
+              API.saveMonthly(month, year, data_month, showToast, setSelectedYearExport)
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >
