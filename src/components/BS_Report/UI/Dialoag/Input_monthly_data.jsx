@@ -162,9 +162,9 @@ export default function InputMonthlyData({
             {t_translate("button.save")}
           </Button>
         </div>
-        <div className="max-h-[400px]  max-[1000px]:h-[300px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm">
-            <thead>
+        <div className="max-h-[400px]  max-[1000px]:h-[300px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
+          <table id="Table" className="text-sm">
+            <thead className="sticky top-0 bg-white z-4 w-full">
               <tr>
                 <th className="w-[1px]"></th>
                 <th className="w-[3px]">No</th>
@@ -176,6 +176,12 @@ export default function InputMonthlyData({
                 </th>
                 <th className="w-[1px]"></th>
               </tr>
+              <tr className=" ">
+                        <td
+                          colSpan={100}
+                          className=" h-2 bg-white border border-main-theme "
+                        ></td>
+                      </tr>
             </thead>
             <tbody className="">
               <tr className="">

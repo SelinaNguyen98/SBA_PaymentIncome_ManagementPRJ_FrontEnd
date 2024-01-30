@@ -19,6 +19,7 @@ export const paths = {
   PAYMENT_ORDERS: "payment_orders",
   GROUPCATEGORY: "groups",
   OUTSOURCING:"outsourcing",
+  EXPORT_PL:"Export/PL",
 };
 
 // Request interceptor to attach the authentication token to each request

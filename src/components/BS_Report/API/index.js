@@ -1,5 +1,6 @@
 
 import axios from "axios";
+import { saveAs } from 'file-saver';
 
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
@@ -205,7 +206,6 @@ export function getDataYearly(year, setData) {
 }
 
 export function saveYearly(data_year, showToast) {
-    console.log(valiNumber(55), 55)
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -226,4 +226,14 @@ export function saveYearly(data_year, showToast) {
     } else {
         showToast.error("only input Number")
     }
+}
+
+export function exportFile(year) {
+    const token = localStorage.getItem("token");
+    axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
+    axios.get(`${API_BASE_URL}/Export/BS`,
+        { params: { y: year }, responseType: 'blob', }).then(response => {
+            console.log(response)
+            saveAs(response.data, year + '-' + 'Balace-sheet.xlsx')
+        })
 }

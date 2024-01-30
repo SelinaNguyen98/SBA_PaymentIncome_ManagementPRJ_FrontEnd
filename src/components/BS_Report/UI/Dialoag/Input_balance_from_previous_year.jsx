@@ -121,9 +121,9 @@ export default function Input_balance_from_previous_year({
             {year - 1} {t_translate("form_input_monthly_data_BS.title_form_balance_previous_year")}
           </span>
         )}
-        <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm">
-          <table id="invoiceTable" className="text-sm">
-            <thead>
+        <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
+          <table id="Table" className="text-sm">
+            <thead className="sticky top-0 bg-white z-4 w-full">
               <tr>
                 <th className="w-[1px]"></th>
                 <th className="w-[3px]">No</th>
@@ -135,6 +135,12 @@ export default function Input_balance_from_previous_year({
                 </th>
                 <th className="w-[1px]"></th>
               </tr>
+              <tr className=" ">
+                        <td
+                          colSpan={100}
+                          className=" h-2 bg-white border border-main-theme "
+                        ></td>
+                      </tr>
             </thead>
             <tbody className="">
               <tr className="">

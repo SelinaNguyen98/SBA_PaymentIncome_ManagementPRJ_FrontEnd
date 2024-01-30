@@ -1,14 +1,13 @@
 import * as yup from "yup";
 
-
 export const createPaymentSchema = yup
   .object()
   .shape({
-    payment_date: yup.string().required("Ngày thanh toán là bắt buộc"),
-    name: yup.string().required("name là bắt buộc"),
+    payment_date: yup.string().required("Value can not be null!"),
+    name: yup.string().required("Value can not be null!"),
     cost: yup.string().required(),
-    pay: yup.string().required("is required"),
-    category_id: yup.string().required("is required"),
+    pay: yup.string().required("Value can not be null!"),
+    category_id: yup.string().required("Value can not be null!"),
   })
   .required();
 
@@ -48,6 +47,5 @@ export const createOutsourcingSchema = yup
     outsourced_project: yup.string().required("Value can not be null!"),
     company_name: yup.string().required("Value can not be null!"),
     vnd: yup.string().required(),
-
   })
   .required();

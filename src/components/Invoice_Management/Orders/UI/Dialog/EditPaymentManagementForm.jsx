@@ -22,6 +22,8 @@ export default function EditPaymentManagementForm({
   selectedDate,
   // eslint-disable-next-line react/prop-types, no-unused-vars
   exchangeRateId,
+  // eslint-disable-next-line react/prop-types, no-unused-vars
+  show_result,
 }) {
   const t_add_payment = t;
   const {
@@ -61,7 +63,7 @@ export default function EditPaymentManagementForm({
     .toISOString()
     .split("T")[0];
 
-   // State Format Day
+  // State Format Day
   // eslint-disable-next-line no-unused-vars
   const existingData = {
     // eslint-disable-next-line react/prop-types
@@ -78,12 +80,13 @@ export default function EditPaymentManagementForm({
     Object.keys(existingData).forEach((key) => {
       setValue(key, existingData[key]);
     });
-  }, [selectedDate,invoicePayment]);
+  }, [selectedDate, invoicePayment]);
   const onSubmit = handleSubmit(async (data) => {
     try {
       const response = await updatePayment(data);
       console.log(response);
       cancel();
+      show_result();
     } catch (error) {
       console.error("Error submitting form:", error.data);
     }
@@ -97,10 +100,10 @@ export default function EditPaymentManagementForm({
         <form className="px-4 mt-5" onSubmit={onSubmit}>
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
             <label className="lg:col-span-3">
-            {t_add_payment("add_edit_order.day")}
+              {t_add_payment("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-            <input
+              <input
                 type="date"
                 {...register("payment_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
@@ -155,7 +158,7 @@ export default function EditPaymentManagementForm({
               </span>
             </Button>
           </div>
-        </form> 
+        </form>
       </div>
     </Modal>
   );
@@ -206,4 +209,3 @@ const InputCustomComponent = ({
     </div>
   );
 };
-
