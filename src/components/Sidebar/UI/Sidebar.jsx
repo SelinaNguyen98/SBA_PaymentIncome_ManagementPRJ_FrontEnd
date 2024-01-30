@@ -151,7 +151,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className={`flex flex-row bg-main-theme h-screen lg:h-[962px] 2xl:h-[958px] xl:h-[958px] overflow-hidden`}>
+    <div className={`flex flex-row bg-main-theme h-screen overflow-hidden`}>
       <div
         className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]  ${
           isHiddenSidebar ? "hidden" : ""
