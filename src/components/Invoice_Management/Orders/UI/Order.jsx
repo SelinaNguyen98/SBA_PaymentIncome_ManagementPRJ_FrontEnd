@@ -193,23 +193,30 @@ const Order = () => {
         } else {
           setDataOrder((prevData) => {
             console.log("Previous Data:", prevData);
-            return response.orders || [];
+
+            // Thêm cột thứ tự vào mỗi order
+            const newData = response.orders.map((order, index) => ({
+              ...order,
+              orderNumber: (currentPage_Order - 1) * 5 + index + 1,
+            }));
+
+            return newData || [];
           });
+
           setTotalPages_Order(response.pagination.total_pages);
 
-          // Check and update selectedRows_Order based on selectedOrderIds
+          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
           const newSelectedRows = new Array(response.orders.length).fill(false);
           response.orders.forEach((order, index) => {
             if (selectedOrderIds.includes(order.id)) {
               newSelectedRows[index] = true;
             }
           });
+
           setSelectedRows_Order(newSelectedRows);
           // setSelectedRow_Order([]);
         }
-      }
-  
-       else {
+      } else {
         console.log("Invalid response format:", response);
         setDataOrder([]);
         setTotalPages_Order(1);
@@ -228,7 +235,9 @@ const Order = () => {
     };
 
     fetchData();
-    return () => { controller.abort() }
+    return () => {
+      controller.abort();
+    };
   }, [currentPage_Order, selectedOrderIds]);
 
   //Payment
@@ -303,9 +312,9 @@ const Order = () => {
         selectedDate,
         currentPage_Payment
       );
-
+  
       console.log("API Response:", response);
-
+  
       if (response && response.pagination) {
         if (response.payment_orders === null) {
           setTotalPages_Payment(1);
@@ -313,19 +322,26 @@ const Order = () => {
         } else {
           setDataPayment((prevData) => {
             console.log("Previous Data:", prevData);
-            return response.payment_orders || [];
+  
+            // Thêm cột thứ tự vào mỗi payment_order
+            const newData = response.payment_orders.map((payment_order, index) => ({
+              ...payment_order,
+              paymentNumber: (currentPage_Payment - 1) * 5 + index + 1,
+            }));
+  
+            return newData || [];
           });
+  
           setTotalPages_Payment(response.pagination.total_pages);
-
-          // Check and update selectedRows_Order based on selectedOrderIds
-          const newSelectedRows = new Array(
-            response.payment_orders.length
-          ).fill(false);
-          response.payment_orders.forEach((payment_orders, index) => {
-            if (selectedPaymentIds.includes(payment_orders.id)) {
+  
+          // Check và cập nhật selectedRows_Payment dựa trên selectedPaymentIds
+          const newSelectedRows = new Array(response.payment_orders.length).fill(false);
+          response.payment_orders.forEach((payment_order, index) => {
+            if (selectedPaymentIds.includes(payment_order.id)) {
               newSelectedRows[index] = true;
             }
           });
+  
           setSelectedRows_Payment(newSelectedRows);
           // setSelectedRow_Payment([]);
         }
@@ -340,6 +356,7 @@ const Order = () => {
       setTotalPages_Payment(1);
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       console.log(state.dataExRate);
@@ -347,9 +364,10 @@ const Order = () => {
     };
 
     fetchData();
-    return () => { controller.abort() }
+    return () => {
+      controller.abort();
+    };
   }, [currentPage_Payment, selectedPaymentIds]);
-
 
   //Outsourcing
   const [dataOutsourcing, setDataOutsourcing] = useState([]);
@@ -428,9 +446,9 @@ const Order = () => {
         selectedDate,
         currentPage_Outsourcing
       );
-
+  
       console.log("API Response:", response);
-
+  
       if (response && response.pagination) {
         if (response.outsourcing === null) {
           setTotalPages_Outsourcing(1);
@@ -438,11 +456,19 @@ const Order = () => {
         } else {
           setDataOutsourcing((prevData) => {
             console.log("Previous Data:", prevData);
-            return response.outsourcing || [];
+  
+            // Thêm cột thứ tự vào mỗi outsourcing
+            const newData = response.outsourcing.map((outsourcing, index) => ({
+              ...outsourcing,
+              outsourcingNumber: (currentPage_Outsourcing - 1) * 5 + index + 1,
+            }));
+  
+            return newData || [];
           });
+  
           setTotalPages_Outsourcing(response.pagination.total_pages);
-
-          // Check and update selectedRows_Order based on selectedOrderIds
+  
+          // Check và cập nhật selectedRows_Outsourcing dựa trên selectedOutsourcingIds
           const newSelectedRows = new Array(response.outsourcing.length).fill(
             false
           );
@@ -451,6 +477,7 @@ const Order = () => {
               newSelectedRows[index] = true;
             }
           });
+  
           setSelectedRows_Outsourcing(newSelectedRows);
           // setSelectedRow_Outsourcing([]);
           console.log(response.outsourcing);
@@ -466,6 +493,7 @@ const Order = () => {
       setTotalPages_Outsourcing(1);
     }
   };
+  
   useEffect(() => {
     const fetchData = async () => {
       console.log(state.dataExRate);
@@ -473,9 +501,11 @@ const Order = () => {
     };
 
     fetchData();
-    return () => { controller.abort() }
+    return () => {
+      controller.abort();
+    };
   }, [currentPage_Outsourcing, selectedOutsourcingIds]);
-  
+
   useEffect(() => {
     const fetchData = () => {
       fetchExchangeRate();
@@ -484,7 +514,9 @@ const Order = () => {
       fetchData_Outsourcing();
     };
     fetchData();
-    return () => { controller.abort() }
+    return () => {
+      controller.abort();
+    };
   }, [selectedDate]);
 
   return (
@@ -616,7 +648,7 @@ const Order = () => {
                         />
                       </td>
                       <td className="w-8" name="tb_no">
-                        {(currentPage_Order - 1) * 5 + index + 1}
+                        {rowDataOrder.orderNumber}
                       </td>
                       <td className="w-24" name="tb_date">
                         <input
@@ -866,7 +898,7 @@ const Order = () => {
                         />
                       </td>
                       <td className="w-8" name="tb_no">
-                        {(currentPage_Payment - 1) * 5 + index + 1}
+                      {rowDataPayment.paymentNumber}
                       </td>
                       <td className="w-24" name="tb_date">
                         <input
@@ -1119,7 +1151,7 @@ const Order = () => {
                         />
                       </td>
                       <td className="w-8" name="tb_no">
-                        {(currentPage_Outsourcing - 1) * 5 + index + 1}
+                       {rowDataOutsourcing.outsourcingNumber}
                       </td>
                       <td className="w-24" name="tb_date">
                         <input
@@ -1328,7 +1360,7 @@ const Order = () => {
           });
           //fetchData_Order();
         }}
-        show_result={()=>{
+        show_result={() => {
           showToast.success("Edit successfully!");
           fetchData_Order();
         }}
@@ -1346,7 +1378,7 @@ const Order = () => {
           });
           //fetchData_Payment();
         }}
-        show_result={()=>{
+        show_result={() => {
           showToast.success("Edit successfully!");
           fetchData_Payment();
         }}
@@ -1364,7 +1396,7 @@ const Order = () => {
           });
           //fetchData_Outsourcing();
         }}
-        show_result={()=>{
+        show_result={() => {
           showToast.success("Edit successfully!");
           fetchData_Outsourcing();
         }}
