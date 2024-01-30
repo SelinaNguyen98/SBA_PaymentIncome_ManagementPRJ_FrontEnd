@@ -11,3 +11,13 @@ export const getPaymentsByYearAndMonths = async (y) => {
     throw error;
   }
 };
+export const getFileExportExcel_PL = async (y)=>{
+  try {
+    const response = await API.callAPI_ExportPL(
+      y
+    );
+    return response;
+  }catch (error) {
+    throw error;
+  }
+}

@@ -5,7 +5,7 @@ import YearPicker_Button from "../../../Utils/YearPicker/YearPicker_Button";
 import "../Style/style.css";
 import { AppContext } from "../../../Utils/contexts/app.context";
 import { useTranslation } from "react-i18next";
-import { getPaymentsByYearAndMonths } from "../Controller";
+import { getPaymentsByYearAndMonths, getFileExportExcel_PL } from "../Controller";
 import * as XLSX from "xlsx";
 const PL_Report = () => {
   let sequentialNumber = 1;
@@ -87,50 +87,59 @@ const PL_Report = () => {
     return formattedNumber;
   };
 
-  const exportToExcel = () => {
-    const titleRow = [t("title.PL_report")]; // Add title row
-    const headerRow = [
-      "",
-      "No",
-      t("header_table_PL_BS.name"),
-      ...Array.from({ length: 12 }).map((_, monthIndex) => {
-        const displayMonth = ((monthIndex + 3) % 12) + 1;
-        const displayYear =
-          selectedYearExport.getFullYear() + Math.floor((monthIndex + 3) / 12);
+  const exportToExcel= async (year) => {
+    // const titleRow = [t("title.PL_report")]; // Add title row
+    // const headerRow = [
+    //   "",
+    //   "No",
+    //   t("header_table_PL_BS.name"),
+    //   ...Array.from({ length: 12 }).map((_, monthIndex) => {
+    //     const displayMonth = ((monthIndex + 3) % 12) + 1;
+    //     const displayYear =
+    //       selectedYearExport.getFullYear() + Math.floor((monthIndex + 3) / 12);
 
-        return `${displayMonth}/${displayYear}`;
-      }),
-      t("header_table_PL_BS.total"),
-      "",
-    ];
+    //     return `${displayMonth}/${displayYear}`;
+    //   }),
+    //   t("header_table_PL_BS.total"),
+    //   "",
+    // ];
 
-    const dataRows = dataBS.flatMap((groupData, groupIndex) => [
-      ...groupData.categories.map((categoryData, categoryIndex) => [
-        "",
-        sequentialNumber_excel++,
-        categoryData.category_name,
-        ...Object.keys(categoryData.data).map(
-          (month) => categoryData.data[month]
-        ),
-        categoryData.total,
-        "",
-      ]),
-      [
-        "",
-        sequentialNumber_excel++,
-        groupData.group_name,
-        ...Object.keys(groupData.total_month).map(
-          (month) => groupData.total_month[month]
-        ),
-        "",
-      ],
-      ["", "", "", "", "", "", ""],
-    ]);
-    const ws = XLSX.utils.aoa_to_sheet([titleRow, headerRow, ...dataRows]);
+    // const dataRows = dataBS.flatMap((groupData, groupIndex) => [
+    //   ...groupData.categories.map((categoryData, categoryIndex) => [
+    //     "",
+    //     sequentialNumber_excel++,
+    //     categoryData.category_name,
+    //     ...Object.keys(categoryData.data).map(
+    //       (month) => categoryData.data[month]
+    //     ),
+    //     categoryData.total,
+    //     "",
+    //   ]),
+    //   [
+    //     "",
+    //     sequentialNumber_excel++,
+    //     groupData.group_name,
+    //     ...Object.keys(groupData.total_month).map(
+    //       (month) => groupData.total_month[month]
+    //     ),
+    //     "",
+    //   ],
+    //   ["", "", "", "", "", "", ""],
+    // ]);
+    // const ws = XLSX.utils.aoa_to_sheet([titleRow, headerRow, ...dataRows]);
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-    XLSX.writeFile(wb, "Profit_and_Loss_Report.xlsx");
+    // const wb = XLSX.utils.book_new();
+    // XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    // XLSX.writeFile(wb, "Profit_and_Loss_Report.xlsx");
+    try {
+      const response = await getFileExportExcel_PL(year);
+      //console.log(response);
+      //const formattedData = formatData(response);
+      //console.log(formattedData);
+      //setDataBS(formattedData);
+    } catch (error) {
+      console.error("Show Error :", error);
+    }
   };
 
   return (
@@ -178,7 +187,7 @@ const PL_Report = () => {
                         />
                         <Button
                           className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1 gap-2"
-                          onClick={exportToExcel}
+                          onClick={()=>{exportToExcel(selectedYearExport.getFullYear())}}
                           data-modal-target="crud-modal"
                           data-modal-toggle="crud-modal"
                         >
@@ -265,12 +274,11 @@ const PL_Report = () => {
                                   )
                                 )}
                                 <td className="w-24">
-                                <input
-                                        className="text-center"
-                                        readOnly
-                                        value= {categoryData.data.total}
-                                      />
-                                
+                                  <input
+                                    className="text-center"
+                                    readOnly
+                                    value={categoryData.data.total}
+                                  />
                                 </td>
                               </tr>
                             )
@@ -283,12 +291,20 @@ const PL_Report = () => {
                             {Object.keys(groupData.total_month).map(
                               (month, monthIndex) => (
                                 <td key={monthIndex} className="w-32">
-                                  {groupData.total_month[month]}
+                                  <input
+                                    className="text-center"
+                                    readOnly
+                                    value={groupData.total_month[month]}
+                                  />
                                 </td>
                               )
                             )}
                             <td className="w-24">
-                              {groupData.total_month.total}
+                              <input
+                                className="text-center"
+                                readOnly
+                                value={groupData.total_month.total}
+                              />
                             </td>
                           </tr>
                         </React.Fragment>

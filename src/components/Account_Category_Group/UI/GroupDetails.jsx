@@ -101,7 +101,7 @@ export default function GroupDetails() {
     }
   };
 
-  const [dataTable, setDataOrder] = useState([]);
+  const [dataTable, setDataTable] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const handleChangePage = (newPage) => {
@@ -115,29 +115,46 @@ export default function GroupDetails() {
         Parameters_report
       );
       console.log("API Response:", response);
-
+  
       if (response && response.pagination) {
         if (response.groups === null) {
           setTotalPages(1);
           setCurrentPage(1);
         } else {
-          setDataOrder((prevData) => {
+          // Thêm cột thứ tự vào mỗi dòng dữ liệu
+          const newData = response.groups.map((item, index) => {
+            // Tính toán giá trị của cột thứ tự
+            const number = (currentPage - 1) * 10 + index + 1;
+  
+            // Thêm cột thứ tự vào dòng dữ liệu
+            return {
+              ...item,
+              number: number,
+            };
+          });
+  
+          setDataTable((prevData) => {
             console.log("Previous Data:", prevData);
-            return response.groups || [];
+            // Cập nhật state với dữ liệu mới có cột thứ tự
+            return newData;
           });
           setTotalPages(response.pagination.total_pages);
+          setCurrentPage(1);
         }
       } else {
         console.error("Invalid response format:", response);
-        setDataOrder([]);
+        setDataTable([]);
         setTotalPages(1);
+        setCurrentPage(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
-      setDataOrder([]);
+      setDataTable([]);
       setTotalPages(1);
+      setCurrentPage(1);
     }
   };
+  
 
   useEffect(() => {
     const controller = new AbortController();
@@ -155,17 +172,33 @@ export default function GroupDetails() {
             setTotalPages(1);
             setCurrentPage(1);
           } else {
-            setDataOrder((prevData) => response.groups || []);
+            // Thêm cột thứ tự vào mỗi dòng dữ liệu
+          const newData = response.groups.map((item, index) => {
+            // Tính toán giá trị của cột thứ tự
+            const number = (currentPage - 1) * 10 + index + 1;
+  
+            // Thêm cột thứ tự vào dòng dữ liệu
+            return {
+              ...item,
+              number: number,
+            };
+          });
+  
+          setDataTable((prevData) => {
+            console.log("Previous Data:", prevData);
+            // Cập nhật state với dữ liệu mới có cột thứ tự
+            return newData;
+          });
             setTotalPages(response.pagination.total_pages);
           }
         } else {
           console.error("Invalid response format:", response);
-          setDataOrder([]);
+          setDataTable([]);
           setTotalPages(1);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-        setDataOrder([]);
+        setDataTable([]);
         setTotalPages(1);
       }
     };
@@ -302,7 +335,7 @@ export default function GroupDetails() {
                       <tr key={index}>
                         <td className=" w-[5%]"></td>
                         <td className="w-8" name="tb_no">
-                          {(currentPage - 1) * 10 + index + 1}
+                        {group?.number}
                         </td>
                         <td name="tb_report">
                           {group?.report_type === "pl"
