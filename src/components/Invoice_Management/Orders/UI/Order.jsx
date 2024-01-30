@@ -125,6 +125,7 @@ const Order = () => {
     setState((prevState) => ({ ...prevState, ...data }));
 
   //Order
+  const [isLoading_Order, setIsLoading_Order] = useState(true);
   const [dataOrder, setDataOrder] = useState([]);
   const [selectedRows_Order, setSelectedRows_Order] = useState([]);
   const [currentPage_Order, setCurrentPage_Order] = useState(1);
@@ -195,6 +196,7 @@ const Order = () => {
     }
   };
   const fetchData_Order = async () => {
+    setIsLoading_Order(true);
     try {
       const response = await getOrderByYearAndMonths(
         selectedDate,
@@ -242,6 +244,8 @@ const Order = () => {
       console.error("Error fetching data:", error);
       setDataOrder([]);
       setTotalPages_Order(1);
+    } finally {
+      setIsLoading_Order(false);
     }
   };
 
@@ -258,6 +262,7 @@ const Order = () => {
   }, [currentPage_Order, selectedOrderIds]);
 
   //Payment
+  const [isLoading_Payment, setIsLoading_Payment] = useState(true);
   const [dataPayment, setDataPayment] = useState([]);
   const [selectedRows_Payment, setSelectedRows_Payment] = useState([]);
   const [currentPage_Payment, setCurrentPage_Payment] = useState(1);
@@ -324,6 +329,7 @@ const Order = () => {
     }
   };
   const fetchData_Payment = async () => {
+    setIsLoading_Payment(true);
     try {
       const response = await getPaymentByYearAndMonths(
         selectedDate,
@@ -375,6 +381,8 @@ const Order = () => {
       console.error("Error fetching data:", error);
       setDataPayment([]);
       setTotalPages_Payment(1);
+    } finally {
+      setIsLoading_Payment(false);
     }
   };
 
@@ -391,6 +399,7 @@ const Order = () => {
   }, [currentPage_Payment, selectedPaymentIds]);
 
   //Outsourcing
+  const [isLoading_Outsourcing, setIsLoading_Outsourcing] = useState(true);
   const [dataOutsourcing, setDataOutsourcing] = useState([]);
   const [selectedRows_Outsourcing, setSelectedRows_Outsourcing] = useState([]);
   const [currentPage_Outsourcing, setCurrentPage_Outsourcing] = useState(1);
@@ -462,6 +471,7 @@ const Order = () => {
     }
   };
   const fetchData_Outsourcing = async () => {
+    setIsLoading_Outsourcing(true);
     try {
       const response = await getOutsourcingByYearAndMonths(
         selectedDate,
@@ -512,6 +522,8 @@ const Order = () => {
       console.error("Error fetching data:", error);
       setDataOutsourcing([]);
       setTotalPages_Outsourcing(1);
+    } finally {
+      setIsLoading_Outsourcing(false);
     }
   };
 
@@ -655,128 +667,149 @@ const Order = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="">
-                  <td colSpan={100}></td>
-                </tr>
-                {dataOrder && dataOrder.length > 0 ? (
-                  dataOrder.map((rowDataOrder, index) => (
-                    <tr key={index}>
-                      <td className="w-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedRows_Order[index]}
-                          onChange={() => handleRowCheckboxChange_Order(index)}
-                        />
-                      </td>
-                      <td className="w-8" name="tb_no">
-                        {rowDataOrder.orderNumber}
-                      </td>
-                      <td className="w-24" name="tb_date">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={(rowDataOrder.order_date || "").split(" ")[0]}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_name">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={rowDataOrder.company_name}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_jyp">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumber(rowDataOrder.jpy)}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_vnd">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumberSeparator(rowDataOrder.vnd)}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_usd">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumber(rowDataOrder.usd)}
-                        />
-                      </td>
-                      <td className="w-8" name="tb_action">
-                        <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
-                          <svg
-                            onClick={() => {
-                              updateState({ isShowFormEditOrder: true });
-                              console.log(rowDataOrder);
-                              updateState({
-                                selectedRowOrder_Edit: rowDataOrder,
-                              });
-                              updateState({
-                                selectedRowOrder_Edit: rowDataOrder,
-                              });
-                            }}
-                            className="cursor-pointer"
-                            width="19"
-                            height="19"
-                            viewBox="0 0 19 19"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
-                              fill="#FFC107"
-                            />
-                            <path
-                              d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
-                              fill="black"
-                              fillOpacity="0.2"
-                            />
-                          </svg>
-                          <div className=" border border-gray-400 mx-2 "></div>
-
-                          <svg
-                            className="cursor-pointer"
-                            onClick={() => {
-                              updateState({ isShowDeleteModal_Order: true });
-                              console.log(index);
-                              handleRowCheckboxChange_Order(index);
-                            }}
-                            width="19"
-                            height="19"
-                            viewBox="0 0 16 18"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
-                              fill="#F44336"
-                            />
-                            <path
-                              d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
-                              fill="black"
-                              fillOpacity="0.2"
-                            />
-                          </svg>
-                        </div>
-                      </td>
-                      <td className="w-[1%]"></td>
-                    </tr>
-                  ))
-                ) : (
+                {isLoading_Order && (
                   <tr>
-                    <td colSpan={100} className="text-center">
-                      DATA NOT FOUND
+                    <td colSpan={100} className="h-full">
+                      <div className="flex justify-center items-center h-full">
+                        <div className="loader"></div>
+                      </div>
                     </td>
                   </tr>
                 )}
 
-                <tr className="bg-main-theme h-[0px] py-0 my-0">
-                  <td colSpan={100}></td>
-                </tr>
+                {/* Render table rows when data is available */}
+                {!isLoading_Order && (
+                  <React.Fragment>
+                    <tr className="">
+                      <td colSpan={100}></td>
+                    </tr>
+                    {dataOrder && dataOrder.length > 0 ? (
+                      dataOrder.map((rowDataOrder, index) => (
+                        <tr key={index}>
+                          <td className="w-3">
+                            <input
+                              type="checkbox"
+                              checked={selectedRows_Order[index]}
+                              onChange={() =>
+                                handleRowCheckboxChange_Order(index)
+                              }
+                            />
+                          </td>
+                          <td className="w-8" name="tb_no">
+                            {rowDataOrder.orderNumber}
+                          </td>
+                          <td className="w-24" name="tb_date">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={
+                                (rowDataOrder.order_date || "").split(" ")[0]
+                              }
+                            />
+                          </td>
+                          <td className="w-32" name="tb_name">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={rowDataOrder.company_name}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_jyp">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumber(rowDataOrder.jpy)}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_vnd">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumberSeparator(rowDataOrder.vnd)}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_usd">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumber(rowDataOrder.usd)}
+                            />
+                          </td>
+                          <td className="w-8" name="tb_action">
+                            <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                              <svg
+                                onClick={() => {
+                                  updateState({ isShowFormEditOrder: true });
+                                  console.log(rowDataOrder);
+                                  updateState({
+                                    selectedRowOrder_Edit: rowDataOrder,
+                                  });
+                                  updateState({
+                                    selectedRowOrder_Edit: rowDataOrder,
+                                  });
+                                }}
+                                className="cursor-pointer"
+                                width="19"
+                                height="19"
+                                viewBox="0 0 19 19"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                                  fill="#FFC107"
+                                />
+                                <path
+                                  d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                                  fill="black"
+                                  fillOpacity="0.2"
+                                />
+                              </svg>
+                              <div className=" border border-gray-400 mx-2 "></div>
+
+                              <svg
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  updateState({
+                                    isShowDeleteModal_Order: true,
+                                  });
+                                  console.log(index);
+                                  handleRowCheckboxChange_Order(index);
+                                }}
+                                width="19"
+                                height="19"
+                                viewBox="0 0 16 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                                  fill="#F44336"
+                                />
+                                <path
+                                  d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                                  fill="black"
+                                  fillOpacity="0.2"
+                                />
+                              </svg>
+                            </div>
+                          </td>
+                          <td className="w-[1%]"></td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={100} className="text-center">
+                          DATA NOT FOUND
+                        </td>
+                      </tr>
+                    )}
+
+                    <tr className="bg-main-theme h-[0px] py-0 my-0">
+                      <td colSpan={100}></td>
+                    </tr>
+                  </React.Fragment>
+                )}
               </tbody>
             </table>
           </div>
@@ -903,132 +936,152 @@ const Order = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="">
-                  <td colSpan={100}></td>
-                </tr>
-                {dataPayment && dataPayment.length > 0 ? (
-                  dataPayment.map((rowDataPayment, index) => (
-                    <tr key={index}>
-                      <td className="w-3">
-                        <input
-                          type="checkbox"
-                          checked={selectedRows_Payment[index]}
-                          onChange={() =>
-                            handleRowCheckboxChange_Payment(index)
-                          }
-                        />
-                      </td>
-                      <td className="w-8" name="tb_no">
-                        {rowDataPayment.paymentNumber}
-                      </td>
-                      <td className="w-24" name="tb_date">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={
-                            (rowDataPayment.payment_date || "").split(" ")[0]
-                          }
-                        />
-                      </td>
-                      <td className="w-32" name="tb_name">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={rowDataPayment.company_name}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_jyp">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumber(rowDataPayment.jpy)}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_vnd">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumberSeparator(rowDataPayment.vnd)}
-                        />
-                      </td>
-                      <td className="w-32" name="tb_usd">
-                        <input
-                          className="text-center"
-                          readOnly
-                          value={formatNumber(rowDataPayment.usd)}
-                        />
-                      </td>
-                      <td className="w-8" name="tb_action">
-                        <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
-                          <svg
-                            onClick={() => {
-                              updateState({ isShowFormEditPayment: true });
-                              console.log(rowDataPayment);
-                              updateState({
-                                selectedRowPayment_Edit: rowDataPayment,
-                              });
-                              updateState({
-                                selectedRowPaymnet_Edit: rowDataPayment,
-                              });
-                            }}
-                            className="cursor-pointer"
-                            width="19"
-                            height="19"
-                            viewBox="0 0 19 19"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
-                              fill="#FFC107"
-                            />
-                            <path
-                              d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
-                              fill="black"
-                              fillOpacity="0.2"
-                            />
-                          </svg>
-                          <div className=" border border-gray-400 mx-2 "></div>
-
-                          <svg
-                            className="cursor-pointer"
-                            onClick={() => {
-                              updateState({ isShowDeleteModal_Payment: true });
-                              console.log(index);
-                              handleRowCheckboxChange_Payment(index);
-                            }}
-                            width="19"
-                            height="19"
-                            viewBox="0 0 16 18"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
-                              fill="#F44336"
-                            />
-                            <path
-                              d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
-                              fill="black"
-                              fillOpacity="0.2"
-                            />
-                          </svg>
-                        </div>
-                      </td>
-                      <td className="w-[1%]"></td>
-                    </tr>
-                  ))
-                ) : (
+                {/* Conditionally render the loading spinner within tbody */}
+                {isLoading_Payment && (
                   <tr>
-                    <td colSpan={100} className="text-center">
-                      DATA NOT FOUND
+                    <td colSpan={100} className="h-full">
+                      <div className="flex justify-center items-center h-full">
+                        <div className="loader"></div>
+                      </div>
                     </td>
                   </tr>
                 )}
 
-                <tr className="bg-main-theme h-[0px] py-0 my-0">
-                  <td colSpan={100}></td>
-                </tr>
+                {/* Render table rows when data is available */}
+                {!isLoading_Payment && (
+                  <React.Fragment>
+                    <tr className="">
+                      <td colSpan={100}></td>
+                    </tr>
+                    {dataPayment && dataPayment.length > 0 ? (
+                      dataPayment.map((rowDataPayment, index) => (
+                        <tr key={index}>
+                          <td className="w-3">
+                            <input
+                              type="checkbox"
+                              checked={selectedRows_Payment[index]}
+                              onChange={() =>
+                                handleRowCheckboxChange_Payment(index)
+                              }
+                            />
+                          </td>
+                          <td className="w-8" name="tb_no">
+                            {rowDataPayment.paymentNumber}
+                          </td>
+                          <td className="w-24" name="tb_date">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={
+                                (rowDataPayment.payment_date || "").split(
+                                  " "
+                                )[0]
+                              }
+                            />
+                          </td>
+                          <td className="w-32" name="tb_name">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={rowDataPayment.company_name}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_jyp">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumber(rowDataPayment.jpy)}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_vnd">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumberSeparator(rowDataPayment.vnd)}
+                            />
+                          </td>
+                          <td className="w-32" name="tb_usd">
+                            <input
+                              className="text-center"
+                              readOnly
+                              value={formatNumber(rowDataPayment.usd)}
+                            />
+                          </td>
+                          <td className="w-8" name="tb_action">
+                            <div className=" flex justify-center py-1 mx-1 bg-white  border-gray-500/50 border rounded-sm ">
+                              <svg
+                                onClick={() => {
+                                  updateState({ isShowFormEditPayment: true });
+                                  console.log(rowDataPayment);
+                                  updateState({
+                                    selectedRowPayment_Edit: rowDataPayment,
+                                  });
+                                  updateState({
+                                    selectedRowPaymnet_Edit: rowDataPayment,
+                                  });
+                                }}
+                                className="cursor-pointer"
+                                width="19"
+                                height="19"
+                                viewBox="0 0 19 19"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                                  fill="#FFC107"
+                                />
+                                <path
+                                  d="M16.3 6.175L12.05 1.975L13.45 0.575C13.8333 0.191667 14.3043 0 14.863 0C15.4217 0 15.8923 0.191667 16.275 0.575L17.675 1.975C18.0583 2.35833 18.2583 2.821 18.275 3.363C18.2917 3.905 18.1083 4.36733 17.725 4.75L16.3 6.175ZM14.85 7.65L4.25 18.25H0V14L10.6 3.4L14.85 7.65Z"
+                                  fill="black"
+                                  fillOpacity="0.2"
+                                />
+                              </svg>
+                              <div className=" border border-gray-400 mx-2 "></div>
+
+                              <svg
+                                className="cursor-pointer"
+                                onClick={() => {
+                                  updateState({
+                                    isShowDeleteModal_Payment: true,
+                                  });
+                                  console.log(index);
+                                  handleRowCheckboxChange_Payment(index);
+                                }}
+                                width="19"
+                                height="19"
+                                viewBox="0 0 16 18"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                                  fill="#F44336"
+                                />
+                                <path
+                                  d="M3 18C2.45 18 1.979 17.804 1.587 17.412C1.195 17.02 0.999333 16.5493 1 16V3H0V1H5V0H11V1H16V3H15V16C15 16.55 14.804 17.021 14.412 17.413C14.02 17.805 13.5493 18.0007 13 18H3ZM5 14H7V5H5V14ZM9 14H11V5H9V14Z"
+                                  fill="black"
+                                  fillOpacity="0.2"
+                                />
+                              </svg>
+                            </div>
+                          </td>
+                          <td className="w-[1%]"></td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={100} className="text-center">
+                          DATA NOT FOUND
+                        </td>
+                      </tr>
+                    )}
+
+                    <tr className="bg-main-theme h-[0px] py-0 my-0">
+                      <td colSpan={100}></td>
+                    </tr>
+                  </React.Fragment>
+                )}
               </tbody>
             </table>
           </div>
@@ -1156,7 +1209,21 @@ const Order = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="">
+                 {/* Conditionally render the loading spinner within tbody */}
+                 {isLoading_Outsourcing && (
+                  <tr>
+                    <td colSpan={100} className="h-full">
+                      <div className="flex justify-center items-center h-full">
+                        <div className="loader"></div>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+
+                {/* Render table rows when data is available */}
+                {!isLoading_Outsourcing && (
+                  <React.Fragment>
+                  <tr className="">
                   <td colSpan={100}></td>
                 </tr>
                 {dataOutsourcing && dataOutsourcing.length > 0 ? (
@@ -1282,6 +1349,8 @@ const Order = () => {
                 <tr className="bg-main-theme h-[0px] py-0 my-0">
                   <td colSpan={100}></td>
                 </tr>
+                  </React.Fragment>
+                )}
               </tbody>
             </table>
           </div>
@@ -1329,69 +1398,71 @@ const Order = () => {
           </div>
         </Modal>
       )}
-      {state.isShowFormNewOrder &&
+      {state.isShowFormNewOrder && (
         <AddOrderForm
-        visible={state.isShowFormNewOrder}
-        t={t_order}
-        cancel={() => updateState({ isShowFormNewOrder: false })}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        changeFirstPage={() => {
-          showToast.success("Add new order successfully!");
-          updateState({ isShowFormNewOrder: false });
-          setCurrentPage_Order(1);
-          fetchData_Order();
-        }}
-      />
-      }
-      {state.isShowFormNewPayment &&
+          visible={state.isShowFormNewOrder}
+          t={t_order}
+          cancel={() => updateState({ isShowFormNewOrder: false })}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          changeFirstPage={() => {
+            showToast.success("Add new order successfully!");
+            updateState({ isShowFormNewOrder: false });
+            setCurrentPage_Order(1);
+            fetchData_Order();
+          }}
+        />
+      )}
+      {state.isShowFormNewPayment && (
         <AddPaymentManagementForm
-        visible={state.isShowFormNewPayment}
-        t={t_order}
-        cancel={() => updateState({ isShowFormNewPayment: false })}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        changeFirstPage={() => {
-          showToast.success("Add new payment successfully!");
-          updateState({ isShowFormNewPayment: false });
-          setCurrentPage_Payment(1);
-          fetchData_Payment();
-        }}
-      />
-      }
-      {state.isShowFormNewOutsourcing &&
+          visible={state.isShowFormNewPayment}
+          t={t_order}
+          cancel={() => updateState({ isShowFormNewPayment: false })}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          changeFirstPage={() => {
+            showToast.success("Add new payment successfully!");
+            updateState({ isShowFormNewPayment: false });
+            setCurrentPage_Payment(1);
+            fetchData_Payment();
+          }}
+        />
+      )}
+      {state.isShowFormNewOutsourcing && (
         <AddOutsourcingForm
-        visible={state.isShowFormNewOutsourcing}
-        t={t_order}
-        cancel={() => updateState({ isShowFormNewOutsourcing: false })}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        changeFirstPage={() => {
-          showToast.success("Add new Outsourcing successfully!");
-          updateState({ isShowFormNewOutsourcing: false });
-          setCurrentPage_Outsourcing(1);
-          fetchData_Outsourcing();
-        }}
-      />
-      }
-      {state.isShowFormEditOrder && <EditOrderForm
-        invoiceOrder={state.selectedRowOrder_Edit}
-        visible={state.isShowFormEditOrder}
-        t={t_order}
-        selectedDate={selectedDate}
-        exchangeRateId={state.dataExRate}
-        cancel={() => {
-          updateState({
-            isShowFormEditOrder: false,
-            selectedRowOrder_Edit: null,
-          });
-          //fetchData_Order();
-        }}
-        show_result={() => {
-          showToast.success("Edit successfully!");
-          fetchData_Order();
-        }}
-      />}
+          visible={state.isShowFormNewOutsourcing}
+          t={t_order}
+          cancel={() => updateState({ isShowFormNewOutsourcing: false })}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          changeFirstPage={() => {
+            showToast.success("Add new Outsourcing successfully!");
+            updateState({ isShowFormNewOutsourcing: false });
+            setCurrentPage_Outsourcing(1);
+            fetchData_Outsourcing();
+          }}
+        />
+      )}
+      {state.isShowFormEditOrder && (
+        <EditOrderForm
+          invoiceOrder={state.selectedRowOrder_Edit}
+          visible={state.isShowFormEditOrder}
+          t={t_order}
+          selectedDate={selectedDate}
+          exchangeRateId={state.dataExRate}
+          cancel={() => {
+            updateState({
+              isShowFormEditOrder: false,
+              selectedRowOrder_Edit: null,
+            });
+            //fetchData_Order();
+          }}
+          show_result={() => {
+            showToast.success("Edit successfully!");
+            fetchData_Order();
+          }}
+        />
+      )}
       {state.isShowFormEditPayment && (
         <EditPaymentManagementForm
           invoicePayment={state.selectedRowPayment_Edit}

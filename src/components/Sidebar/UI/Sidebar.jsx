@@ -80,10 +80,10 @@ export default function SideBar() {
   const selectOption = (e) => {
     for (let el of refUl.current.children) {
       el.classList =
-        "bg-[#121C3E] mb-3 min-h-9 rounded-md p-1 min-w-56 text-white";
+        "bg-[#121C3E] mb-3 min-h-9 rounded-md p-1 min-w-56 text-white cursor-pointer";
     }
     e.currentTarget.classList =
-      "bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56";
+      "bg-yellow-400 mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer";
 
     // Add logic to navigate based on the selected option if needed
     const selectedOption = e.currentTarget.innerText.trim();
@@ -344,7 +344,7 @@ export default function SideBar() {
                               <button
                                 key={buttonName}
                                 className={classNames(
-                                  `flex items-center py-2 px-3 mt-2 rounded-[16px] text-left font-bold text-sm uppercase w-full justify-center ${
+                                  `flex items-center py-2 px-3 mt-2 rounded-[16px] text-left font-bold text-sm uppercase w-full justify-center cursor-pointer ${
                                     activeButton === buttonName
                                       ? "bg-yellow"
                                       : "bg-white"
@@ -381,7 +381,7 @@ export default function SideBar() {
                     <button
                       key={buttonName}
                       className={classNames(
-                        `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm ${
+                        `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm cursor-pointer ${
                           (activeButton === buttonName)
                             ? "bg-yellow "
                             : "bg-white"
