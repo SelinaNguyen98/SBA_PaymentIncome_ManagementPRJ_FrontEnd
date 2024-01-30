@@ -151,7 +151,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className="flex flex-row bg-main-theme h-full overflow-auto">
+    <div className={`flex flex-row bg-main-theme h-[962px] max-[1200px]:h-[860px] max-[1500px]:h-[783px] max-[1000px]:h-[963px]  overflow-y-hidden`}>
       <div
         className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]  ${
           isHiddenSidebar ? "hidden" : ""
@@ -161,7 +161,7 @@ export default function SideBar() {
           <img src={logo} alt="" className="h-20 w-44" />
           <img className="absolute top-[65px]" src={comName} alt="" />
         </div>
-        <ul className="flex flex-col gap-8" ref={refUl}>
+        <ul className="flex flex-col gap-6" ref={refUl}>
           <li
             className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
               (location.pathname === "/home/Account_Category"|| location.pathname === "/home")
@@ -401,7 +401,7 @@ export default function SideBar() {
             </div>
           </div>
         </div>
-        <div className="bg-main-theme w-full ">
+        <div className="bg-main-theme w-full h-screen">
           <Outlet className="z-0 h-full" />
         </div>
       </div>

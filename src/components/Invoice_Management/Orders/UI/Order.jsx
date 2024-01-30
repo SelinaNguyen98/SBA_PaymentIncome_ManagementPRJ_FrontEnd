@@ -218,10 +218,11 @@ const Order = () => {
               ...order,
               orderNumber: (currentPage_Order - 1) * 5 + index + 1,
             }));
-
+            
             return newData || [];
           });
-
+          console.log("huhu",dataOrder);
+          
           setTotalPages_Order(response.pagination.total_pages);
 
           // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
@@ -260,6 +261,8 @@ const Order = () => {
       controller.abort();
     };
   }, [currentPage_Order, selectedOrderIds]);
+
+  
 
   //Payment
   const [isLoading_Payment, setIsLoading_Payment] = useState(true);
@@ -559,10 +562,11 @@ const Order = () => {
         setSelectedDate={setSelectedDate}
         className="ml-4 bg-white w-64"
       />
+      <div className="h-[800px] max-[1500px]:h-[620px] overflow-y-auto mt-2">
       {/* ORDER */}
       <div
-        id="contentInvoiceDetail"
-        className={` relative bg-main-theme pb-5 h-full
+        id=""
+        className={` relative bg-main-theme pb-5
         col-span-full
        `}
       >
@@ -639,7 +643,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[320px] max-[1600px]:h-[230px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] max-[1600px]:h-[250px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -826,7 +830,7 @@ const Order = () => {
       {/*PAYMENT*/}
 
       <div
-        id="contentInvoiceDetail"
+        id=""
         className={` relative bg-main-theme pb-5 
         col-span-full
        `}
@@ -908,7 +912,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[320px] max-[1600px]:h-[230px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] max-[1600px]:h-[250px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -1098,7 +1102,7 @@ const Order = () => {
       {/* OUTSOURCING */}
 
       <div
-        id="contentInvoiceDetail"
+        id=""
         className={` relative bg-main-theme pb-5 
         col-span-full
        `}
@@ -1179,7 +1183,7 @@ const Order = () => {
               </div>
             </div>
           </div>
-          <div className="h-[320px] max-[1600px]:h-[250px] overflow-y-auto overflow-x-auto mt-4 text-sm">
+          <div className="h-[350px] max-[1600px]:h-[250px] overflow-y-auto overflow-x-auto mt-4 text-sm">
             <table id="Table_Order" className="w-full">
               <thead>
                 <tr>
@@ -1532,7 +1536,7 @@ const Order = () => {
         }}
         deleteOutsourcing={deleteOutsourcing}
       />
-    </div>
+    </div></div>
   );
 };
 
