@@ -562,7 +562,7 @@ const Order = () => {
         setSelectedDate={setSelectedDate}
         className="ml-4 bg-white w-64"
       />
-      <div className="h-[800px] max-lg:h-[620px] overflow-auto mt-2">
+      <div className="h-[800px] max-[1500px]:h-[620px] overflow-auto mt-2">
       {/* ORDER */}
       <div
         id=""
