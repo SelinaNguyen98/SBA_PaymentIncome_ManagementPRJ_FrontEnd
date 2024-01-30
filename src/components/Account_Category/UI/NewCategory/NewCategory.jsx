@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createCategorySchema } from "../../../../Utils/validation/rulesYup";
 import { createCategory, getGroupCategory } from "../../Controller";
+import { AppContext } from "../../../../Utils/contexts/app.context";
 // import { group } from "console";
 // import { createCategorySchema } from "../../../../Utils/validation/rulesYup"
 
@@ -15,6 +16,7 @@ export default function NewCategory({ visible, cancel, ok }) {
   const [groups, setGroups] = useState([]);
 
   const { t } = useTranslation();
+  const { showToast } = useContext(AppContext);
   const {
     register,
     handleSubmit,
@@ -32,6 +34,7 @@ export default function NewCategory({ visible, cancel, ok }) {
       const response = await  createCategory(data);
       console.log(response);
       // changeFirstPage();
+      showToast.success("Add successfully!");
       cancel()
     } catch (error) {
       console.log(error);
@@ -111,6 +114,7 @@ export default function NewCategory({ visible, cancel, ok }) {
           </Button>
           <Button
             onClick={cancel}
+            
             className={" border-red-500 bg-white border-2 py-2 min-w-[150px] "}
           >
             <span className=" text-red-500  uppercase ">

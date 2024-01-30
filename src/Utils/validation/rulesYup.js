@@ -28,6 +28,8 @@ export const createOrderSchema = yup
   .shape({
     name: yup.string().required("Name is mandatory"),
     group_id: yup.string().required("Account Category Group is mandatory"),
+  })
+  .required();
 
 
 export const createPaymentOrderSchema = yup
