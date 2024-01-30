@@ -151,7 +151,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className={`flex flex-row bg-main-theme h-[962px] max-[1200px]:h-[860px] max-[1500px]:h-[783px] max-[1000px]:h-[963px]  overflow-y-hidden`}>
+    <div className={`flex flex-row bg-main-theme h-[962px] max-[1200px]:h-[860px] max-lg:h-[783px] max-[1000px]:h-[963px]  overflow-hidden`}>
       <div
         className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]  ${
           isHiddenSidebar ? "hidden" : ""
