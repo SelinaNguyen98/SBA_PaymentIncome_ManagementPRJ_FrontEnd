@@ -211,7 +211,7 @@ export function getDataYearly(year, setData) {
         )
 }
 
-export function saveYearly(data_year, showToast) {
+export function saveYearly(data_year, showToast, setSelectedYearExport) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -225,7 +225,12 @@ export function saveYearly(data_year, showToast) {
     }
     )
     if (checkNum) {
-        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => showToast.success(response.message), () => {
+        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => {
+            showToast.success(response.message)
+            const newYear = new Date(data_year[0]?.bs_month_year + 1)
+            newYear.setFullYear(data_year[0]?.bs_month_year + 1)
+            setSelectedYearExport(newYear)
+        }, () => {
             showToast.error("Amount is required ")
         }
         )
