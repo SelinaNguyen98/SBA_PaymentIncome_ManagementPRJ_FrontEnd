@@ -280,7 +280,6 @@ export default function InvoiceDetails() {
             <div className="flex flex-row">
               <Button
                 onClick={() => {
-                  console.log(idExRate);
                   if (idExRate === null) {
                     updateState({ isShowWarringModal: true });
                   } else {

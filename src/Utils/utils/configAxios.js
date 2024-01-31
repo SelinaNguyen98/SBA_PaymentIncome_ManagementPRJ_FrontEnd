@@ -10,6 +10,7 @@ export const paths = {
   PL_REPORT: "getDataPL",
   GROUP: "groups",
   CATEGORY: "categories",
+  CATEGORY_ALL: "categories/all",
   GET_ORDER_MONTH_YEAR: "orders",
   DELETE_ORDER: "orders",
   CREATE_ORDER: "orders",

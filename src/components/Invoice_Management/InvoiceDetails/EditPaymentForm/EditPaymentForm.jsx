@@ -8,6 +8,7 @@ import Button from "../../../../Utils/Button";
 import { useTranslation } from "react-i18next";
 import { formatNumberSeparator } from "../../../../Utils/utils/maths";
 import { getGetAllCategoriesPL, updatePayment } from "../Controller";
+import ReactDatePicker from "react-datepicker";
 
 export default function EditPaymentForm({
   visible,
@@ -27,14 +28,14 @@ export default function EditPaymentForm({
     setValue,
     // eslint-disable-next-line no-unused-vars
     setError,
-     // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line no-unused-vars
     getValues,
     formState: { errors },
   } = useForm();
 
   // const convertedDate = new Date(invoicePayment?.payment_date);
   const formattedDate = invoicePayment?.payment_date.split(" ")[0];
-
+  const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
   // State Format Day
   const maxDate = new Date(
     selectedDate.getFullYear(),
@@ -88,7 +89,10 @@ export default function EditPaymentForm({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-       // eslint-disable-next-line no-unused-vars
+      // eslint-disable-next-line no-unused-vars
+      // setValue("payment_date", );
+
+      // console.log(dayPickerValue.toISOString().split("T")[0]);
       const response = await updatePayment(data);
       triggerData();
       cancel();
@@ -106,7 +110,7 @@ export default function EditPaymentForm({
         </span>
 
         <form
-          className="px-4 mt-10 overflow-hidden block"
+          className="px-4 pt-1 mt-10 overflow-hidden block"
           noValidate
           onSubmit={onSubmit}
         >
@@ -115,13 +119,21 @@ export default function EditPaymentForm({
               {t("page_payment_detail.date")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
-                type="date"
-                {...register("payment_date")}
+              <ReactDatePicker
+                selected={dayPickerValue}
+                defaultValue={dayPickerValue}
+                wrapperClassName="w-full"
+                dateFormat="dd/MM/yyyy"
+                onChange={(value) => {
+                  setDayPickerValue(value);
+                  setValue("payment_date", value.toISOString().split("T")[0]);
+                }}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
-                min={minDate}
-                max={maxDate}
+                minDate={new Date(minDate)}
+                maxDate={new Date(maxDate)}
+                onKeyDown={(e) => e.preventDefault()} // Ngăn chặn sự kiện nhập từ bàn phím
               />
+
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
