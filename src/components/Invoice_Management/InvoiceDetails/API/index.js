@@ -25,7 +25,7 @@ export const callAPI_GetPaymentsYearAndMonths = async (
           year,
           page,
           key,
-          direction
+          direction,
         },
         signal,
       }
@@ -42,7 +42,7 @@ export const callApi_deletePaymentByID = async (ids) => {
   try {
     console.log(ids);
     // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
-    const response = await axios.delete(paths.PAYMENT , {
+    const response = await axios.delete(paths.PAYMENT, {
       data: { id: ids },
     });
     // console.log(response.data);
@@ -71,9 +71,10 @@ export const callApi_getExchagerateByMonthAndYear = async (
   // eslint-disable-next-line no-useless-catch
   try {
     const { signal } = controller;
-
+    console.log("Param obbjec", month, year);
     const response = await axios.get(paths.EXCHAGE_RATE, {
       params: {
+
         month,
         year,
       },
@@ -119,11 +120,7 @@ export const callApi_createExchagerateByMonthAndYear = async (
 
 export const callAPI_GetAllCategoriesPL = async () => {
   try {
-    const response = await axios.get(paths.categoriesPL, {
-      params: {
-        report_type: "pl",
-      },
-    });
+    const response = await axios.get(paths.CATEGORY_ALL);
 
     return response.data?.categories;
   } catch (error) {

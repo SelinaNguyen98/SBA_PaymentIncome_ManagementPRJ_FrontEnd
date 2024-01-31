@@ -1,7 +1,9 @@
 /* eslint-disable no-useless-catch */
 // Controller.js
+import { motion } from "framer-motion";
 import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 import * as API from "../API";
+import { monthsToQuarters } from "date-fns";
 
 export const getPaymentsByYearAndMonths = async (
   month,
@@ -18,7 +20,6 @@ export const getPaymentsByYearAndMonths = async (
       controller,
       sortConfig?.key,
       sortConfig?.direction
-
     );
     return response;
   } catch (error) {
@@ -61,8 +62,10 @@ export const getExChangeRateByMonthYear = async (month, year, controller) => {
 export const createExChangeRate = async (month, year, jpy, usd, idExRate) => {
   try {
     // if idExRate is null || trim, ''  => create
+    if (month < 10) month = "0" + month;
+    console.log(year + "-" + month);
     const response = await API.callApi_createExchagerateByMonthAndYear(
-      month + "-" + year,
+      year + "-" + month,
       formatNumberHasDot(jpy),
       formatNumberHasDot(usd),
       idExRate

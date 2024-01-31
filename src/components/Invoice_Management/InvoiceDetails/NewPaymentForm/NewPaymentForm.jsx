@@ -10,21 +10,23 @@ import { useTranslation } from "react-i18next";
 import { createPayment, getGetAllCategoriesPL } from "../Controller";
 import { formatNumberSeparator } from "../../../../Utils/utils/maths";
 
+import ReactDatePicker, { CalendarContainer } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function NewPaymentForm({
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   visible,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   cancel,
-    // eslint-disable-next-line react/prop-types, no-unused-vars
+  // eslint-disable-next-line react/prop-types, no-unused-vars
   ok,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   selectedDate,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   exchangeRateId,
-    // eslint-disable-next-line react/prop-types
+  // eslint-disable-next-line react/prop-types
   changeFirstPage,
-  
 }) {
   const { t } = useTranslation();
   const [categories, setCategories] = useState([]);
@@ -34,15 +36,28 @@ export default function NewPaymentForm({
     // eslint-disable-next-line no-unused-vars
     setError,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createPaymentSchema) });
+  // useForm();
+
+  const [dayPickerValue, setDayPickerValue] = useState(() => {
+    let today = new Date();
+    if (
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    )
+      return today;
+    return selectedDate;
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
       const resonse = await createPayment(data);
       console.log(resonse);
 
-      changeFirstPage();
+      // changeFirstPage();
     } catch (error) {
       console.log(error);
     }
@@ -63,14 +78,6 @@ export default function NewPaymentForm({
     .toISOString()
     .split("T")[0];
 
-  // St
-  // useEffect(() => {
-  //   // Set the min and max attributes for the date input
-  //   const dateInput = document.getElementById("payment_date");
-  //   dateInput.setAttribute("min", minDate);
-  //   dateInput.setAttribute("max", maxDate);
-  // }, [minDate, maxDate]);
-
   useEffect(() => {
     fetchGetCategoriesPL();
     setValue("user_id", localStorage.getItem("user_id") || 1);
@@ -82,7 +89,6 @@ export default function NewPaymentForm({
     try {
       const response = await getGetAllCategoriesPL();
       setCategories(response);
-      console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -105,13 +111,30 @@ export default function NewPaymentForm({
               {t("page_payment_detail.date")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
+              {/* <input
+                id="iddat"
                 type="date"
                 {...register("payment_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
-              />
+              /> */}
+              <div>
+                <ReactDatePicker
+                  selected={dayPickerValue}
+                  defaultValue={dayPickerValue}
+                  wrapperClassName="w-full"
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(value) => {
+                    setDayPickerValue(value);
+                  }}
+                  className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                  minDate={new Date(minDate)}
+                  maxDate={new Date(maxDate)}
+                  onKeyDown={(e) => e.preventDefault()} // Ngăn chặn sự kiện nhập từ bàn phím
+                />
+              </div>
+
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
