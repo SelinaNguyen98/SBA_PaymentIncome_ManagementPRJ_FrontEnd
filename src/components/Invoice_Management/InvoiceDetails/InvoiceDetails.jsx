@@ -350,15 +350,20 @@ export default function InvoiceDetails() {
               </th>
               <th className=" w-[3%]"> NO</th>
               <th
-                className=" w-[10%] items-center justify-center"
+                className=" w-[10%]"
                 onClick={() => requestSort("payment_date")}
               >
-                <div className="">
-                  <span>{t("page_payment_detail.date")}</span>
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span>{t("page_payment_detail.date")} </span>
+                  <RiExpandUpDownFill />
                 </div>
               </th>
+
               <th className=" w-[10%]" onClick={() => requestSort("name")}>
-                {t("page_payment_detail.name")}
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span> {t("page_payment_detail.name")} </span>
+                  <RiExpandUpDownFill />
+                </div>
               </th>
               <th className=" w-[8%]"> JPY</th>
               <th className=" w-[8%]"> VND</th>
@@ -368,11 +373,17 @@ export default function InvoiceDetails() {
                 className=" w-[10%]"
                 onClick={() => requestSort("category_name")}
               >
-                {t("page_payment_detail.journal")}
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span>{t("page_payment_detail.journal")} </span>
+                  <RiExpandUpDownFill />
+                </div>
               </th>
               <th className=" w-[16%]">{t("page_payment_detail.invoice")}</th>
               <th className=" w-[8%]" onClick={() => requestSort("pay")}>
-                {t("page_payment_detail.pay")}
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span> {t("page_payment_detail.pay")} </span>
+                  <RiExpandUpDownFill />
+                </div>
               </th>
               <th className=" w-[6%]">ACTION</th>
 
