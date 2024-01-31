@@ -281,19 +281,23 @@ const Order = () => {
           });
 
           setSelectedRows_Order(newSelectedRows);
+          setCurrentPage_Order(1);
           // setSelectedRow_Order([]);
         }
       } else {
         console.log("Invalid response format:", response);
         setDataOrder([]);
         setTotalPages_Order(1);
+        setCurrentPage_Order(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataOrder([]);
       setTotalPages_Order(1);
+      setCurrentPage_Order(1);
     } finally {
       setIsLoading_Order(false);
+      setCurrentPage_Order(1);
     }
   };
 
@@ -457,19 +461,23 @@ const Order = () => {
           });
 
           setSelectedRows_Payment(newSelectedRows);
+          setCurrentPage_Payment(1);
           // setSelectedRow_Payment([]);
         }
       } else {
         console.error("Invalid response format:", response);
         setDataPayment([]);
         setTotalPages_Payment(1);
+        setCurrentPage_Payment(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataPayment([]);
       setTotalPages_Payment(1);
+      setCurrentPage_Payment(1);
     } finally {
       setIsLoading_Payment(false);
+      setCurrentPage_Payment(1);
     }
   };
 
@@ -636,6 +644,7 @@ const Order = () => {
           });
 
           setSelectedRows_Outsourcing(newSelectedRows);
+          setCurrentPage_Outsourcing(1);
           // setSelectedRow_Outsourcing([]);
           console.log(response.outsourcing);
         }
@@ -643,13 +652,16 @@ const Order = () => {
         console.error("Invalid response format:", response);
         setDataOutsourcing([]);
         setTotalPages_Outsourcing(1);
+        setCurrentPage_Outsourcing(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataOutsourcing([]);
       setTotalPages_Outsourcing(1);
+      setCurrentPage_Outsourcing(1);
     } finally {
       setIsLoading_Outsourcing(false);
+      setCurrentPage_Outsourcing(1);
     }
   };
 
