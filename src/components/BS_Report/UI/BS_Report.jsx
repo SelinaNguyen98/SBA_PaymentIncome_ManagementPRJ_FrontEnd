@@ -278,9 +278,11 @@ const BS_Report = () => {
     updateState({ isShowForm_InputBalanceFromPreviousYear: true });
   };
 
-  const controller = new AbortController();
   useEffect(() => {
+    console.log(selectedYearExport)
+    const controller = new AbortController();
     API.getAllTable(selectedYearExport.getFullYear(), setDataBS, controller);
+    updateState({ isShowForm_InputMonthlyData: false, isShowForm_InputBalanceFromPreviousYear: false })
     return () => {
       controller.abort();
       setDataBS([]);
@@ -294,6 +296,13 @@ const BS_Report = () => {
     return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }
 
+  // useEffect(() => {
+  //   const controller = new AbortController();
+  //   if (state.isShowForm_InputBalanceFromPreviousYear == false || state.isShowForm_InputMonthlyData == false) {
+  //     API.getAllTable(selectedYearExport.getFullYear(), setDataBS, controller)
+  //     return () => { controller.abort() }
+  //   }
+  // }, [state, selectedYearExport])
   return (
     <div className="grid grid-cols-12 bg-main-theme h-full">
       <div
@@ -445,77 +454,77 @@ const BS_Report = () => {
                                 <td className="w-[10px]" name="tb_pevious_year">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() - 1
+                                    selectedYearExport?.getFullYear() - 1
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_04">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-04"
+                                    selectedYearExport?.getFullYear() + "-04"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_05">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-05"
+                                    selectedYearExport?.getFullYear() + "-05"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_06">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-06"
+                                    selectedYearExport?.getFullYear() + "-06"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_07">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-07"
+                                    selectedYearExport?.getFullYear() + "-07"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_08">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-08"
+                                    selectedYearExport?.getFullYear() + "-08"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_09">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-09"
+                                    selectedYearExport?.getFullYear() + "-09"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_10">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-10"
+                                    selectedYearExport?.getFullYear() + "-10"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_11">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-11"
+                                    selectedYearExport?.getFullYear() + "-11"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_12">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() + "-12"
+                                    selectedYearExport?.getFullYear() + "-12"
                                     ]
                                   )}
                                 </td>
                                 <td className="w-[10px]" name="tb_01_Next_Year">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() +
+                                    selectedYearExport?.getFullYear() +
                                     1 +
                                     "-01"
                                     ]
@@ -524,7 +533,7 @@ const BS_Report = () => {
                                 <td className="w-[10px]" name="tb_02_Next_Year">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() +
+                                    selectedYearExport?.getFullYear() +
                                     1 +
                                     "-02"
                                     ]
@@ -533,7 +542,7 @@ const BS_Report = () => {
                                 <td className="w-[10px]" name="tb_03_Next_Year">
                                   {addComma(
                                     rowData_Category.data[
-                                    selectedYearExport.getFullYear() +
+                                    selectedYearExport?.getFullYear() +
                                     1 +
                                     "-03"
                                     ]
@@ -564,70 +573,70 @@ const BS_Report = () => {
                             >
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() - 1
+                                selectedYearExport?.getFullYear() - 1
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_04">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-04"
+                                selectedYearExport?.getFullYear() + "-04"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_05">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-05"
+                                selectedYearExport?.getFullYear() + "-05"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_06">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-06"
+                                selectedYearExport?.getFullYear() + "-06"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_07">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-07"
+                                selectedYearExport?.getFullYear() + "-07"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_08">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-08"
+                                selectedYearExport?.getFullYear() + "-08"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_09">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-09"
+                                selectedYearExport?.getFullYear() + "-09"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_10">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-10"
+                                selectedYearExport?.getFullYear() + "-10"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_11">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-11"
+                                selectedYearExport?.getFullYear() + "-11"
                                 ]
                               )}
                             </td>
                             <td className="w-[10px] td_group" name="tb_12">
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + "-12"
+                                selectedYearExport?.getFullYear() + "-12"
                                 ]
                               )}
                             </td>
@@ -637,7 +646,7 @@ const BS_Report = () => {
                             >
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + 1 + "-01"
+                                selectedYearExport?.getFullYear() + 1 + "-01"
                                 ]
                               )}
                             </td>
@@ -647,7 +656,7 @@ const BS_Report = () => {
                             >
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + 1 + "-02"
+                                selectedYearExport?.getFullYear() + 1 + "-02"
                                 ]
                               )}
                             </td>
@@ -657,7 +666,7 @@ const BS_Report = () => {
                             >
                               {addComma(
                                 rowData_BS.total_month?.[
-                                selectedYearExport.getFullYear() + 1 + "-03"
+                                selectedYearExport?.getFullYear() + 1 + "-03"
                                 ]
                               )}
                             </td>
@@ -689,6 +698,7 @@ const BS_Report = () => {
         }}
         selectedTime={selectedDate}
         showToast={showToast}
+        setSelectedYearExport={setSelectedYearExport}
       />
       <Form_InputBalanceYeatData
         // eslint-disable-next-line no-undef

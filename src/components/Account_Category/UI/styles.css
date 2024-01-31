@@ -95,4 +95,21 @@
 
   .custom-no-border {
     border: none !important;
+
+
+    #search-container {
+      display: flex;
+      flex-direction: row; /* Default: align items horizontally */
+      align-items: center;
+      width: 30%;
+      max-width: 400px;
+      margin: auto;
+    }
+    
+    @media (max-width: 1000px) {
+      #search-container {
+        flex-direction: column; /* Change to column direction when screen width is below 1000px */
+        width: 100%; /* Full width when screen width is below 1000px */
+      }
+    }
   }

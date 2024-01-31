@@ -151,9 +151,9 @@ export default function SideBar() {
   };
 
   return (
-    <div className="flex flex-row bg-main-theme h-full overflow-auto">
+    <div className={`flex flex-row bg-main-theme h-screen overflow-y-hidden`}>
       <div
-        className={`px-4 pt-7 flex flex-col gap-36 bg-[#121C3E]  ${
+        className={`px-4 pt-7 flex flex-col xl:gap-28 2xl:gap-32 lg:gap-28 md:gap-24 gap-20 bg-[#121C3E]  ${
           isHiddenSidebar ? "hidden" : ""
         }`}
       >
@@ -161,10 +161,11 @@ export default function SideBar() {
           <img src={logo} alt="" className="h-20 w-44" />
           <img className="absolute top-[65px]" src={comName} alt="" />
         </div>
-        <ul className="flex flex-col gap-8" ref={refUl}>
+        <ul className="flex flex-col gap-6" ref={refUl}>
           <li
             className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
-              (location.pathname === "/home/Account_Category"|| location.pathname === "/home")
+              location.pathname === "/home/Account_Category" ||
+              location.pathname === "/home"
                 ? "bg-yellow-400 text-black"
                 : "text-white"
             }`}
@@ -188,7 +189,9 @@ export default function SideBar() {
           </li>
           <li
             className={`mb-3 min-h-9 rounded-md p-1 min-w-56 cursor-pointer ${
-              (location.pathname === "/home/InvoiceDetails"|| location.pathname === "/home/Account_Annalytics" || location.pathname === "/home/Order")
+              location.pathname === "/home/InvoiceDetails" ||
+              location.pathname === "/home/Account_Annalytics" ||
+              location.pathname === "/home/Order"
                 ? "bg-yellow-400 text-black"
                 : "text-white"
             }`}
@@ -352,7 +355,7 @@ export default function SideBar() {
                                   {
                                     "bg-yellow-bold":
                                       activeButton === buttonName,
-                                  },
+                                  }
                                 )}
                                 onClick={(e) => {
                                   selectOption_Invoice(e);
@@ -382,7 +385,7 @@ export default function SideBar() {
                       key={buttonName}
                       className={classNames(
                         `col-span-4 rounded-[20px] border-black border-2  py-1 font-bold shadow-sm text-center max-[750px]:text-sm cursor-pointer ${
-                          (activeButton === buttonName)
+                          activeButton === buttonName
                             ? "bg-yellow "
                             : "bg-white"
                         }`,
@@ -401,7 +404,7 @@ export default function SideBar() {
             </div>
           </div>
         </div>
-        <div className="bg-main-theme w-full ">
+        <div className="bg-main-theme w-full h-screen">
           <Outlet className="z-0 h-full" />
         </div>
       </div>
