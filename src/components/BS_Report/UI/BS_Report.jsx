@@ -709,6 +709,7 @@ const BS_Report = () => {
         }}
         selectedTime={selectedYear}
         showToast={showToast}
+        setSelectedYearExport={setSelectedYearExport}
       />
     </div>
   );

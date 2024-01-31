@@ -88,6 +88,7 @@ export default function AddOrderForm({
     setValue("company_name", formData.company_name);
     setValue("vnd", formData.vnd);
   }, [formData, setValue]);
+  
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">

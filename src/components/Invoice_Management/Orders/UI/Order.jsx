@@ -177,8 +177,55 @@ const Order = () => {
     });
   };
 
-  const handleChangePage_Order = (newPage) => {
+  const handleChangePage_Order = async (newPage) => {
     setCurrentPage_Order(newPage);
+  
+    try {
+      const response = await getOrderByYearAndMonths(selectedDate, newPage);
+  
+      console.log("API Response:", response);
+  
+      if (response && response.pagination) {
+        if (response.orders === null) {
+          setTotalPages_Order(1);
+          setCurrentPage_Order(1);
+        } else {
+          setDataOrder((prevData) => {
+            console.log("Previous Data:", prevData);
+  
+            // Thêm cột thứ tự vào mỗi order
+            const newData = response.orders.map((order, index) => ({
+              ...order,
+              orderNumber: (newPage - 1) * 5 + index + 1,
+            }));
+            
+            return newData || [];
+          });
+          console.log("huhu", dataOrder);
+  
+          setTotalPages_Order(response.pagination.total_pages);
+  
+          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
+          const newSelectedRows = new Array(response.orders.length).fill(false);
+          response.orders.forEach((order, index) => {
+            if (selectedOrderIds.includes(order.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+  
+          setSelectedRows_Order(newSelectedRows);
+          // setSelectedRow_Order([]);
+        }
+      } else {
+        console.log("Invalid response format:", response);
+        setDataOrder([]);
+        setTotalPages_Order(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataOrder([]);
+      setTotalPages_Order(1);
+    }
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -234,35 +281,25 @@ const Order = () => {
           });
 
           setSelectedRows_Order(newSelectedRows);
+          setCurrentPage_Order(1);
           // setSelectedRow_Order([]);
         }
       } else {
         console.log("Invalid response format:", response);
         setDataOrder([]);
         setTotalPages_Order(1);
+        setCurrentPage_Order(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataOrder([]);
       setTotalPages_Order(1);
+      setCurrentPage_Order(1);
     } finally {
       setIsLoading_Order(false);
+      setCurrentPage_Order(1);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(state.dataExRate);
-      fetchData_Order();
-    };
-
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [currentPage_Order, selectedOrderIds]);
-
-  
 
   //Payment
   const [isLoading_Payment, setIsLoading_Payment] = useState(true);
@@ -314,9 +351,60 @@ const Order = () => {
       }
     });
   };
-  const handleChangePage_Payment = (newPage) => {
+  const handleChangePage_Payment = async (newPage) => {
     setCurrentPage_Payment(newPage);
+  
+    try {
+      const response = await getPaymentByYearAndMonths(selectedDate, newPage);
+  
+      console.log("API Response:", response);
+  
+      if (response && response.pagination) {
+        if (response.payment_orders === null) {
+          setTotalPages_Payment(1);
+          setCurrentPage_Payment(1);
+        } else {
+          setDataPayment((prevData) => {
+            console.log("Previous Data:", prevData);
+  
+            // Thêm cột thứ tự vào mỗi payment_order
+            const newData = response.payment_orders.map(
+              (payment_order, index) => ({
+                ...payment_order,
+                paymentNumber: (newPage - 1) * 5 + index + 1,
+              })
+            );
+  
+            return newData || [];
+          });
+  
+          setTotalPages_Payment(response.pagination.total_pages);
+  
+          // Check và cập nhật selectedRows_Payment dựa trên selectedPaymentIds
+          const newSelectedRows = new Array(response.payment_orders.length).fill(
+            false
+          );
+          response.payment_orders.forEach((payment_order, index) => {
+            if (selectedPaymentIds.includes(payment_order.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+  
+          setSelectedRows_Payment(newSelectedRows);
+          // setSelectedRow_Payment([]);
+        }
+      } else {
+        console.error("Invalid response format:", response);
+        setDataPayment([]);
+        setTotalPages_Payment(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataPayment([]);
+      setTotalPages_Payment(1);
+    }
   };
+  
   // eslint-disable-next-line no-unused-vars
   const deletePayment = async () => {
     try {
@@ -373,33 +461,26 @@ const Order = () => {
           });
 
           setSelectedRows_Payment(newSelectedRows);
+          setCurrentPage_Payment(1);
           // setSelectedRow_Payment([]);
         }
       } else {
         console.error("Invalid response format:", response);
         setDataPayment([]);
         setTotalPages_Payment(1);
+        setCurrentPage_Payment(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataPayment([]);
       setTotalPages_Payment(1);
+      setCurrentPage_Payment(1);
     } finally {
       setIsLoading_Payment(false);
+      setCurrentPage_Payment(1);
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(state.dataExRate);
-      fetchData_Payment();
-    };
-
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [currentPage_Payment, selectedPaymentIds]);
 
   //Outsourcing
   const [isLoading_Outsourcing, setIsLoading_Outsourcing] = useState(true);
@@ -456,9 +537,59 @@ const Order = () => {
       }
     });
   };
-  const handleChangePage_Outsourcing = (newPage) => {
+  const handleChangePage_Outsourcing = async (newPage) => {
     setCurrentPage_Outsourcing(newPage);
+  
+    try {
+      const response = await getOutsourcingByYearAndMonths(selectedDate, newPage);
+  
+      console.log("API Response:", response);
+  
+      if (response && response.pagination) {
+        if (response.outsourcing === null) {
+          setTotalPages_Outsourcing(1);
+          setCurrentPage_Outsourcing(1);
+        } else {
+          setDataOutsourcing((prevData) => {
+            console.log("Previous Data:", prevData);
+  
+            // Thêm cột thứ tự vào mỗi outsourcing
+            const newData = response.outsourcing.map((outsourcing, index) => ({
+              ...outsourcing,
+              outsourcingNumber: (newPage - 1) * 5 + index + 1,
+            }));
+  
+            return newData || [];
+          });
+  
+          setTotalPages_Outsourcing(response.pagination.total_pages);
+  
+          // Check và cập nhật selectedRows_Outsourcing dựa trên selectedOutsourcingIds
+          const newSelectedRows = new Array(response.outsourcing.length).fill(
+            false
+          );
+          response.outsourcing.forEach((outsourcing, index) => {
+            if (selectedOutsourcingIds.includes(outsourcing.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+  
+          setSelectedRows_Outsourcing(newSelectedRows);
+          // setSelectedRow_Outsourcing([]);
+          console.log(response.outsourcing);
+        }
+      } else {
+        console.error("Invalid response format:", response);
+        setDataOutsourcing([]);
+        setTotalPages_Outsourcing(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataOutsourcing([]);
+      setTotalPages_Outsourcing(1);
+    }
   };
+  
   // eslint-disable-next-line no-unused-vars
   const deleteOutsourcing = async () => {
     try {
@@ -513,6 +644,7 @@ const Order = () => {
           });
 
           setSelectedRows_Outsourcing(newSelectedRows);
+          setCurrentPage_Outsourcing(1);
           // setSelectedRow_Outsourcing([]);
           console.log(response.outsourcing);
         }
@@ -520,27 +652,18 @@ const Order = () => {
         console.error("Invalid response format:", response);
         setDataOutsourcing([]);
         setTotalPages_Outsourcing(1);
+        setCurrentPage_Outsourcing(1);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
       setDataOutsourcing([]);
       setTotalPages_Outsourcing(1);
+      setCurrentPage_Outsourcing(1);
     } finally {
       setIsLoading_Outsourcing(false);
+      setCurrentPage_Outsourcing(1);
     }
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      console.log(state.dataExRate);
-      fetchData_Outsourcing();
-    };
-
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [currentPage_Outsourcing, selectedOutsourcingIds]);
 
   useEffect(() => {
     const fetchData = () => {

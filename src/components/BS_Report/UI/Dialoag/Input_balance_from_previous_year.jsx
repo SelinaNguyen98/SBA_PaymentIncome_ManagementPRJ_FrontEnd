@@ -12,7 +12,7 @@ export default function Input_balance_from_previous_year({
   // eslint-disable-next-line react/prop-types
   t,
   // eslint-disable-next-line react/prop-types
-  selectedTime, showToast,
+  selectedTime, showToast,setSelectedYearExport
 }) {
   const t_translate = t;
   // eslint-disable-next-line no-unused-vars
@@ -184,7 +184,7 @@ export default function Input_balance_from_previous_year({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveYearly(data_year, showToast)
+              API.saveYearly(data_year, showToast,setSelectedYearExport)
               cancel
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
