@@ -103,7 +103,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: response.data?.data[0].jpy,
                 usd: response.data?.data[0].usd,
                 id: response.data?.data[0].id,
-                exchangeDate: pad2(month) + '-' + year
+                exchangeDate: year + '-' + pad2(month)
             })
         }
         else {
@@ -111,7 +111,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: '',
                 usd: '',
                 id: '',
-                exchangeDate: pad2(month) + '-' + year
+                exchangeDate: year + '-' + pad2(month)
             })
         }
     }
