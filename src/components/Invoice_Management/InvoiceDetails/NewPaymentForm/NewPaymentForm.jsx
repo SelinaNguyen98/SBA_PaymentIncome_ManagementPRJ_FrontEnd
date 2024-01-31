@@ -53,11 +53,11 @@ export default function NewPaymentForm({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
+      // setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
       const resonse = await createPayment(data);
       console.log(resonse);
 
-      // changeFirstPage();
+      changeFirstPage();
     } catch (error) {
       console.log(error);
     }
@@ -83,6 +83,7 @@ export default function NewPaymentForm({
     setValue("user_id", localStorage.getItem("user_id") || 1);
     setValue("exchange_rate_id", exchangeRateId);
     setValue("currency_type", "vnd");
+    setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
   }, [selectedDate]);
 
   const fetchGetCategoriesPL = async () => {
@@ -127,6 +128,7 @@ export default function NewPaymentForm({
                   dateFormat="dd/MM/yyyy"
                   onChange={(value) => {
                     setDayPickerValue(value);
+                    setValue("payment_date", value.toISOString().split("T")[0]);
                   }}
                   className="w-full py-1 rounded-sm px-2 bg-main-theme"
                   minDate={new Date(minDate)}
