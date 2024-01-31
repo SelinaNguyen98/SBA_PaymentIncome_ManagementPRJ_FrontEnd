@@ -7,7 +7,9 @@ export const callAPI_GetPaymentsYearAndMonths = async (
   month,
   year,
   page,
-  controller
+  controller,
+  key,
+  direction
 ) => {
   try {
     // const response = await axios.get(paths.GET_PAYMENTS_MONTH_YEAR, config);
@@ -22,6 +24,8 @@ export const callAPI_GetPaymentsYearAndMonths = async (
           month,
           year,
           page,
+          key,
+          direction
         },
         signal,
       }

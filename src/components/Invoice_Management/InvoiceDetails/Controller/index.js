@@ -7,14 +7,18 @@ export const getPaymentsByYearAndMonths = async (
   month,
   year,
   page,
-  controller
+  controller,
+  sortConfig
 ) => {
   try {
     const response = await API.callAPI_GetPaymentsYearAndMonths(
       month,
       year,
       page,
-      controller
+      controller,
+      sortConfig?.key,
+      sortConfig?.direction
+
     );
     return response;
   } catch (error) {
