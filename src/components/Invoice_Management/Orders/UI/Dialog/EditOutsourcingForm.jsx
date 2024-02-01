@@ -9,7 +9,7 @@ import { formatNumberSeparator} from "../../../../../Utils/utils/maths";
 import { createOutsourcingSchema } from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
 import { updateOutsourcing } from "../../Controller";
-
+import ReactDatePicker from "react-datepicker";
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function EditOutsourcingForm({
   // eslint-disable-next-line react/prop-types
@@ -44,6 +44,7 @@ export default function EditOutsourcingForm({
   // eslint-disable-next-line react/prop-types
   const formattedDate =
     invoiceOutsourcing?.outsourced_date?.split(" ")[0] ?? "";
+    const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
   // State Format Day
   // eslint-disable-next-line no-unused-vars
   const maxDate = new Date(
@@ -106,12 +107,26 @@ export default function EditOutsourcingForm({
               {t_add_outsourcing("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-            <input
+            {/* <input
                 type="date"
                 {...register("outsourced_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
+              /> */}
+              <ReactDatePicker
+                selected={dayPickerValue}
+                defaultValue={dayPickerValue}
+                wrapperClassName="w-full"
+                dateFormat="dd/MM/yyyy"
+                onChange={(value) => {
+                  setDayPickerValue(value);
+                  setValue("outsourced_date", value.toISOString().split("T")[0]);
+                }}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                minDate={new Date(minDate)}
+                maxDate={new Date(maxDate)}
+                onKeyDown={(e) => e.preventDefault()} 
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}

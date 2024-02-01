@@ -6,7 +6,7 @@ import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
-
+import ReactDatePicker from "react-datepicker";
 
 import { createOrderSchema } from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
@@ -45,6 +45,7 @@ export default function EditOrderForm({
   // const convertedDate = new Date(invoicePayment?.payment_date);
   // eslint-disable-next-line react/prop-types
   const formattedDate = invoiceOrder?.order_date?.split(" ")[0] ?? "";
+  const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
   // State Format Day
   // eslint-disable-next-line no-unused-vars
   const maxDate = new Date(
@@ -113,12 +114,26 @@ export default function EditOrderForm({
               {t_add_order("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-            <input
+            {/* <input
                 type="date"
                 {...register("order_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
+              /> */}
+              <ReactDatePicker
+                selected={dayPickerValue}
+                defaultValue={dayPickerValue}
+                wrapperClassName="w-full"
+                dateFormat="dd/MM/yyyy"
+                onChange={(value) => {
+                  setDayPickerValue(value);
+                  setValue("order_date", value.toISOString().split("T")[0]);
+                }}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                minDate={new Date(minDate)}
+                maxDate={new Date(maxDate)}
+                onKeyDown={(e) => e.preventDefault()} 
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}

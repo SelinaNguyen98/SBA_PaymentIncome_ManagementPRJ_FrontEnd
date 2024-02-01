@@ -131,7 +131,7 @@ export default function EditPaymentForm({
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 minDate={new Date(minDate)}
                 maxDate={new Date(maxDate)}
-                onKeyDown={(e) => e.preventDefault()} // Ngăn chặn sự kiện nhập từ bàn phím
+                onKeyDown={(e) => e.preventDefault()} 
               />
 
               <div

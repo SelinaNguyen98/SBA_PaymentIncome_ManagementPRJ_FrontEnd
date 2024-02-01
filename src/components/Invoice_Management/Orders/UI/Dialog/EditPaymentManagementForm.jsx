@@ -7,6 +7,7 @@ import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
 import { createPaymentOrderSchema } from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
 import { updatePayment } from "../../Controller";
+import ReactDatePicker from "react-datepicker";
 
 // eslint-disable-next-line react/prop-types, no-unused-vars
 export default function EditPaymentManagementForm({
@@ -41,6 +42,7 @@ export default function EditPaymentManagementForm({
   // const convertedDate = new Date(invoicePayment?.payment_date);
   // eslint-disable-next-line react/prop-types
   const formattedDate = invoicePayment?.payment_date?.split(" ")[0] ?? "";
+  const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
   // State Format Day
   // eslint-disable-next-line no-unused-vars
   const maxDate = new Date(
@@ -103,12 +105,26 @@ export default function EditPaymentManagementForm({
               {t_add_payment("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
+              {/* <input
                 type="date"
                 {...register("payment_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
+              /> */}
+              <ReactDatePicker
+                selected={dayPickerValue}
+                defaultValue={dayPickerValue}
+                wrapperClassName="w-full"
+                dateFormat="dd/MM/yyyy"
+                onChange={(value) => {
+                  setDayPickerValue(value);
+                  setValue("payment_date", value.toISOString().split("T")[0]);
+                }}
+                className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                minDate={new Date(minDate)}
+                maxDate={new Date(maxDate)}
+                onKeyDown={(e) => e.preventDefault()} 
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
