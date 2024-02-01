@@ -6,7 +6,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentOrderSchema } from "../../../../../Utils/validation/rulesYup";
 import { createPayment } from "../../Controller";
-// import { format } from 'date-fns';
+import { format } from 'date-fns';
+import ReactDatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 // eslint-disable-next-line no-unused-vars
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
@@ -36,9 +37,10 @@ export default function AddPaymentManagementForm({
   const {
     register,
     handleSubmit,
-    setValue,
     // eslint-disable-next-line no-unused-vars
     setError,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createPaymentOrderSchema) });
   const resetForm = () => {
@@ -49,11 +51,21 @@ export default function AddPaymentManagementForm({
     });
     
   };
+  const [dayPickerValue, setDayPickerValue] = useState(() => {
+    let today = new Date();
+    if (
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    )
+      return today;
+    return selectedDate;
+  });
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    //console.log(data);
+    const formattedDate = format(dayPickerValue, "yyyy-MM-dd");
     setValue("exchange_rate_id", exchangeRateId);
     try {
-      const response = await createPayment(data);
+      const response = await createPayment({ ...data, payment_date: formattedDate });
       console.log(response);
       changeFirstPage();
     } catch (error) {
@@ -84,7 +96,7 @@ export default function AddPaymentManagementForm({
     setValue("exchange_rate_id", exchangeRateId);
   }, [selectedDate, setValue]);
   useEffect(() => {
-    setValue("payment_date", formData.payment_date);
+    setValue("payment_date", format(dayPickerValue, "yyyy-MM-dd"))
     setValue("company_name", formData.company_name);
     setValue("vnd", formData.vnd);
   }, [formData, setValue]);
@@ -101,14 +113,30 @@ export default function AddPaymentManagementForm({
               {t_add_payment("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
+              {/* <input
                 type="date"
                 {...register("payment_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
                 // defaultValue={format(new Date(), 'dd-MM-yyyy')}
-              />
+              /> */}
+              <div>
+                <ReactDatePicker
+                  selected={dayPickerValue}
+                  defaultValue={dayPickerValue}
+                  wrapperClassName="w-full"
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(value) => {
+                    setDayPickerValue(value);
+                    setValue("order_date", value.toISOString().split("T")[0]);
+                  }}
+                  className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                  minDate={new Date(minDate)}
+                  maxDate={new Date(maxDate)}
+                  onKeyDown={(e) => e.preventDefault()}
+                />
+              </div>
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >

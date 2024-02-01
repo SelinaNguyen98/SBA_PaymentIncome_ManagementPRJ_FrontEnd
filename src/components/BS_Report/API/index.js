@@ -9,7 +9,7 @@ function pad2(number) {
 }
 
 const toInt = (value) => {
-    return parseInt(value.toString().replaceAll(',', ''))
+    return value.toString().replaceAll(',', '')
 }
 
 function addComma(number) {

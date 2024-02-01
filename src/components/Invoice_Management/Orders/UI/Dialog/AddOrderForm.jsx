@@ -1,13 +1,14 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
+import { format } from "date-fns";
 import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createOrderSchema } from "../../../../../Utils/validation/rulesYup";
 import { createOrder } from "../../Controller";
-// import { format } from 'date-fns';
-import 'react-datepicker/dist/react-datepicker.css';
+import ReactDatePicker, { CalendarContainer } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 // eslint-disable-next-line no-unused-vars
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
 // eslint-disable-next-line react/prop-types, no-unused-vars
@@ -36,24 +37,35 @@ export default function AddOrderForm({
   const {
     register,
     handleSubmit,
-    setValue,
     // eslint-disable-next-line no-unused-vars
     setError,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createOrderSchema) });
   const resetForm = () => {
     setFormData({
-      payment_date: "",
+      order_date: "",
       company_name: "",
       vnd: 0,
     });
     
   };
+  const [dayPickerValue, setDayPickerValue] = useState(() => {
+    let today = new Date();
+    if (
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    )
+      return today;
+    return selectedDate;
+  });
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    //console.log(data);
+    const formattedDate = format(dayPickerValue, "yyyy-MM-dd");
     setValue("exchange_rate_id", exchangeRateId);
     try {
-      const response = await createOrder(data);
+      const response = await createOrder({ ...data, order_date: formattedDate });
       console.log(response);
       changeFirstPage();
     } catch (error) {
@@ -75,7 +87,7 @@ export default function AddOrderForm({
     .split("T")[0]; //max day
 
   // eslint-disable-next-line react/prop-types
-  let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 2)
+  let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
     .toISOString()
     .split("T")[0];
 
@@ -84,7 +96,7 @@ export default function AddOrderForm({
     setValue("exchange_rate_id", exchangeRateId);
   }, [selectedDate, setValue]);
   useEffect(() => {
-    setValue("order_date", formData.order_date);
+    setValue("order_date", format(dayPickerValue, "yyyy-MM-dd"));
     setValue("company_name", formData.company_name);
     setValue("vnd", formData.vnd);
   }, [formData, setValue]);
@@ -101,7 +113,7 @@ export default function AddOrderForm({
             {t_add_order("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
+              {/* <input
                 type="date"
                 {...register("order_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
@@ -109,6 +121,27 @@ export default function AddOrderForm({
                 max={maxDate}
                 // defaultValue={format(new Date(), 'dd-MM-yyyy')}
               />
+              <div
+                className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
+              >
+                {errors?.order_date?.message}
+              </div> */}
+              <div>
+                <ReactDatePicker
+                  selected={dayPickerValue}
+                  defaultValue={dayPickerValue}
+                  wrapperClassName="w-full"
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(value) => {
+                    setDayPickerValue(value);
+                    setValue("order_date", value.toISOString().split("T")[0]);
+                  }}
+                  className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                  minDate={new Date(minDate)}
+                  maxDate={new Date(maxDate)}
+                  onKeyDown={(e) => e.preventDefault()}
+                />
+              </div>
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >

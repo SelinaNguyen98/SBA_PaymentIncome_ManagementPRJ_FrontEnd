@@ -1,6 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from "react";
-
+import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createPaymentSchema } from "../../../../Utils/validation/rulesYup";
@@ -53,10 +53,9 @@ export default function NewPaymentForm({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
-      const resonse = await createPayment(data);
-      console.log(resonse);
-
+      const formattedDate = format(dayPickerValue, "yyyy-MM-dd");
+      const response = await createPayment({ ...data, payment_date: formattedDate });
+      console.log(response);
       changeFirstPage();
     } catch (error) {
       console.log(error);
@@ -74,17 +73,17 @@ export default function NewPaymentForm({
     .toISOString()
     .split("T")[0]; //max day
   // eslint-disable-next-line react/prop-types
-  let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 2)
+  let minDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
     .toISOString()
     .split("T")[0];
 
-  useEffect(() => {
-    fetchGetCategoriesPL();
-    setValue("user_id", localStorage.getItem("user_id") || 1);
-    setValue("exchange_rate_id", exchangeRateId);
-    setValue("currency_type", "vnd");
-    setValue("payment_date", dayPickerValue.toISOString().split("T")[0]);
-  }, [selectedDate]);
+    useEffect(() => {
+      fetchGetCategoriesPL();
+      setValue("user_id", localStorage.getItem("user_id") || 1);
+      setValue("exchange_rate_id", exchangeRateId);
+      setValue("currency_type", "vnd");
+      setValue("payment_date", format(dayPickerValue, "yyyy-MM-dd"));
+    }, [selectedDate]);
 
   const fetchGetCategoriesPL = async () => {
     try {

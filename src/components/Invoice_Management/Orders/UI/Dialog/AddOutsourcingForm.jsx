@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { createOutsourcingSchema } from "../../../../../Utils/validation/rulesYup";
 import { createOutsourcing } from "../../Controller";
+import { format } from "date-fns";
+import ReactDatePicker, { CalendarContainer } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-// eslint-disable-next-line no-unused-vars
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
 // eslint-disable-next-line react/prop-types, no-unused-vars
 // eslint-disable-next-line react/prop-types, no-unused-vars
@@ -36,9 +37,10 @@ export default function AddOutsourcingForm({
   const {
     register,
     handleSubmit,
-    setValue,
     // eslint-disable-next-line no-unused-vars
     setError,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createOutsourcingSchema) });
   const resetForm = () => {
@@ -49,11 +51,21 @@ export default function AddOutsourcingForm({
       vnd: 0,
     });
   };
+  const [dayPickerValue, setDayPickerValue] = useState(() => {
+    let today = new Date();
+    if (
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getFullYear() === today.getFullYear()
+    )
+      return today;
+    return selectedDate;
+  });
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    //console.log(data);
+    const formattedDate = format(dayPickerValue, "yyyy-MM-dd");
     setValue("exchange_rate_id", exchangeRateId);
     try {
-      const response = await createOutsourcing(data);
+      const response = await createOutsourcing({ ...data, outsourced_date: formattedDate });
       console.log(response);
       changeFirstPage();
     } catch (error) {
@@ -82,7 +94,7 @@ export default function AddOutsourcingForm({
     setValue("exchange_rate_id", exchangeRateId);
   }, [selectedDate, setValue]);
   useEffect(() => {
-    setValue("outsourced_date", formData.outsourced_date);
+    setValue("outsourced_date", format(dayPickerValue, "yyyy-MM-dd"));
     setValue("outsourced_project", formData.outsourced_project);
     setValue("company_name", formData.company_name);
     setValue("vnd", formData.vnd);
@@ -99,14 +111,30 @@ export default function AddOutsourcingForm({
             {t_add_outsourcing("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-              <input
+              {/* <input
                 type="date"
                 {...register("outsourced_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 min={minDate}
                 max={maxDate}
                 // defaultValue={format(new Date(), 'dd-MM-yyyy')}
-              />
+              /> */}
+              <div>
+                <ReactDatePicker
+                  selected={dayPickerValue}
+                  defaultValue={dayPickerValue}
+                  wrapperClassName="w-full"
+                  dateFormat="dd/MM/yyyy"
+                  onChange={(value) => {
+                    setDayPickerValue(value);
+                    setValue("order_date", value.toISOString().split("T")[0]);
+                  }}
+                  className="w-full py-1 rounded-sm px-2 bg-main-theme"
+                  minDate={new Date(minDate)}
+                  maxDate={new Date(maxDate)}
+                  onKeyDown={(e) => e.preventDefault()}
+                />
+              </div>
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >

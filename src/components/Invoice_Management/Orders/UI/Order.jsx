@@ -237,9 +237,9 @@ const Order = () => {
       setCurrentPage_Order(1);
       try {
         const response = await getOrderByYearAndMonths(selectedDate, 1);
-  
+
         console.log("API Response:", response);
-  
+
         if (response && response.pagination) {
           if (response.orders === null) {
             setTotalPages_Order(1);
@@ -247,27 +247,29 @@ const Order = () => {
           } else {
             setDataOrder((prevData) => {
               console.log("Previous Data:", prevData);
-  
+
               // Thêm cột thứ tự vào mỗi order
               const newData = response.orders.map((order, index) => ({
                 ...order,
                 orderNumber: (1 - 1) * 5 + index + 1,
               }));
-  
+
               return newData || [];
             });
             console.log("huhu", dataOrder);
-  
+
             setTotalPages_Order(response.pagination.total_pages);
-  
+
             // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
-            const newSelectedRows = new Array(response.orders.length).fill(false);
+            const newSelectedRows = new Array(response.orders.length).fill(
+              false
+            );
             response.orders.forEach((order, index) => {
               if (selectedOrderIds.includes(order.id)) {
                 newSelectedRows[index] = true;
               }
             });
-  
+
             setSelectedRows_Order(newSelectedRows);
             // setSelectedRow_Order([]);
           }
@@ -460,9 +462,9 @@ const Order = () => {
       console.log(currentPage_Payment);
       try {
         const response = await getPaymentByYearAndMonths(selectedDate, 1);
-  
+
         console.log("API Response:", response);
-  
+
         if (response && response.pagination) {
           if (response.payment_orders === null) {
             setTotalPages_Payment(1);
@@ -470,7 +472,7 @@ const Order = () => {
           } else {
             setDataPayment((prevData) => {
               console.log("Previous Data:", prevData);
-  
+
               // Thêm cột thứ tự vào mỗi payment_order
               const newData = response.payment_orders.map(
                 (payment_order, index) => ({
@@ -478,12 +480,12 @@ const Order = () => {
                   paymentNumber: (1 - 1) * 5 + index + 1,
                 })
               );
-  
+
               return newData || [];
             });
-  
+
             setTotalPages_Payment(response.pagination.total_pages);
-  
+
             // Check và cập nhật selectedRows_Payment dựa trên selectedPaymentIds
             const newSelectedRows = new Array(
               response.payment_orders.length
@@ -493,7 +495,7 @@ const Order = () => {
                 newSelectedRows[index] = true;
               }
             });
-  
+
             setSelectedRows_Payment(newSelectedRows);
             // setSelectedRow_Payment([]);
           }
@@ -693,13 +695,10 @@ const Order = () => {
       setSelectedOutsourcingIds([]);
       setCurrentPage_Outsourcing(1);
       try {
-        const response = await getOutsourcingByYearAndMonths(
-          selectedDate,
-          1
-        );
-  
+        const response = await getOutsourcingByYearAndMonths(selectedDate, 1);
+
         console.log("API Response:", response);
-  
+
         if (response && response.pagination) {
           if (response.outsourcing === null) {
             setTotalPages_Outsourcing(1);
@@ -707,18 +706,20 @@ const Order = () => {
           } else {
             setDataOutsourcing((prevData) => {
               console.log("Previous Data:", prevData);
-  
+
               // Thêm cột thứ tự vào mỗi outsourcing
-              const newData = response.outsourcing.map((outsourcing, index) => ({
-                ...outsourcing,
-                outsourcingNumber: (1 - 1) * 5 + index + 1,
-              }));
-  
+              const newData = response.outsourcing.map(
+                (outsourcing, index) => ({
+                  ...outsourcing,
+                  outsourcingNumber: (1 - 1) * 5 + index + 1,
+                })
+              );
+
               return newData || [];
             });
-  
+
             setTotalPages_Outsourcing(response.pagination.total_pages);
-  
+
             // Check và cập nhật selectedRows_Outsourcing dựa trên selectedOutsourcingIds
             const newSelectedRows = new Array(response.outsourcing.length).fill(
               false
@@ -728,7 +729,7 @@ const Order = () => {
                 newSelectedRows[index] = true;
               }
             });
-  
+
             setSelectedRows_Outsourcing(newSelectedRows);
             // setSelectedRow_Outsourcing([]);
             console.log(response.outsourcing);
