@@ -44,7 +44,7 @@ export default function ExRateComponent({
       !usd?.trim() ||
       usd.trim() === "0"
     ) {
-      showToast.error("usd and jpy must be > 0");
+      showToast.error("USD and JPY must be > 0");
     } else {
       try {
         const response = await createExChangeRate(
@@ -58,8 +58,12 @@ export default function ExRateComponent({
         );
         console.log(response);
         updateParentIdExRate(idExRate || response?.id || null);
-
-        showToast.success(response?.message);
+        if (response?.message == "update exchange rate successfully") {
+          showToast.success(t("announce.update_exchange_rate_successfully"));
+        }
+        if (response?.message == "create exchange rate successfully") {
+          showToast.success(t("announce.created_exchange_rate_successfully"));
+        }
         triggerData();
       } catch (error) {
         console.log(error);

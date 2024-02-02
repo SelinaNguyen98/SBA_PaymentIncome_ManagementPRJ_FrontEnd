@@ -284,7 +284,7 @@ const Order = () => {
         setTotalPages_Order(1);
       }
       updateState({ isShowDeleteModal_Order: false });
-      showToast.success("Delete successfully!");
+      showToast.success(t_order("announce.deleted_successfully"));
     } catch (error) {
       console.error("Error deleting orders:", error);
     }
@@ -510,7 +510,7 @@ const Order = () => {
         setTotalPages_Payment(1);
       }
       updateState({ isShowDeleteModal_Payment: false });
-      showToast.success("Delete successfully!");
+      showToast.success(t_order("announce.deleted_successfully"));
     } catch (error) {
       console.error("Error deleting payment:", error);
     }
@@ -745,7 +745,7 @@ const Order = () => {
         setTotalPages_Outsourcing(1);
       }
       updateState({ isShowDeleteModal_Outsourcing: false });
-      showToast.success("Delete successfully!");
+      showToast.success(t_order("announce.deleted_successfully"));
     } catch (error) {
       console.error("Error deleting Outsourcing:", error);
     }
@@ -1076,7 +1076,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                            DATA NOT FOUND
+                          {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1354,7 +1354,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                            DATA NOT FOUND
+                          {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1631,7 +1631,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                            DATA NOT FOUND
+                          {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1696,7 +1696,7 @@ const Order = () => {
             selectedDate={selectedDate}
             exchangeRateId={state.dataExRate}
             changeFirstPage={() => {
-              showToast.success("Add new order successfully!");
+              showToast.success(t_order("announce.add_new_order_successfully"));
               updateState({ isShowFormNewOrder: false });
               setCurrentPage_Order(1);
               fetchData_Order();
@@ -1711,7 +1711,7 @@ const Order = () => {
             selectedDate={selectedDate}
             exchangeRateId={state.dataExRate}
             changeFirstPage={() => {
-              showToast.success("Add new payment successfully!");
+              showToast.success(t_order("announce.add_new_payment_successfully"));
               updateState({ isShowFormNewPayment: false });
               setCurrentPage_Payment(1);
               fetchData_Payment();
@@ -1726,7 +1726,7 @@ const Order = () => {
             selectedDate={selectedDate}
             exchangeRateId={state.dataExRate}
             changeFirstPage={() => {
-              showToast.success("Add new Outsourcing successfully!");
+              showToast.success(t_order("announce.add_new_outsourcing_cost_successfully"));
               updateState({ isShowFormNewOutsourcing: false });
               setCurrentPage_Outsourcing(1);
               fetchData_Outsourcing();
@@ -1748,7 +1748,7 @@ const Order = () => {
               //fetchData_Order();
             }}
             show_result={() => {
-              showToast.success("Edit successfully!");
+              showToast.success(t_order("announce.edited_successfully"));
               fetchData_Order();
             }}
           />
@@ -1768,7 +1768,7 @@ const Order = () => {
               //fetchData_Payment();
             }}
             show_result={() => {
-              showToast.success("Edit successfully!");
+              showToast.success(t_order("announce.edited_successfully"));
               fetchData_Payment();
             }}
           />
@@ -1788,7 +1788,7 @@ const Order = () => {
               //fetchData_Outsourcing();
             }}
             show_result={() => {
-              showToast.success("Edit successfully!");
+              showToast.success(t_order("announce.edited_successfully"));
               fetchData_Outsourcing();
             }}
           />

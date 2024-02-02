@@ -112,5 +112,29 @@
     "add_payment": "NEW PAYMENT",
     "del_invoice_detail": "DELETE INVOICE DETAIL",
     "del_invoice_content": "Are you sure you want to delete this payment ?"
+  },
+  "announce": {
+    "created_account_successfully": "Created successfully.",
+    "edited_successfully": "Edited successfully.",
+    "deleted_successfully": "Deleted successfully.",
+    "update_exchange_rate_successfully": "Updated exchange rate successfully.",
+    "add_new_order_successfully": "Add new order successfully.",
+    "add_new_payment_successfully": "Add new payment successfully.",
+    "add_new_outsourcing_cost_successfully": "Add new outsourcing cost successfully.",
+    "created_exchange_rate_successfully": "Created exchange rate successfully.",
+    "edited_data_successfully": "Edited data successfully.",
+    "only_input_number": "Only input number.",
+    "created_invoice_successfully": "Created successfully.",
+    "data_not_found":"DATA NOT FOUND"
+  },
+  "validate":{
+    "please_provide_a_category_name": "Please provide a category name.",
+    "please_choose_a_account_category_group": "Please choose a account category group.",
+    "please_provide_a_payment_name": "Please provide a payment name.",
+    "please_choose_a_account_category": "Please choose a account category.",
+    "please_provide_a_pay": "Please provide a pay",
+    "value_cannot_be_null": "Value cannot be null.",
+    "please_provide_a_company_name": "Please provide a company name.",
+    "please_choose_a_outsourced_project": "Please provide a outsourced project."
   }
 }

@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { formatNumberSeparator} from "../../../../../Utils/utils/maths";
+import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
 import { createOutsourcingSchema } from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
 import { updateOutsourcing } from "../../Controller";
@@ -44,7 +44,7 @@ export default function EditOutsourcingForm({
   // eslint-disable-next-line react/prop-types
   const formattedDate =
     invoiceOutsourcing?.outsourced_date?.split(" ")[0] ?? "";
-    const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
+  const [dayPickerValue, setDayPickerValue] = useState(new Date(formattedDate));
   // State Format Day
   // eslint-disable-next-line no-unused-vars
   const maxDate = new Date(
@@ -72,11 +72,11 @@ export default function EditOutsourcingForm({
     // eslint-disable-next-line react/prop-types
     id: invoiceOutsourcing?.id,
     outsourced_date: formattedDate,
-    outsourced_project:  invoiceOutsourcing?.outsourced_project,
+    outsourced_project: invoiceOutsourcing?.outsourced_project,
     // eslint-disable-next-line react/prop-types
-    company_name:  invoiceOutsourcing?.company_name,
+    company_name: invoiceOutsourcing?.company_name,
     // eslint-disable-next-line react/prop-types
-    vnd: formatNumberSeparator( invoiceOutsourcing?.vnd.toString() ?? ""),
+    vnd: formatNumberSeparator(invoiceOutsourcing?.vnd.toString() ?? ""),
   };
   useEffect(() => {
     setValue("user_id", localStorage.getItem("user_id") || 1);
@@ -107,7 +107,7 @@ export default function EditOutsourcingForm({
               {t_add_outsourcing("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-            {/* <input
+              {/* <input
                 type="date"
                 {...register("outsourced_date")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
@@ -121,17 +121,22 @@ export default function EditOutsourcingForm({
                 dateFormat="dd/MM/yyyy"
                 onChange={(value) => {
                   setDayPickerValue(value);
-                  setValue("outsourced_date", value.toISOString().split("T")[0]);
+                  setValue(
+                    "outsourced_date",
+                    value.toISOString().split("T")[0]
+                  );
                 }}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 minDate={new Date(minDate)}
                 maxDate={new Date(maxDate)}
-                onKeyDown={(e) => e.preventDefault()} 
+                onKeyDown={(e) => e.preventDefault()}
               />
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.outsourced_date?.message}
+                {errors?.outsourced_date?.message === "Value cannot be null."
+                  ? t_add_outsourcing("validate.value_cannot_be_null")
+                  : errors?.outsourced_date?.message}
               </div>
             </div>
           </div>
@@ -139,13 +144,21 @@ export default function EditOutsourcingForm({
             label={t_add_outsourcing("add_edit_order.Outsourced_project")}
             name="outsourced_project"
             register={register}
-            errorMessage={errors?.outsourced_project?.message}
+            errorMessage={
+              errors?.outsourced_project?.message === "Please choose a outsourced project."
+                ? t_add_outsourcing("validate.please_choose_a_outsourced_project")
+                : ""
+            }
           />
           <InputCustomComponent
             label={t_add_outsourcing("add_edit_order.Company_name")}
             name="company_name"
             register={register}
-            errorMessage={errors?.company_name?.message}
+            errorMessage={
+              errors?.company_name?.message === "Please provide a company name."
+                ? t_add_outsourcing("validate.please_provide_a_company_name")
+                : ""
+            }
           />
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
             <label className="lg:col-span-3">VND</label>

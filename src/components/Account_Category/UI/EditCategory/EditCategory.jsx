@@ -28,7 +28,7 @@ export default function EditCategory({ visible, cancel, category,ok }) {
     try {
       const response = await  editCategory(data);
       console.log(response);
-      showToast.success("Edit successfully!");
+      showToast.success(t("announce.edited_successfully"));
       // changeFirstPage();
       cancel()
     } catch (error) {

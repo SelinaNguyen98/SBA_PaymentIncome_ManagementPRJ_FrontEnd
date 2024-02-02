@@ -99,7 +99,7 @@ export default function Account_Category() {
         handleChangePage_Category(currentPage_Category - 1);
         return;
     }
-      showToast.success("Delete  successfully!");
+      showToast.success(t("announce.deleted_successfully"));
       trigger()
       console.log(response);
     } catch (error) {
@@ -228,9 +228,9 @@ export default function Account_Category() {
             className=" outline-none w-[30vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
             focus-within:shadow-md transition-shadow duration-250"
           >
-            <option value={""}>Select All</option>
-            <option value={"pl"}>Profit and Loss Report</option>
-            <option value={"bs"}>Balance Sheet Report</option>
+            <option value={""}>{t("button.Select_all")}</option>
+            <option value={"pl"}>{t("title.PL_report")}</option>
+            <option value={"bs"}>{t("title.BS_report")}</option>
           </select>
         );
       }
@@ -242,7 +242,7 @@ export default function Account_Category() {
             className=" outline-none w-[30vw] h-[50px]  pl-[10px] rounded-r-[10px] flex bg-white border-solid border border-[#ccc]
             focus-within:shadow-md transition-shadow duration-250 "
           >
-            <option value="" selected>Select All</option>
+            <option value="" selected>{t("button.Select_all")}</option>
             {groups.map((group, index) => {
               return (
                 <option value={group?.id} key={index}>

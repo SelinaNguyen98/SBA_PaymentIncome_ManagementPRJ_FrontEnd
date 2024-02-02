@@ -9,7 +9,7 @@ function pad2(number) {
 }
 
 const toInt = (value) => {
-    return value.toString().replaceAll(',', '')
+    return parseInt(value.toString().replaceAll(',', ''))
 }
 
 function addComma(number) {
@@ -103,7 +103,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: response.data?.data[0].jpy,
                 usd: response.data?.data[0].usd,
                 id: response.data?.data[0].id,
-                exchangeDate: year + '-' + pad2(month)
+                exchangeDate: pad2(year) + '-' +  month
             })
         }
         else {
@@ -111,7 +111,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: '',
                 usd: '',
                 id: '',
-                exchangeDate: year + '-' + pad2(month)
+                exchangeDate: pad2(year) + '-' +  month
             })
         }
     }
@@ -211,7 +211,7 @@ export function getDataYearly(year, setData) {
         )
 }
 
-export function saveYearly(data_year, showToast, setSelectedYearExport) {
+export function saveYearly(data_year, showToast) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -225,12 +225,7 @@ export function saveYearly(data_year, showToast, setSelectedYearExport) {
     }
     )
     if (checkNum) {
-        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => {
-            showToast.success(response.message)
-            const newYear = new Date(data_year[0]?.bs_month_year + 1)
-            newYear.setFullYear(data_year[0]?.bs_month_year + 1)
-            setSelectedYearExport(newYear)
-        }, () => {
+        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => showToast.success(response.message), () => {
             showToast.error("Amount is required ")
         }
         )

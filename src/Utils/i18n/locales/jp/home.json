@@ -40,7 +40,7 @@
     "input_balance_from_previous_year": "前年度繰越入力",
     "Login": "ログイン",
     "Log_out": "ログアウト",
-    "Select_all":"すべて選択！"
+    "Select_all":"全て選択"
   },
   "header_table_order": {
     "order_date": "受注日",
@@ -111,5 +111,29 @@
     "add_payment": "インボイス登録",
     "del_invoice_detail": "インボイス削除",
     "del_invoice_content": "選択されたインボイスを削除してよろしいでしょうか。"
+  },
+  "announce": {
+    "created_account_successfully": "登録が完了しました。",
+    "edited_successfully": "更新が完了しました。",
+    "deleted_successfully": "削除が完了しました。",
+    "update_exchange_rate_successfully": "更新が完了しました。",
+    "add_new_order_successfully": "受注登録が完了しました。",
+    "add_new_payment_successfully": "精算登録が完了しました。",
+    "add_new_outsourcing_cost_successfully": "外注登録が完了しました。",
+    "created_exchange_rate_successfully": "為替レート登録が完了しました。",
+    "edited_data_successfully": "データ更新が完了しました。",
+    "only_input_number": "数字だけ入力してください。",
+    "created_invoice_successfully": "作成が完了しました。",
+    "data_not_found":"該当のデータが見つかりません。"
+  },
+  "validate":{
+    "please_provide_a_category_name": "会計勘定項目名を入力してください。",
+    "please_choose_a_account_category_group": "会計勘定グループを選択してください。",
+    "please_provide_a_payment_name": "会計勘定項目名を入力してください。",
+    "please_choose_a_account_category": "会計勘定グループを選択してください。",
+    "please_provide_a_pay": "支払いを入力してください。",
+    "value_cannot_be_null": "入力が必須です。",
+    "please_provide_a_company_name": "会社名を入力してください。",
+    "please_choose_a_outsourced_project": "外注プロジェクトを入力してください。"
   }
 }

@@ -24,23 +24,21 @@ export default function NewCategory({ visible, cancel, ok }) {
     // eslint-disable-next-line no-unused-vars
     setError,
     formState: { errors },
-  } = useForm({resolver: yupResolver(createCategorySchema)});
+  } = useForm({ resolver: yupResolver(createCategorySchema) });
   const onSubmit = handleSubmit(async (data) => {
     // console.log("Dsdds",data);
 
-
     // setValue();
     try {
-      const response = await  createCategory(data);
+      const response = await createCategory(data);
       console.log(response);
       // changeFirstPage();
-      showToast.success("Add successfully!");
-      cancel()
+      showToast.success(t("announce.created_account_successfully"));
+      cancel();
     } catch (error) {
       console.log(error);
     }
   });
-  
 
   useEffect(() => {
     fetchGetCategoriesPL();
@@ -55,7 +53,7 @@ export default function NewCategory({ visible, cancel, ok }) {
       console.log(error);
     }
   };
-  
+
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white m-2 py-5 px-12  rounded-2xl">
@@ -65,7 +63,9 @@ export default function NewCategory({ visible, cancel, ok }) {
 
         <form className="px-4 mt-5" onSubmit={onSubmit}>
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
-            <label className="lg:col-span-3">{t("notification_account_category.name")}</label>
+            <label className="lg:col-span-3">
+              {t("notification_account_category.name")}
+            </label>
             <div className=" lg:col-span-9 ml-3">
               <input
                 type="text"
@@ -75,15 +75,19 @@ export default function NewCategory({ visible, cancel, ok }) {
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.name?.message}
+                {errors?.name?.message === "Name is mandatory"
+                  ? t("validate.please_provide_a_category_name")
+                  : errors?.name?.message}
               </div>
             </div>
           </div>
 
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
-            <label className="lg:col-span-3">{t("titlePage.accountCategoryGroup")}</label>
+            <label className="lg:col-span-3">
+              {t("titlePage.accountCategoryGroup")}
+            </label>
             <div className=" lg:col-span-9 ml-3">
-            <select
+              <select
                 {...register("group_id")}
                 className="w-full py-1 rounded-sm px-2 bg-main-theme"
                 defaultValue="" // Set the default value here
@@ -91,7 +95,7 @@ export default function NewCategory({ visible, cancel, ok }) {
                 <option value="" disabled></option>
                 {groups.map((group, index) => {
                   return (
-                    <option value={group?.id} key={index} >
+                    <option value={group?.id} key={index}>
                       {group?.name}
                     </option>
                   );
@@ -100,30 +104,32 @@ export default function NewCategory({ visible, cancel, ok }) {
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.group_id?.message}
+                {errors?.group_id?.message === "Account Category Group is mandatory"
+                  ? t("validate.please_choose_a_account_category_group")
+                  : errors?.group_id?.message}
               </div>
             </div>
           </div>
 
           <div className="flex items-center justify-around  mt-6 mb-7  ">
-          <Button
-            type="submit"
-            className={" py-2 border-2 border-gray min-w-[150px]"}
-          >
-            {t("button.save")}
-          </Button>
-          <Button
-            onClick={cancel}
-            
-            className={" border-red-500 bg-white border-2 py-2 min-w-[150px] "}
-          >
-            <span className=" text-red-500  uppercase ">
-              {t("button.cancel")}
-            </span>
-          </Button>
-        </div>
+            <Button
+              type="submit"
+              className={" py-2 border-2 border-gray min-w-[150px]"}
+            >
+              {t("button.save")}
+            </Button>
+            <Button
+              onClick={cancel}
+              className={
+                " border-red-500 bg-white border-2 py-2 min-w-[150px] "
+              }
+            >
+              <span className=" text-red-500  uppercase ">
+                {t("button.cancel")}
+              </span>
+            </Button>
+          </div>
         </form>
-      
       </div>
     </Modal>
   );

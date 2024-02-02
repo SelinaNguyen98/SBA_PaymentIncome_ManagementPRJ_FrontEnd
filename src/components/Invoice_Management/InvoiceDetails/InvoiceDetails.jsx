@@ -158,7 +158,7 @@ export default function InvoiceDetails() {
   const handleDelete = async () => {
     try {
       if (selectedRowData?.id == null || selectedRowData?.id == undefined)
-        showToast.delete("Not found this ID");
+        showToast.delete(t("announce.data_not_found"));
       const response = await deletePaymentById(selectedRowData?.id);
 
       // xoa id no neu no ton tai trong mang da cho selectedrow
@@ -173,7 +173,7 @@ export default function InvoiceDetails() {
       }
       fetchInvoices(page);
       // setDataChangeTrigger(!dataChangeTrigger);
-      showToast.success("Delete successfully!");
+      showToast.success(t("announce.deleted_successfully"));
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -193,7 +193,7 @@ export default function InvoiceDetails() {
 
         fetchInvoices(1);
         updateState({ isShowConfirmDeleteAllModal: false });
-        showToast.success("Delete successfully!");
+        showToast.success(t("announce.deleted_successfully"));
       }
     } catch (error) {
       console.log(error);
@@ -686,6 +686,7 @@ export default function InvoiceDetails() {
             updateState({ isShowFormNewPayment: false });
           }}
           changeFirstPage={() => {
+            showToast.success(t("announce.created_invoice_successfully"));
             fetchInvoices(1);
             updateState({ isShowFormNewPayment: false });
           }}
@@ -706,7 +707,7 @@ export default function InvoiceDetails() {
             });
           }}
           show_result={() => {
-            showToast.success("Edit successfully!");
+            showToast.success(t("announce.edited_successfully"));
             fetchInvoices(page);
           }}
           triggerData={() => {}}

@@ -4,7 +4,7 @@ import Button from "../../../../../Utils/Button";
 import Modal from "../../../../../Utils/Modal";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { formatNumberSeparator } from "../../../../../Utils/utils/maths";
-import { createPaymentOrderSchema } from "../../../../../Utils/validation/rulesYup";
+import { createPaymentOrderSchema }  from "../../../../../Utils/validation/rulesYup";
 // eslint-disable-next-line no-unused-vars
 import { updatePayment } from "../../Controller";
 import ReactDatePicker from "react-datepicker";
@@ -129,7 +129,9 @@ export default function EditPaymentManagementForm({
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.payment_date?.message}
+                 {errors?.payment_date?.message === "Value cannot be null."
+                  ? t_add_payment("validate.value_cannot_be_null")
+                  : errors?.payment_date?.message}
               </div>
             </div>
           </div>
@@ -137,7 +139,11 @@ export default function EditPaymentManagementForm({
             label={t_add_payment("add_edit_order.Company_name")}
             name="company_name"
             register={register}
-            errorMessage={errors?.company_name?.message}
+            errorMessage={
+              errors?.company_name?.message === "Please provide a company name."
+                ? t_add_payment("validate.please_provide_a_company_name")
+                : ""
+            }
           />
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
             <label className="lg:col-span-3">VND</label>

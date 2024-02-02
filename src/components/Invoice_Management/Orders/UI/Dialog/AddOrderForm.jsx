@@ -145,7 +145,9 @@ export default function AddOrderForm({
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.order_date?.message}
+                {errors?.order_date?.message === "Value cannot be null."
+                  ? t_add_order("validate.value_cannot_be_null")
+                  : errors?.order_date?.message}
               </div>
             </div>
           </div>
@@ -153,7 +155,11 @@ export default function AddOrderForm({
             label={t_add_order("add_edit_order.Company_name")}
             name="company_name" 
             register={register}
-            errorMessage={errors?.company_name?.message}
+            errorMessage={
+              errors?.company_name?.message === "Please provide a company name."
+                ? t_add_order("validate.please_provide_a_company_name")
+                : ""
+            }
           />
           {/* <InputCustomComponent
             label={"VND"}

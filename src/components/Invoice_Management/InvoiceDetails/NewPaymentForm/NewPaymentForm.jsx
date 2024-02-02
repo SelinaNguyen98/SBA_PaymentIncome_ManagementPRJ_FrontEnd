@@ -54,7 +54,10 @@ export default function NewPaymentForm({
   const onSubmit = handleSubmit(async (data) => {
     try {
       const formattedDate = format(dayPickerValue, "yyyy-MM-dd");
-      const response = await createPayment({ ...data, payment_date: formattedDate });
+      const response = await createPayment({
+        ...data,
+        payment_date: formattedDate,
+      });
       console.log(response);
       changeFirstPage();
     } catch (error) {
@@ -77,13 +80,13 @@ export default function NewPaymentForm({
     .toISOString()
     .split("T")[0];
 
-    useEffect(() => {
-      fetchGetCategoriesPL();
-      setValue("user_id", localStorage.getItem("user_id") || 1);
-      setValue("exchange_rate_id", exchangeRateId);
-      setValue("currency_type", "vnd");
-      setValue("payment_date", format(dayPickerValue, "yyyy-MM-dd"));
-    }, [selectedDate]);
+  useEffect(() => {
+    fetchGetCategoriesPL();
+    setValue("user_id", localStorage.getItem("user_id") || 1);
+    setValue("exchange_rate_id", exchangeRateId);
+    setValue("currency_type", "vnd");
+    setValue("payment_date", format(dayPickerValue, "yyyy-MM-dd"));
+  }, [selectedDate]);
 
   const fetchGetCategoriesPL = async () => {
     try {
@@ -139,7 +142,9 @@ export default function NewPaymentForm({
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.payment_date?.message}
+                {errors?.payment_date?.message === "Value cannot be null."
+                  ? t("validate.value_cannot_be_null")
+                  : errors?.payment_date?.message}
               </div>
             </div>
           </div>
@@ -148,7 +153,11 @@ export default function NewPaymentForm({
             label={t("page_payment_detail.name")}
             name={"name"}
             register={register}
-            errorMessage={errors?.name?.message}
+            errorMessage={
+              errors?.name?.message === "Please provide a payment name."
+                ? t("validate.please_provide_a_payment_name")
+                : ""
+            }
           />
 
           <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
@@ -165,7 +174,9 @@ export default function NewPaymentForm({
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.cost?.message}
+                {errors?.cost?.message === "Value cannot be null."
+                  ? t("validate.value_cannot_be_null")
+                  : errors?.cost?.message}
               </div>
             </div>
           </div>
@@ -201,7 +212,10 @@ export default function NewPaymentForm({
               <div
                 className={`text-red-500 min-h-[1.25rem] text-sm overflow-x-hidden`}
               >
-                {errors?.category_id?.message}
+                {errors?.category_id?.message ===
+                "Please choose a account category."
+                  ? t("validate.please_choose_a_account_category")
+                  : errors?.category_id?.message}
               </div>
             </div>
           </div>
@@ -217,7 +231,11 @@ export default function NewPaymentForm({
             label={t("page_payment_detail.pay")}
             name={"pay"}
             register={register}
-            errorMessage={errors?.pay?.message}
+            errorMessage={
+              errors?.pay?.message === "Please provide a pay."
+                ? t("validate.please_provide_a_pay")
+                : ""
+            }
           />
 
           {/* <div className={` grid lg:grid-cols-12 gap-y-2 mb-2 gap-12`}>
