@@ -158,7 +158,7 @@ export default function InputMonthlyData({
             className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
             data-modal-target="crud-modal"
             data-modal-toggle="crud-modal"
-            onClick={() => API.createOrUpdateExchangeRate(exchangeRate, showToast)}
+            onClick={() => API.createOrUpdateExchangeRate(exchangeRate, showToast,t_translate("announce.only_input_number"),t_translate("validate.value_cannot_be_null"),t_translate("announce.update_exchange_rate_successfully"),t_translate("announce.created_exchange_rate_successfully" ))}
           >
             {t_translate("button.save")}
           </Button>
@@ -227,7 +227,7 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveMonthly(month, year, data_month, showToast, setSelectedYearExport)
+              API.saveMonthly(month, year, data_month, showToast, setSelectedYearExport,t_translate("announce.edited_data_successfully"),t_translate("validate.value_cannot_be_null"),t_translate("announce.only_input_number"))
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >

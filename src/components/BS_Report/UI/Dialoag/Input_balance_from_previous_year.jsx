@@ -184,7 +184,7 @@ export default function Input_balance_from_previous_year({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveYearly(data_year, showToast,setSelectedYearExport)
+              API.saveYearly(data_year, showToast,setSelectedYearExport,t_translate("announce.edited_data_successfully"),t_translate("validate.value_cannot_be_null"),t_translate("announce.only_input_number"))
               cancel
             }}
             className="py-2 border-2 border-gray min-w-[150px]"

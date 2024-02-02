@@ -1,4 +1,5 @@
 
+import { faArrowUp91 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { saveAs } from 'file-saver';
 
@@ -103,7 +104,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: response.data?.data[0].jpy,
                 usd: response.data?.data[0].usd,
                 id: response.data?.data[0].id,
-                exchangeDate: pad2(year) + '-' +  month
+                exchangeDate: year + '-' +  pad2(month)
             })
         }
         else {
@@ -111,7 +112,7 @@ export function getExchangeRate(month, year, setExchangeRate) {
                 jpy: '',
                 usd: '',
                 id: '',
-                exchangeDate: pad2(year) + '-' +  month
+                exchangeDate: year + '-' + pad2(month)
             })
         }
     }
@@ -119,23 +120,28 @@ export function getExchangeRate(month, year, setExchangeRate) {
 }
 
 // được gọi khi nhấn nút save ở exchange rate 
-export function createOrUpdateExchangeRate(exchangeRate, showToast) {
+export function createOrUpdateExchangeRate(exchangeRate, showToast,a1,a2,a3,a4) {
     console.log(exchangeRate)
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     if (valiNumber(toInt(exchangeRate.jpy)) === false || valiNumber(toInt(exchangeRate.usd)) === false) {
-        showToast.error("Only input number")
+        showToast.error(a1);
     }
     else {
         axios.post(`${API_BASE_URL}/exchangeRate`, {
             ...exchangeRate, jpy: toInt(exchangeRate.jpy), usd: toInt(exchangeRate.usd)
         }).then(response => {
-            showToast.success(response.data.message)
-        }, () => showToast.error("Input is required"))
+            if (response.data.message== "update exchange rate successfully") {
+                showToast.success(a3);
+              }
+              if (response.data.message == "create exchange rate successfully") {
+                showToast.success(a4);
+              }
+        }, () => showToast.error(a2))
     }
 }
 
-export function saveMonthly(month, year, data_month, showToast, setSelectedYearExport) {
+export function saveMonthly(month, year, data_month, showToast, setSelectedYearExport,a1,a2,a3) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -153,17 +159,17 @@ export function saveMonthly(month, year, data_month, showToast, setSelectedYearE
             month_year: year.toString() + '-' + pad2(month),
             balances: data
         }).then(response => {
-            showToast.success(response.message)
+            showToast.success(a1)
             const newYear = new Date(year)
             newYear.setFullYear(year)
             setSelectedYearExport(newYear)
         }, (e) => {
-            showToast.error("Amount is required ")
+            showToast.error(a2)
             console.log(e)
         }
         )
     } else {
-        showToast.error("only input number")
+        showToast.error(a3)
     }
 }
 
@@ -211,7 +217,7 @@ export function getDataYearly(year, setData) {
         )
 }
 
-export function saveYearly(data_year, showToast) {
+export function saveYearly(data_year, showToast,a1,a2,a3) {
     const token = localStorage.getItem("token");
     axios.defaults.headers.common = { 'Authorization': `Bearer ${token}` }
     const data = []
@@ -225,12 +231,12 @@ export function saveYearly(data_year, showToast) {
     }
     )
     if (checkNum) {
-        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => showToast.success(response.message), () => {
-            showToast.error("Amount is required ")
+        axios.post(`${API_BASE_URL}/getDatayear`, [...data]).then(response => showToast.success(a1), () => {
+            showToast.error(a2)
         }
         )
     } else {
-        showToast.error("only input Number")
+        showToast.error(a3)
     }
 }
 

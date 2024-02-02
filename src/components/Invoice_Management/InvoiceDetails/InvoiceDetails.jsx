@@ -401,7 +401,7 @@ export default function InvoiceDetails() {
                 ></td>
               </tr>
 
-              {dataTable &&
+              {dataTable && dataTable.length > 0 ? (
                 dataTable.map((invoicePayment, index) => (
                   <tr
                     key={index}
@@ -582,7 +582,14 @@ export default function InvoiceDetails() {
                     {/* Warring: Last column of each row is like padding-right */}
                     <td className="px-10 pr-4 bg-main-theme text-center border-hidden"></td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={100} className="text-center">
+                    {t("announce.data_not_found")}
+                  </td>
+                </tr>
+              )}
 
               {/* Warring:  Last row like tha padding bottom */}
               <tr>

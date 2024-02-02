@@ -109,7 +109,7 @@ const AccountAnnalytics = () => {
                   ></td>
                 </tr>
                 {/* //////////////// */}
-                {dataTable &&
+                {dataTable && dataTable.length > 0 ? (
                   dataTable.map((analytic, index) => (
                     <tr
                       key={index}
@@ -163,7 +163,14 @@ const AccountAnnalytics = () => {
                       <td className=" w-[2%] bg-main-theme border-hidden"></td>
                       {/* //////////////// */}
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={100} className="text-center">
+                      {t("announce.data_not_found")}
+                    </td>
+                  </tr>
+                )}
 
                 {/* Warring:  Last row like tha padding bottom */}
                 <tr>
