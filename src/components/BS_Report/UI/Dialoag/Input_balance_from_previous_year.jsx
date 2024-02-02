@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-unused-vars
-import { React, useContext, useEffect, useState } from "react";
+import { React, useContext, useEffect, useState, useRef } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
-import * as API from "../../API/index"
+import * as API from "../../API/index";
 
 export default function Input_balance_from_previous_year({
   // eslint-disable-next-line react/prop-types
@@ -12,7 +12,9 @@ export default function Input_balance_from_previous_year({
   // eslint-disable-next-line react/prop-types
   t,
   // eslint-disable-next-line react/prop-types
-  selectedTime, showToast,setSelectedYearExport
+  selectedTime,
+  showToast,
+  setSelectedYearExport,
 }) {
   const t_translate = t;
   // eslint-disable-next-line no-unused-vars
@@ -94,31 +96,45 @@ export default function Input_balance_from_previous_year({
 
   useEffect(() => {
     if (visible) {
-      API.getDataYearly(year, setData_year)
+      API.getDataYearly(year, setData_year);
+    } else {
+      setData_year([]);
     }
-    else {
-      setData_year([])
-    }
-  }, [visible, year])
+  }, [visible, year]);
 
   function addComma(number) {
-    if (!number) return number
-    number = number.toString().replaceAll(',', '')
+    if (!number) return number;
+    number = number.toString().replaceAll(",", "");
     return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }
+  const inputRefs = useRef([]);
 
+  // Function to focus on the next or first input field
+  const focusNextInput = (currentIndex) => {
+    const nextIndex = (currentIndex + 1) % inputRefs.current.length;
+    inputRefs.current[nextIndex].focus();
+  };
   return (
     <Modal visible={visible}>
       <div className="flex flex-col bg-white max-h-[600px] m-2 py-5 px-12 rounded-2xl w-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[600px] overflow-y-auto">
         {isInputMonthlyData ? (
           // Display if the translation contains "INPUT MONTHLY DATA FOR"
           <span className="uppercase py-1 mx-auto my-3 px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-            {t_translate("form_input_monthly_data_BS.title_form_balance_previous_year")}{" ("} {year - 1}{")"}{" FOR "}{year}
+            {t_translate(
+              "form_input_monthly_data_BS.title_form_balance_previous_year"
+            )}
+            {" ("} {year - 1}
+            {")"}
+            {" FOR "}
+            {year}
           </span>
         ) : (
           // Display if the translation contains "月毎野データ入力"
           <span className="uppercase py-1 mx-auto px-12 text-center bg-white-500/80 font-bold text-sm rounded-full shadow-inner border-1 border border-black/20 top-box">
-            {year - 1} {t_translate("form_input_monthly_data_BS.title_form_balance_previous_year")}
+            {year - 1}{" "}
+            {t_translate(
+              "form_input_monthly_data_BS.title_form_balance_previous_year"
+            )}
           </span>
         )}
         <div className="max-h-[600px] max-w-[1600px] overflow-y-auto overflow-x-auto mt-4 text-sm relative">
@@ -159,16 +175,22 @@ export default function Input_balance_from_previous_year({
                     {rowData_year.category_name}
                   </td>
 
-                  <td
-                    className="w-[10px]"
-                    name="tb_amount"
-                  >
-                    <input value={rowData_year.amount} onChange={(e) => {
-                      const newData = [...data_year];
-                      newData[index].amount = addComma(e.target.value);
-                      setData_year(newData);
-                    }} />
-
+                  <td className="w-[10px]" name="tb_amount">
+                    <input
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      value={rowData_year.amount}
+                      onChange={(e) => {
+                        const newData = [...data_year];
+                        newData[index].amount = addComma(e.target.value);
+                        setData_year(newData);
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Prevent form submission
+                          focusNextInput(index);
+                        }
+                      }}
+                    />
                   </td>
 
                   <td className="w-[1px]"></td>
@@ -184,8 +206,15 @@ export default function Input_balance_from_previous_year({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveYearly(data_year, showToast,setSelectedYearExport,t_translate("announce.edited_data_successfully"),t_translate("validate.value_cannot_be_null"),t_translate("announce.only_input_number"))
-              cancel
+              API.saveYearly(
+                data_year,
+                showToast,
+                setSelectedYearExport,
+                t_translate("announce.edited_data_successfully"),
+                t_translate("validate.value_cannot_be_null"),
+                t_translate("announce.only_input_number")
+              );
+              cancel;
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >

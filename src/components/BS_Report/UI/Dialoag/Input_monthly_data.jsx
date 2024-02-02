@@ -3,14 +3,17 @@ import { React, useContext, useEffect, useState } from "react";
 import Button from "../../../../Utils/Button";
 import Modal from "../../../../Utils/Modal";
 import { useTranslation } from "react-i18next";
-import * as API from "../../API/index"
+import * as API from "../../API/index";
+import { useRef } from "react";
 export default function InputMonthlyData({
   // eslint-disable-next-line react/prop-types
   visible,
   // eslint-disable-next-line react/prop-types
   cancel,
   // eslint-disable-next-line react/prop-types
-  selectedTime, showToast,setSelectedYearExport
+  selectedTime,
+  showToast,
+  setSelectedYearExport,
 }) {
   const { t } = useTranslation();
   const t_translate = t;
@@ -83,9 +86,9 @@ export default function InputMonthlyData({
     },
   ]);
   const [exchangeRate, setExchangeRate] = useState({
-    jpy: '',
-    usd: '',
-  })
+    jpy: "",
+    usd: "",
+  });
 
   // Extract month and year from selectedTime
   // eslint-disable-next-line react/prop-types
@@ -99,22 +102,29 @@ export default function InputMonthlyData({
 
   useEffect(() => {
     if (visible) {
-      API.getExchangeRate(month, year, setExchangeRate)
-      API.getDataMonthly(year, month, setData_month)
+      API.getExchangeRate(month, year, setExchangeRate);
+      API.getDataMonthly(year, month, setData_month);
     } else {
-      setData_month([])
+      setData_month([]);
     }
-  }, [visible, selectedTime])
+  }, [visible, selectedTime]);
 
   const handleChange = (e) => {
-    setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value })
-    console.log(exchangeRate)
-  }
+    setExchangeRate({ ...exchangeRate, [e.target.name]: e.target.value });
+    console.log(exchangeRate);
+  };
   function addComma(number) {
-    if (!number) return number
-    number = number.toString().replaceAll(',', '')
+    if (!number) return number;
+    number = number.toString().replaceAll(",", "");
     return number.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
   }
+  const inputRefs = useRef([]);
+
+  // Function to focus on the next or first input field
+  const focusNextInput = (currentIndex) => {
+    const nextIndex = (currentIndex + 1) % inputRefs.current.length;
+    inputRefs.current[nextIndex].focus();
+  };
   return (
     <Modal visible={visible}>
       <div className="modalContainer flex flex-col bg-white m-2 py-5 px-12 rounded-2xl w-[800px] max-h-[800px] max-[1000px]:w-[400px]  max-[1000px]:max-h-[700px] overflow-y-auto ">
@@ -158,7 +168,16 @@ export default function InputMonthlyData({
             className="col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1"
             data-modal-target="crud-modal"
             data-modal-toggle="crud-modal"
-            onClick={() => API.createOrUpdateExchangeRate(exchangeRate, showToast,t_translate("announce.only_input_number"),t_translate("validate.value_cannot_be_null"),t_translate("announce.update_exchange_rate_successfully"),t_translate("announce.created_exchange_rate_successfully" ))}
+            onClick={() =>
+              API.createOrUpdateExchangeRate(
+                exchangeRate,
+                showToast,
+                t_translate("announce.only_input_number"),
+                t_translate("validate.value_cannot_be_null"),
+                t_translate("announce.update_exchange_rate_successfully"),
+                t_translate("announce.created_exchange_rate_successfully")
+              )
+            }
           >
             {t_translate("button.save")}
           </Button>
@@ -188,12 +207,12 @@ export default function InputMonthlyData({
               <tr className="">
                 <td colSpan={100}></td>
               </tr>
-              {data_month?.balance_sheet?.map((rowData_month, index) =>
-              (
+              {data_month?.balance_sheet?.map((rowData_month, index) => (
                 <tr key={index}>
                   <td className="w-[1px]"></td>
-                  <td className="w-[3px]" name="tb_no">{index + 1}</td>
-
+                  <td className="w-[3px]" name="tb_no">
+                    {index + 1}
+                  </td>
 
                   <td
                     className="max-w-[100px] min-w-[10px] w-[100px] overflow-x-auto overflow-scroll"
@@ -202,21 +221,27 @@ export default function InputMonthlyData({
                     {rowData_month.category_name}
                   </td>
 
-                  <td
-                    className="w-[10px]"
-                    name="tb_Amount"
-                  >
-                    <input value={rowData_month.amount} onChange={(e) => {
-                      const newData = data_month.balance_sheet;
-                      newData[index].amount = addComma(e.target.value);
-                      setData_month({ ...data_month, newData });
-                    }} />
+                  <td className="w-[10px]" name="tb_Amount">
+                    <input
+                      ref={(el) => (inputRefs.current[index] = el)}
+                      value={rowData_month.amount}
+                      onChange={(e) => {
+                        const newData = data_month.balance_sheet;
+                        newData[index].amount = addComma(e.target.value);
+                        setData_month({ ...data_month, newData });
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Prevent form submission
+                          focusNextInput(index);
+                        }
+                      }}
+                    />
                   </td>
 
                   <td className="w-[1px]"></td>
                 </tr>
-              )
-              )}
+              ))}
 
               <tr className="bg-main-theme h-[0px] py-0 my-0">
                 <td colSpan={100}></td>
@@ -227,16 +252,23 @@ export default function InputMonthlyData({
         <div className="flex items-center justify-around  mt-6 mb-7  ">
           <Button
             onClick={() => {
-              API.saveMonthly(month, year, data_month, showToast, setSelectedYearExport,t_translate("announce.edited_data_successfully"),t_translate("validate.value_cannot_be_null"),t_translate("announce.only_input_number"))
+              API.saveMonthly(
+                month,
+                year,
+                data_month,
+                showToast,
+                setSelectedYearExport,
+                t_translate("announce.edited_data_successfully"),
+                t_translate("validate.value_cannot_be_null"),
+                t_translate("announce.only_input_number")
+              );
             }}
             className="py-2 border-2 border-gray min-w-[150px]"
           >
             {t_translate("button.save")}
           </Button>
           <Button
-            onClick={
-              cancel
-            }
+            onClick={cancel}
             className="border-red-500 bg-white border-2 py-2 min-w-[150px]"
           >
             <span className="text-red-500 uppercase">
