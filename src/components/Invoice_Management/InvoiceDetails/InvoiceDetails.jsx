@@ -364,9 +364,22 @@ export default function InvoiceDetails() {
                   <RiExpandUpDownFill />
                 </div>
               </th>
-              <th className=" w-[8%]"> JPY</th>
-              <th className=" w-[8%]"> VND</th>
-              <th className=" w-[8%]"> USD</th>
+              <th className=" w-[8%]" onClick={() => requestSort("cost")}>
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span> JPY </span>
+                  <RiExpandUpDownFill />
+                </div>
+              </th>
+              <th className=" w-[8%]" onClick={() => requestSort("cost")}>
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span> VND </span>
+                  <RiExpandUpDownFill />
+                </div></th>
+              <th className=" w-[8%]" onClick={() => requestSort("cost")}>
+                <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                  <span> USD </span>
+                  <RiExpandUpDownFill />
+                </div></th>
               <th className=" w-[10%]">{t("page_payment_detail.note")}</th>
               <th
                 className=" w-[10%]"
