@@ -4,13 +4,13 @@ import { formatNumberHasDot } from "../../../../Utils/utils/maths";
 // eslint-disable-next-line no-unused-vars
 // import { format } from 'date-fns';
 
-export const getOrderByYearAndMonths = async (selectedDate, current_page) => {
+export const getOrderByYearAndMonths = async (selectedDate, current_page,sortConfig) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const month = selectedDate.getMonth() + 1; // Months are 0-indexed
     const year = selectedDate.getFullYear();
     
-    const response = await API.callAPI_GetOrder(month, year, current_page);
+    const response = await API.callAPI_GetOrder(month, year, current_page, sortConfig?.key,sortConfig?.direction);
     return response;
   } catch (error) {
     throw error;
@@ -75,13 +75,13 @@ export const updateOrder = async (formData) => {
 };
 
 //Payment
-export const getPaymentByYearAndMonths = async (selectedDate, current_page) => {
+export const getPaymentByYearAndMonths = async (selectedDate, current_page,sortConfig) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const month = selectedDate.getMonth() + 1; // Months are 0-indexed
     const year = selectedDate.getFullYear();
     
-    const response = await API.callAPI_Get_Payment_Order(month, year, current_page);
+    const response = await API.callAPI_Get_Payment_Order(month, year, current_page, sortConfig?.key,sortConfig?.direction);
     return response;
   } catch (error) {
     throw error;
@@ -133,13 +133,13 @@ export const updatePayment = async (formData) => {
 
 
 //Outsourcing
-export const getOutsourcingByYearAndMonths = async (selectedDate, current_page) => {
+export const getOutsourcingByYearAndMonths = async (selectedDate, current_page,sortConfig) => {
   // eslint-disable-next-line no-useless-catch
   try {
     const month = selectedDate.getMonth() + 1; // Months are 0-indexed
     const year = selectedDate.getFullYear();
     
-    const response = await API.callAPI_Get_Outsourcing(month, year, current_page);
+    const response = await API.callAPI_Get_Outsourcing(month, year, current_page, sortConfig?.key,sortConfig?.direction);
     return response;
   } catch (error) {
     throw error;

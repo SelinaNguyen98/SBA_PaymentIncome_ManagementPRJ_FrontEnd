@@ -7,7 +7,7 @@ import { paths } from "../../../../Utils/utils/configAxios";
 // Change from const to let
 let cancelTokenSource = axios.CancelToken.source();
 
-export const callAPI_GetOrder = async (month, year, page) => {
+export const callAPI_GetOrder = async (month, year, page,key,direction) => {
   try {
     // Cancel the previous request if it exists
     cancelTokenSource.cancel("Operation canceled due to new request.");
@@ -17,7 +17,7 @@ export const callAPI_GetOrder = async (month, year, page) => {
     cancelTokenSource = newCancelTokenSource; // Reassign using let
 
     const response = await axios.get(paths.GET_ORDER_MONTH_YEAR, {
-      params: { month, year, page },
+      params: { month, year, page, key,direction,},
       cancelToken: newCancelTokenSource.token, // Set the cancel token for this request
     });
 
@@ -91,7 +91,7 @@ export const callApi_updateOrder = async (formData) => {
 //Payment_Order:
 let paymentOrderCancelTokenSource = axios.CancelToken.source();
 
-export const callAPI_Get_Payment_Order = async (month, year, page) => {
+export const callAPI_Get_Payment_Order = async (month, year, page,key,direction) => {
   try {
     // Cancel the previous request if it exists
     paymentOrderCancelTokenSource.cancel("Operation canceled due to new request.");
@@ -101,7 +101,7 @@ export const callAPI_Get_Payment_Order = async (month, year, page) => {
     paymentOrderCancelTokenSource = newCancelTokenSource; // Reassign using let
 
     const response = await axios.get(paths.PAYMENT_ORDERS, {
-      params: { month, year, page },
+      params: { month, year, page,key,direction},
       cancelToken: newCancelTokenSource.token, // Set the cancel token for this request
     });
 
@@ -156,7 +156,7 @@ export const callApi_Update_Payment_Order = async (formData) => {
 // Create a cancel token source
 let outsourcingCancelTokenSource = axios.CancelToken.source();
 
-export const callAPI_Get_Outsourcing = async (month, year, page) => {
+export const callAPI_Get_Outsourcing = async (month, year, page,key,direction) => {
   try {
     // Cancel the previous request if it exists
     outsourcingCancelTokenSource.cancel("Operation canceled due to new request.");
@@ -166,7 +166,7 @@ export const callAPI_Get_Outsourcing = async (month, year, page) => {
     outsourcingCancelTokenSource = newCancelTokenSource; // Reassign using let
 
     const response = await axios.get(paths.OUTSOURCING, {
-      params: { month, year, page },
+      params: { month, year, page,key,direction},
       cancelToken: newCancelTokenSource.token, // Set the cancel token for this request
     });
 

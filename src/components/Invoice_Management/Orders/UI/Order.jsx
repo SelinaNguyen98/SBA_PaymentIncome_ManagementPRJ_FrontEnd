@@ -29,7 +29,7 @@ import {
   deleteOutsourcingByIds,
 } from "../Controller"; // Import the deleteOrderByIds function
 import "./style.css";
-
+import { RiExpandUpDownFill } from "react-icons/ri";
 const Order = () => {
   const controller = new AbortController();
   const { showToast } = useContext(AppContext);
@@ -131,7 +131,10 @@ const Order = () => {
   const [currentPage_Order, setCurrentPage_Order] = useState(1);
   const [totalPages_Order, setTotalPages_Order] = useState(1);
   const [selectedOrderIds, setSelectedOrderIds] = useState([]); // New state to store selected order IDs
-
+  const [sortConfig_Order, setSortConfig_Order] = useState({
+    key: "created_at",
+    direction: "desc",
+  });
   const handleRowCheckboxChange_Order = (index) => {
     const orderId = dataOrder[index].id;
     const newSelectedRows = [...selectedRows_Order];
@@ -181,7 +184,11 @@ const Order = () => {
     setCurrentPage_Order(newPage);
 
     try {
-      const response = await getOrderByYearAndMonths(selectedDate, newPage);
+      const response = await getOrderByYearAndMonths(
+        selectedDate,
+        newPage,
+        sortConfig_Order
+      );
 
       console.log("API Response:", response);
 
@@ -236,7 +243,11 @@ const Order = () => {
       setSelectedOrderIds([]);
       setCurrentPage_Order(1);
       try {
-        const response = await getOrderByYearAndMonths(selectedDate, 1);
+        const response = await getOrderByYearAndMonths(
+          selectedDate,
+          1,
+          sortConfig_Order
+        );
 
         console.log("API Response:", response);
 
@@ -289,12 +300,13 @@ const Order = () => {
       console.error("Error deleting orders:", error);
     }
   };
-  const fetchData_Order = async () => {
+  const fetchData_Order = async (sortConfigInput) => {
     setIsLoading_Order(true);
     try {
       const response = await getOrderByYearAndMonths(
         selectedDate,
-        currentPage_Order
+        currentPage_Order,
+        sortConfigInput || sortConfig_Order
       );
 
       console.log("API Response:", response);
@@ -347,6 +359,68 @@ const Order = () => {
       setCurrentPage_Order(1);
     }
   };
+  const requestSort_Order = async (key) => {
+    let direction = "asc";
+    if (sortConfig_Order.key === key) {
+      // Nếu đang sắp xếp theo cùng một cột
+      direction = sortConfig_Order.direction === "asc" ? "desc" : "asc";
+    }
+    let NewsortConfig = { key, direction };
+    try {
+      const response = await getOrderByYearAndMonths(
+        selectedDate,
+        currentPage_Order,
+        NewsortConfig || sortConfig_Order
+      );
+
+      console.log("API Response:", response);
+
+      if (response && response.pagination) {
+        if (response.orders === null) {
+          setTotalPages_Order(1);
+          setCurrentPage_Order(1);
+        } else {
+          setDataOrder((prevData) => {
+            console.log("Previous Data:", prevData);
+
+            // Thêm cột thứ tự vào mỗi order
+            const newData = response.orders.map((order, index) => ({
+              ...order,
+              orderNumber: (currentPage_Order - 1) * 5 + index + 1,
+            }));
+
+            return newData || [];
+          });
+          console.log("huhu", dataOrder);
+
+          setTotalPages_Order(response.pagination.total_pages);
+
+          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
+          const newSelectedRows = new Array(response.orders.length).fill(false);
+          response.orders.forEach((order, index) => {
+            if (selectedOrderIds.includes(order.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+
+          setSelectedRows_Order(newSelectedRows);
+        }
+      } else {
+        console.log("Invalid response format:", response);
+        setDataOrder([]);
+        setTotalPages_Order(1);
+        setCurrentPage_Order(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataOrder([]);
+      setTotalPages_Order(1);
+      setCurrentPage_Order(1);
+    } finally {
+      setIsLoading_Order(false);
+    }
+    setSortConfig_Order(NewsortConfig);
+  };
 
   //Payment
   const [isLoading_Payment, setIsLoading_Payment] = useState(true);
@@ -355,6 +429,10 @@ const Order = () => {
   const [currentPage_Payment, setCurrentPage_Payment] = useState(1);
   const [totalPages_Payment, setTotalPages_Payment] = useState(1);
   const [selectedPaymentIds, setSelectedPaymentIds] = useState([]);
+  const [sortConfig_Payment, setSortConfig_Payment] = useState({
+    key: "created_at",
+    direction: "desc",
+  });
   const handleRowCheckboxChange_Payment = (index) => {
     const paymentId = dataPayment[index].id;
     const newSelectedRows = [...selectedRows_Payment];
@@ -402,7 +480,11 @@ const Order = () => {
     setCurrentPage_Payment(newPage);
 
     try {
-      const response = await getPaymentByYearAndMonths(selectedDate, newPage);
+      const response = await getPaymentByYearAndMonths(
+        selectedDate,
+        newPage,
+        sortConfig_Payment
+      );
 
       console.log("API Response:", response);
 
@@ -461,7 +543,11 @@ const Order = () => {
       setCurrentPage_Payment(1);
       console.log(currentPage_Payment);
       try {
-        const response = await getPaymentByYearAndMonths(selectedDate, 1);
+        const response = await getPaymentByYearAndMonths(
+          selectedDate,
+          1,
+          sortConfig_Payment
+        );
 
         console.log("API Response:", response);
 
@@ -515,12 +601,13 @@ const Order = () => {
       console.error("Error deleting payment:", error);
     }
   };
-  const fetchData_Payment = async () => {
+  const fetchData_Payment = async (sortConfigInput) => {
     setIsLoading_Payment(true);
     try {
       const response = await getPaymentByYearAndMonths(
         selectedDate,
-        currentPage_Payment
+        currentPage_Payment,
+        sortConfigInput || sortConfig_Payment
       );
 
       console.log("API Response:", response);
@@ -576,6 +663,72 @@ const Order = () => {
       setCurrentPage_Payment(1);
     }
   };
+  const requestSort_Payment = async (key) => {
+    let direction = "asc";
+    if (sortConfig_Payment.key === key) {
+      // Nếu đang sắp xếp theo cùng một cột
+      direction = sortConfig_Payment.direction === "asc" ? "desc" : "asc";
+    }
+    let NewsortConfig = { key, direction };
+    try {
+      const response = await getPaymentByYearAndMonths(
+        selectedDate,
+        currentPage_Payment,
+        NewsortConfig || sortConfig_Payment
+      );
+
+      console.log("API Response:", response);
+
+      if (response && response.pagination) {
+        if (response.payment_orders === null) {
+          setTotalPages_Payment(1);
+          setCurrentPage_Payment(1);
+        } else {
+          setDataPayment((prevData) => {
+            console.log("Previous Data:", prevData);
+
+            // Thêm cột thứ tự vào mỗi payment_order
+            const newData = response.payment_orders.map(
+              (payment_order, index) => ({
+                ...payment_order,
+                paymentNumber: (currentPage_Payment - 1) * 5 + index + 1,
+              })
+            );
+
+            return newData || [];
+          });
+
+          setTotalPages_Payment(response.pagination.total_pages);
+
+          // Check và cập nhật selectedRows_Payment dựa trên selectedPaymentIds
+          const newSelectedRows = new Array(
+            response.payment_orders.length
+          ).fill(false);
+          response.payment_orders.forEach((payment_order, index) => {
+            if (selectedPaymentIds.includes(payment_order.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+
+          setSelectedRows_Payment(newSelectedRows);
+        }
+      } else {
+        console.error("Invalid response format:", response);
+        setDataPayment([]);
+        setTotalPages_Payment(1);
+        setCurrentPage_Payment(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataPayment([]);
+      setTotalPages_Payment(1);
+      setCurrentPage_Payment(1);
+    } finally {
+      setIsLoading_Payment(false);
+    }
+    setSortConfig_Payment(NewsortConfig);
+  };
+
   //Outsourcing
   const [isLoading_Outsourcing, setIsLoading_Outsourcing] = useState(true);
   const [dataOutsourcing, setDataOutsourcing] = useState([]);
@@ -583,6 +736,10 @@ const Order = () => {
   const [currentPage_Outsourcing, setCurrentPage_Outsourcing] = useState(1);
   const [totalPages_Outsourcing, setTotalPages_Outsourcing] = useState(1);
   const [selectedOutsourcingIds, setSelectedOutsourcingIds] = useState([]);
+  const [sortConfig_Outsourcing, setSortConfig_Outsourcing] = useState({
+    key: "created_at",
+    direction: "desc",
+  });
   const handleRowCheckboxChange_Outsourcing = (index) => {
     const outsourcingId = dataOutsourcing[index].id;
     const newSelectedRows = [...selectedRows_Outsourcing];
@@ -637,7 +794,8 @@ const Order = () => {
     try {
       const response = await getOutsourcingByYearAndMonths(
         selectedDate,
-        newPage
+        newPage,
+        sortConfig_Outsourcing
       );
 
       console.log("API Response:", response);
@@ -695,7 +853,11 @@ const Order = () => {
       setSelectedOutsourcingIds([]);
       setCurrentPage_Outsourcing(1);
       try {
-        const response = await getOutsourcingByYearAndMonths(selectedDate, 1);
+        const response = await getOutsourcingByYearAndMonths(
+          selectedDate,
+          1,
+          sortConfig_Outsourcing
+        );
 
         console.log("API Response:", response);
 
@@ -750,13 +912,14 @@ const Order = () => {
       console.error("Error deleting Outsourcing:", error);
     }
   };
-  const fetchData_Outsourcing = async () => {
+  const fetchData_Outsourcing = async (sortConfigInput) => {
     setCurrentPage_Outsourcing(1);
     setIsLoading_Outsourcing(true);
     try {
       const response = await getOutsourcingByYearAndMonths(
         selectedDate,
-        currentPage_Outsourcing
+        currentPage_Outsourcing,
+        sortConfigInput || sortConfig_Outsourcing
       );
 
       console.log("API Response:", response);
@@ -811,7 +974,72 @@ const Order = () => {
       setCurrentPage_Outsourcing(1);
     }
   };
+  const requestSort_Outsourcing = async (key) => {
+    let direction = "asc";
+    if (sortConfig_Outsourcing.key === key) {
+      // Nếu đang sắp xếp theo cùng một cột
+      direction = sortConfig_Outsourcing.direction === "asc" ? "desc" : "asc";
+    }
+    let NewsortConfig = { key, direction };
+    try {
+      const response = await getOutsourcingByYearAndMonths(
+        selectedDate,
+        currentPage_Outsourcing,
+        NewsortConfig || sortConfig_Outsourcing
+      );
 
+      console.log("API Response:", response);
+
+      if (response && response.pagination) {
+        if (response.outsourcing === null) {
+          setTotalPages_Outsourcing(1);
+          setCurrentPage_Outsourcing(1);
+        } else {
+          setDataOutsourcing((prevData) => {
+            console.log("Previous Data:", prevData);
+
+            // Thêm cột thứ tự vào mỗi outsourcing
+            const newData = response.outsourcing.map((outsourcing, index) => ({
+              ...outsourcing,
+              outsourcingNumber: (currentPage_Outsourcing - 1) * 5 + index + 1,
+            }));
+
+            return newData || [];
+          });
+
+          setTotalPages_Outsourcing(response.pagination.total_pages);
+
+          // Check và cập nhật selectedRows_Outsourcing dựa trên selectedOutsourcingIds
+          const newSelectedRows = new Array(response.outsourcing.length).fill(
+            false
+          );
+          response.outsourcing.forEach((outsourcing, index) => {
+            if (selectedOutsourcingIds.includes(outsourcing.id)) {
+              newSelectedRows[index] = true;
+            }
+          });
+
+          setSelectedRows_Outsourcing(newSelectedRows);
+          console.log(response.outsourcing);
+        }
+      } else {
+        console.error("Invalid response format:", response);
+        setDataOutsourcing([]);
+        setTotalPages_Outsourcing(1);
+        setCurrentPage_Outsourcing(1);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setDataOutsourcing([]);
+      setTotalPages_Outsourcing(1);
+      setCurrentPage_Outsourcing(1);
+    } finally {
+      setIsLoading_Outsourcing(false);
+    }
+    setSortConfig_Outsourcing(NewsortConfig);
+  };
+
+  //Fetch All
   useEffect(() => {
     const fetchData = () => {
       fetchExchangeRate();
@@ -927,15 +1155,58 @@ const Order = () => {
                       />
                     </th>
                     <th className="w-8">No</th>
-                    <th className="w-24">
-                      {t_order("header_table_order.order_date")}
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Order("order_date")}
+                    >
+                      {/* {t_order("header_table_order.order_date")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>{t_order("header_table_order.order_date")} </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-32">
-                      {t_order("header_table_order.Company_name")}
+                    <th
+                      className="w-32"
+                      onClick={() => requestSort_Order("company_name")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>
+                          {t_order("header_table_order.Company_name")}
+                        </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-12">JPY</th>
-                    <th className="w-24">VND</th>
-                    <th className="w-24">USD</th>
+                    <th
+                      className="w-12"
+                      onClick={() => requestSort_Order("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>JPY</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Order("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>VND</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Order("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>USD</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
                     <th className="w-24">
                       {t_order("header_table_order.Action")}
                     </th>
@@ -1076,7 +1347,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                          {t_order("announce.data_not_found")}
+                            {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1198,15 +1469,60 @@ const Order = () => {
                       />
                     </th>
                     <th className="w-8">No</th>
-                    <th className="w-24">
-                      {t_order("header_table_order.Date_of_payment")}
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Payment("payment_date")}
+                    >
+                      {/* {t_order("header_table_order.Date_of_payment")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>
+                          {t_order("header_table_order.Date_of_payment")}
+                        </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-32">
-                      {t_order("header_table_order.Company_name")}
+                    <th
+                      className="w-32"
+                      onClick={() => requestSort_Payment("company_name")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>
+                          {t_order("header_table_order.Company_name")}
+                        </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-24">JPY</th>
-                    <th className="w-24">VND</th>
-                    <th className="w-24">USD</th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Payment("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>JPY</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Payment("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>VND</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Payment("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>USD</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
                     <th className="w-24">
                       {t_order("header_table_order.Action")}
                     </th>
@@ -1354,7 +1670,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                          {t_order("announce.data_not_found")}
+                            {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1477,15 +1793,62 @@ const Order = () => {
                       />
                     </th>
                     <th className="w-8">No</th>
-                    <th className="w-44">
-                      {t_order("header_table_order.Outsourced_project")}
+                    <th
+                      className="w-44"
+                      onClick={() =>
+                        requestSort_Outsourcing("outsourced_project")
+                      }
+                    >
+                      {/* {t_order("header_table_order.Outsourced_project")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>
+                          {t_order("header_table_order.Outsourced_project")}
+                        </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-32">
-                      {t_order("header_table_order.Company_name")}
+                    <th
+                      className="w-32"
+                      onClick={() => requestSort_Outsourcing("company_name")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>
+                          {t_order("header_table_order.Company_name")}
+                        </span>
+                        <RiExpandUpDownFill />
+                      </div>
                     </th>
-                    <th className="w-24">JPY</th>
-                    <th className="w-24">VND</th>
-                    <th className="w-24">USD</th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Outsourcing("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>JPY</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Outsourcing("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>VND</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
+                    <th
+                      className="w-24"
+                      onClick={() => requestSort_Outsourcing("vnd")}
+                    >
+                      {/* {t_order("header_table_order.Company_name")} */}
+                      <div className=" flex-row flex items-center justify-center text-center hover:cursor-pointer">
+                        <span>USD</span>
+                        <RiExpandUpDownFill />
+                      </div>
+                    </th>
                     <th className="w-24">
                       {t_order("header_table_order.Action")}
                     </th>
@@ -1631,7 +1994,7 @@ const Order = () => {
                       ) : (
                         <tr>
                           <td colSpan={100} className="text-center">
-                          {t_order("announce.data_not_found")}
+                            {t_order("announce.data_not_found")}
                           </td>
                         </tr>
                       )}
@@ -1711,7 +2074,9 @@ const Order = () => {
             selectedDate={selectedDate}
             exchangeRateId={state.dataExRate}
             changeFirstPage={() => {
-              showToast.success(t_order("announce.add_new_payment_successfully"));
+              showToast.success(
+                t_order("announce.add_new_payment_successfully")
+              );
               updateState({ isShowFormNewPayment: false });
               setCurrentPage_Payment(1);
               fetchData_Payment();
@@ -1726,7 +2091,9 @@ const Order = () => {
             selectedDate={selectedDate}
             exchangeRateId={state.dataExRate}
             changeFirstPage={() => {
-              showToast.success(t_order("announce.add_new_outsourcing_cost_successfully"));
+              showToast.success(
+                t_order("announce.add_new_outsourcing_cost_successfully")
+              );
               updateState({ isShowFormNewOutsourcing: false });
               setCurrentPage_Outsourcing(1);
               fetchData_Outsourcing();
