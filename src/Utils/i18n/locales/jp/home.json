@@ -12,7 +12,7 @@
     "thGroup": "勘定科目合計グループ",
     "allCandidates": "検索条件",
     "accountCategoryGroup": "勘定科目合計グループ",
-    "accountCategory": "勘定科目合計",
+    "accountCategory": "勘定科目管理",
     "thName": "勘定科目",
     "reportType": "レポート種",
     "searchPlaceholder": "検索",
@@ -26,7 +26,7 @@
     "BS_report": "貸借対照表(BS)",
     "PL_report": "損益計算書(PL)",
     "accountCategoryGroup": "勘定科目合計グループ",
-    "accountCategory": "勘定科目合計",
+    "accountCategory": "勘定科目管理",
     "Invoice_Management": "インボイス管理"
   },
   "button": {
