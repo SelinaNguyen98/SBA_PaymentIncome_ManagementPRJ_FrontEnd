@@ -141,7 +141,7 @@ const PL_Report = () => {
                         <YearPicker_Button
                           selectedYear={selectedYearExport}
                           setSelectedYear={setSelectedYearExport}
-                          className="col-span-12 lg:col-span-2 max-[1000px]:w-full max-w-36 max-[1600px]:max-w-32"
+                          className="col-span-12 lg:col-span-2 max-[1000px]:w-full max-w-36 max-[1600px]:max-w-32 z-50"
                         />
                         <Button
                           className="ml-4 col-span-12 lg:col-span-1 flex-shrink-0 px-1 my-1 gap-2"
@@ -180,7 +180,7 @@ const PL_Report = () => {
                       id="Table"
                       className="max-h-[500px] text-sm w-full table-fixed"
                     >
-                      <thead className="sticky top-0 bg-white z-50 w-full">
+                      <thead className="sticky top-0 bg-white z-10 w-full">
                         <tr>
                           <th className="w-[1px]"></th>
                           <th className="w-16">No</th>

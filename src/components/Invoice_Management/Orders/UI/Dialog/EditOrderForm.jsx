@@ -30,6 +30,7 @@ export default function EditOrderForm({
   show_result,
 }) {
   const t_add_order = t;
+  //Khai báo Schema Validation:
   const {
     register,
     // eslint-disable-next-line no-unused-vars
@@ -42,6 +43,8 @@ export default function EditOrderForm({
     getValues,
     formState: { errors },
   } = useForm({ resolver: yupResolver(createOrderSchema) });
+//   yupResolver được sử dụng để tích hợp Yup schema với react-hook-form.
+// createOrderSchema là một schema Yup chứa các quy tắc validation cho dữ liệu đầu vào.
   // const convertedDate = new Date(invoicePayment?.payment_date);
   // eslint-disable-next-line react/prop-types
   const formattedDate = invoiceOrder?.order_date?.split(" ")[0] ?? "";
@@ -80,19 +83,16 @@ export default function EditOrderForm({
     vnd: formatNumberSeparator(invoiceOrder?.vnd.toString() ?? ""),
   };
   useEffect(() => {
-    // console.log(invoiceOrder);
     setValue("user_id", localStorage.getItem("user_id") || 1);
     setValue("exchange_rate_id", exchangeRateId);
     Object.keys(existingData).forEach((key) => {
       setValue(key, existingData[key]);
     });
   }, [selectedDate,invoiceOrder]);
+  // Dữ liệu hiện tại được lấy từ invoiceOrder và được thiết lập trong hook useEffect để truyền giá trị vào các trường của form.
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // Format the date before sending the request
-      // data.order_date = format(new Date(data.order_date), "dd-MM-yyyy");
-      // console.log(data.order_date);
-      // console.log(data);
       const response = await updateOrder(data);
       console.log(response);
       cancel();
@@ -114,13 +114,6 @@ export default function EditOrderForm({
               {t_add_order("add_edit_order.day")}
             </label>
             <div className=" lg:col-span-9 ml-3">
-            {/* <input
-                type="date"
-                {...register("order_date")}
-                className="w-full py-1 rounded-sm px-2 bg-main-theme"
-                min={minDate}
-                max={maxDate}
-              /> */}
               <ReactDatePicker
                 selected={dayPickerValue}
                 defaultValue={dayPickerValue}

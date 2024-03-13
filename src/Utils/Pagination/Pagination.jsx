@@ -2,66 +2,64 @@
 import React, { useState } from "react";
 
 /**
- * voi Range -2 ap dung cho khoang cach dau va cuoi
- *  [1] 2 3 ... 20
+ * Component Pagination:
+ * - Range -2 áp dụng cho khoảng cách đầu và cuối
+ * - Hiển thị trang như sau:
+ *   [1] 2 3 ... 20
  *   1 [2] 3 ... 20
  *   1 2 [3] 4 ... 20
- * 
- *   1 ... 3 [4] 5 ... 20
- *   1 ... 16 [17] 18 ... 20
-
+ *   ...
  *   1 ... 17 [18] 19 20
  *   1 ... 18 [19] 20
  *   1 ... 18 19 [20]
  */
 
 const RANGE = 1;
+
 // eslint-disable-next-line react/prop-types
 export default function Pagination({ changePage, page = 5, totalPage = 0 }) {
-  const renderPsgination = () => {
+  // Hàm render phân trang
+  const renderPagination = () => {
     let dotAfter = false;
     let dotBefore = false;
+
+    // Hàm hiển thị dấu chấm '...' trước trang
     const renderDotBefore = (index) => {
       if (!dotBefore) {
         dotBefore = true;
         return (
-          <span
-            key={index}
-            // className="bg-white rounded px-3 py-2 shadow-sm cursor-pointer border"
-          >
+          <span key={index}>
             ...
           </span>
         );
       }
-
       return null;
     };
 
+    // Hàm hiển thị dấu chấm '...' sau trang
     const renderDotAfter = (index) => {
       if (!dotAfter) {
         dotAfter = true;
         return (
-          <span
-            key={index}
-            // className="bg-white rounded px-3 py-2 shadow-sm cursor-pointer border"
-          >
+          <span key={index}>
             ...
           </span>
         );
       }
-
       return null;
     };
 
+    // Nếu số trang không hợp lệ thì không hiển thị
     if (totalPage <= 0 || isNaN(totalPage)) {
       return null;
     }
+
     return Array(totalPage)
       .fill(0)
       .map((_, index) => {
         const pageNumber = index + 1;
 
-        // Dieu kien return ve ky tu 3 cham
+        // Điều kiện hiển thị dấu chấm '...'
         if (
           page <= RANGE + 1 &&
           pageNumber > 3 &&
@@ -81,41 +79,40 @@ export default function Pagination({ changePage, page = 5, totalPage = 0 }) {
           pageNumber > RANGE &&
           pageNumber <= totalPage - 3 &&
           page >= totalPage - RANGE
-        )
+        ) {
           return renderDotBefore(index);
+        }
 
-        /**
-         * 18 19 20
-         * nung so nho hon 18 deu phai  ...
-         */
-
-        ///////////////////////////////////////////
+        // Hiển thị số trang hoặc dấu chấm '...' tùy vào điều kiện
         if (page === pageNumber) {
           return (
-            <span key={index} className="m-2 cursor-pointer ">
-              <div className="  rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
+            <span key={index} className="m-2 cursor-pointer">
+              <div className="rounded-full w-6 h-6 text-center items-center justify-center bg-[#8798D4]">
                 {pageNumber}
               </div>
             </span>
           );
+        } else {
+          return (
+            <button
+              key={index}
+              onClick={() => changePage(pageNumber)}
+              className="m-2 cursor-pointer"
+            >
+              {pageNumber}
+            </button>
+          );
         }
-
-        return (
-          <button
-            key={index}
-            onClick={() => changePage(pageNumber)}
-            className="m-2 cursor-pointer "
-          >
-            {pageNumber}
-          </button>
-        );
       });
   };
 
+  // Render component Pagination
   return (
-    <div className=" flex items-center justify-end rounded-full shadow-md bg-[#F7F9FF] text-[16px]  max-2xl-plus:text-[20px]   font-[500] ">
+    <div className="flex items-center justify-end rounded-full shadow-md bg-[#F7F9FF] text-[16px] max-2xl-plus:text-[20px] font-[500]">
       {page === 1 ? (
-        <span className="bg-gray/60 cursor-not-allowed ">
+        // Nút Previous không hoạt động nếu đang ở trang đầu tiên
+        <span className="bg-gray/60 cursor-not-allowed">
+          {/* Icon mũi tên Previous */}
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -130,7 +127,9 @@ export default function Pagination({ changePage, page = 5, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
+        // Nút Previous hoạt động khi không ở trang đầu tiên
         <button onClick={() => changePage(page - 1)}>
+          {/* Icon mũi tên Previous */}
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -146,10 +145,13 @@ export default function Pagination({ changePage, page = 5, totalPage = 0 }) {
         </button>
       )}
 
-      {renderPsgination()}
+      {/* Hiển thị các nút trang hoặc dấu chấm '...' */}
+      {renderPagination()}
 
       {page === totalPage ? (
-        <span className="bg-gray/60 cursor-not-allowed ">
+        // Nút Next không hoạt động nếu đang ở trang cuối cùng
+        <span className="bg-gray/60 cursor-not-allowed">
+          {/* Icon mũi tên Next */}
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"
@@ -164,7 +166,9 @@ export default function Pagination({ changePage, page = 5, totalPage = 0 }) {
           </svg>
         </span>
       ) : (
+        // Nút Next hoạt động khi không ở trang cuối cùng
         <button onClick={() => changePage(page + 1)}>
+          {/* Icon mũi tên Next */}
           <svg
             className="w-10 h-6"
             viewBox="0 0 7 18"

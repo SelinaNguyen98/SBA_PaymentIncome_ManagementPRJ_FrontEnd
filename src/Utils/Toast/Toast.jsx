@@ -5,12 +5,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function Toast() {
+  // Sử dụng useContext để lấy thông tin về toast từ AppContext
   const { toast } = useContext(AppContext);
+
+  // Xác định loại toast (success hoặc error), mặc định là success nếu không có loại nào được xác định
   const type = toast?.type || "success"; // 'success' | 'error'
+
   return (
     <>
+      {/* Kiểm tra nếu có toast thì hiển thị */}
       {toast && (
         <AnimatePresence>
+          {/* Sử dụng Framer Motion để thực hiện hiệu ứng khi hiển thị toast */}
           <motion.div
             className=" fixed min-w-[200px] top-0 right-0 z-[9999]  box-border  "
             initial={{ x: "100%" }}
@@ -23,6 +29,7 @@ export default function Toast() {
              ${type === "error" ? "border-red-500 text-red" : ""}
             `}
             >
+              {/* Hiển thị biểu tượng thành công nếu là toast success */}
               {type == "success" && (
                 <svg
                   width="15"
@@ -41,10 +48,12 @@ export default function Toast() {
                   />
                 </svg>
               )}
+              {/* Hiển thị biểu tượng lỗi nếu là toast error */}
               {type === "error" && (
                 <HiOutlineExclamationCircle size={22} className="mr-2" />
               )}
 
+              {/* Hiển thị nội dung thông báo hoặc "Successfully!" nếu không có nội dung */}
               {toast?.message || "Successfully!"}
             </div>
           </motion.div>

@@ -1,93 +1,41 @@
+// Import thư viện axios
 import axios from "axios";
 
+// Thiết lập URL cơ sở cho tất cả các yêu cầu API
 axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
 
+// Định nghĩa các đường dẫn API trong ứng dụng
 export const paths = {
-  LOGIN: "auth/login",
-  GET_PAYMENTS_MONTH_YEAR: "payments",
-  PAYMENT: "payments",
-  EXCHAGE_RATE: "exchangeRate",
-  PL_REPORT: "getDataPL",
-  GROUP: "groups",
-  CATEGORY: "categories",
-  CATEGORY_ALL: "categories/all",
-  GET_ORDER_MONTH_YEAR: "orders",
-  DELETE_ORDER: "orders",
-  CREATE_ORDER: "orders",
-  UPDATE_ORDER: "orders",
-  categoriesPL: "categories",
-  ANALYTICS: "analytics",
-  PAYMENT_ORDERS: "payment_orders",
-  GROUPCATEGORY: "groups",
-  OUTSOURCING:"outsourcing",
-  EXPORT_PL:"Export/PL",
+  LOGIN: "auth/login",  // Đăng nhập
+  GET_PAYMENTS_MONTH_YEAR: "payments",  // Lấy thông tin thanh toán theo tháng và năm
+  PAYMENT: "payments",  // Thực hiện các thao tác liên quan đến thanh toán
+  EXCHAGE_RATE: "exchangeRate",  // Tỷ giá hối đoái
+  PL_REPORT: "getDataPL",  // Báo cáo lợi nhuận và lỗ
+  GROUP: "groups",  // Nhóm
+  CATEGORY: "categories",  // Danh mục
+  CATEGORY_ALL: "categories/all",  // Tất cả danh mục
+  GET_ORDER_MONTH_YEAR: "orders",  // Lấy đơn hàng theo tháng và năm
+  DELETE_ORDER: "orders",  // Xóa đơn hàng
+  CREATE_ORDER: "orders",  // Tạo mới đơn hàng
+  UPDATE_ORDER: "orders",  // Cập nhật đơn hàng
+  categoriesPL: "categories",  // Danh mục cho báo cáo lợi nhuận và lỗ
+  ANALYTICS: "analytics",  // Phân tích dữ liệu
+  PAYMENT_ORDERS: "payment_orders",  // Thanh toán cho đơn hàng
+  GROUPCATEGORY: "groups",  // Nhóm danh mục
+  OUTSOURCING: "outsourcing",  // Dịch vụ thuê ngoại vi
+  EXPORT_PL: "Export/PL",  // Xuất báo cáo lợi nhuận và lỗ
 };
 
-// Request interceptor to attach the authentication token to each request
+// Intercepter yêu cầu để gắn token xác thực vào mỗi yêu cầu
 axios.interceptors.request.use((config) => {
+  // Lấy token từ local storage
   const authToken = localStorage.getItem("token");
+
+  // Nếu tồn tại token, thêm vào tiêu đề yêu cầu để xác thực
   if (authToken) {
     config.headers.Authorization = `Bearer ${authToken}`;
   }
+
+  // Trả về cấu hình đã được thay đổi
   return config;
 });
-
-// let isRefreshing = false;
-// let refreshSubscribers = [];
-
-// Function to set the authentication token to local storage
-// const setAuthToken = (token) => {
-//   localStorage.setItem("token", token);
-// };
-
-// KHÚC BÊN DƯỚI DÙNG ĐỂ REFESH TOKEN KHÔNG RÕ AI LÀM // TODO //
-// axios.interceptors.response.use(
-//   (response) => response,
-//   (error) => {
-//     const originalRequest = error.config;
-
-//     // Check if the error is due to an expired token
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       if (isRefreshing) {
-//         // If a token refresh is already in progress, add the original request to the subscribers
-//         return new Promise((resolve) => {
-//           refreshSubscribers.push((token) => {
-//             originalRequest.headers.Authorization = `Bearer ${token}`;
-//             resolve(axios(originalRequest));
-//           });
-//         });
-//       }
-
-//       isRefreshing = true;
-//       originalRequest._retry = true;
-
-//       // Perform the token refresh request
-//       return new Promise((resolve, reject) => {
-//         // Replace this with your actual code to refresh the authentication token
-//         axios
-//           .post("auth/refresh")
-//           .then((response) => {
-//             const newAuthToken = response.data.access_token;
-//             // Update the stored token with the new one
-//             setAuthToken(newAuthToken);
-
-//             // Update the Authorization header with the new token
-//             originalRequest.headers.Authorization = `Bearer ${newAuthToken}`;
-
-//             // Resolve the original request
-//             resolve(axios(originalRequest));
-//           })
-//           .catch((err) => {
-//             // Handle token refresh failure (e.g., redirect to login)
-//             reject(err);
-//           })
-//           .finally(() => {
-//             isRefreshing = false;
-//             refreshSubscribers = [];
-//           });
-//       });
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );

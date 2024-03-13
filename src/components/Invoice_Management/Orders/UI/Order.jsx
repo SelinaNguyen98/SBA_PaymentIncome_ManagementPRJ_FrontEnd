@@ -125,22 +125,28 @@ const Order = () => {
     setState((prevState) => ({ ...prevState, ...data }));
 
   //Order
-  const [isLoading_Order, setIsLoading_Order] = useState(true);
-  const [dataOrder, setDataOrder] = useState([]);
-  const [selectedRows_Order, setSelectedRows_Order] = useState([]);
-  const [currentPage_Order, setCurrentPage_Order] = useState(1);
-  const [totalPages_Order, setTotalPages_Order] = useState(1);
-  const [selectedOrderIds, setSelectedOrderIds] = useState([]); // New state to store selected order IDs
+  const [isLoading_Order, setIsLoading_Order] = useState(true); // Trạng thái loading dữ liệu đơn hàng
+  const [dataOrder, setDataOrder] = useState([]); // Dữ liệu đơn hàng
+  const [selectedRows_Order, setSelectedRows_Order] = useState([]); // Các dòng đơn hàng được chọn
+  const [currentPage_Order, setCurrentPage_Order] = useState(1); // Trang hiện tại của danh sách đơn hàng
+  const [totalPages_Order, setTotalPages_Order] = useState(1); // Tổng số trang của danh sách đơn hàng
+  const [selectedOrderIds, setSelectedOrderIds] = useState([]); // State mới để lưu trữ các ID đơn hàng được chọn
   const [sortConfig_Order, setSortConfig_Order] = useState({
     key: "created_at",
     direction: "desc",
-  });
+  }); // Cấu hình sắp xếp mặc định cho danh sách đơn hàng
+
+  // Hàm xử lý khi checkbox của một dòng đơn hàng thay đổi
   const handleRowCheckboxChange_Order = (index) => {
+    // Lấy ID của đơn hàng từ dữ liệu
     const orderId = dataOrder[index].id;
+
+    // Sao chép mảng các dòng đơn hàng được chọn và cập nhật trạng thái của dòng hiện tại
     const newSelectedRows = [...selectedRows_Order];
     newSelectedRows[index] = !newSelectedRows[index];
     setSelectedRows_Order(newSelectedRows);
 
+    // Cập nhật mảng các ID đơn hàng được chọn dựa trên trạng thái mới của dòng
     setSelectedOrderIds((prevSelectedOrderIds) => {
       if (newSelectedRows[index]) {
         return [...prevSelectedOrderIds, orderId];
@@ -150,29 +156,32 @@ const Order = () => {
     });
   };
 
-  const [selectAllPages_Order, setSelectAllPages_Order] = useState([false]);
+  const [selectAllPages_Order, setSelectAllPages_Order] = useState([false]); // Chọn tất cả các dòng trên tất cả các trang
   const handleSelectAllCheckboxChange_Order = () => {
-    // Use the current page to determine the index in the array
+    // Sử dụng trang hiện tại để xác định chỉ mục trong mảng
     const pageIndex = currentPage_Order - 1;
 
+    // Sao chép mảng trạng thái chọn trên các trang và cập nhật trạng thái của trang hiện tại
     setSelectAllPages_Order((prevSelectAllPages) => {
       const newSelectAllPages = [...prevSelectAllPages];
       newSelectAllPages[pageIndex] = !newSelectAllPages[pageIndex];
       return newSelectAllPages;
     });
 
+    // Tạo mảng mới để lưu trạng thái chọn của từng dòng
     const newSelectedRows = new Array(dataOrder.length).fill(
       !selectAllPages_Order[pageIndex]
     );
     setSelectedRows_Order(newSelectedRows);
 
+    // Cập nhật mảng các ID đơn hàng được chọn dựa trên trạng thái chọn của trang
     setSelectedOrderIds((prevSelectedOrderIds) => {
       if (!selectAllPages_Order[pageIndex]) {
-        // If selecting all, concatenate all order IDs from the current page
+        // Nếu chọn tất cả, ghép nối tất cả ID đơn hàng từ trang hiện tại
         const currentPageOrderIds = dataOrder.map((order) => order.id);
         return [...prevSelectedOrderIds, ...currentPageOrderIds];
       } else {
-        // If deselecting all, remove all order IDs from the current page
+        // Nếu bỏ chọn tất cả, loại bỏ tất cả ID đơn hàng từ trang hiện tại
         return prevSelectedOrderIds.filter(
           (id) => !dataOrder.map((order) => order.id).includes(id)
         );
@@ -180,10 +189,13 @@ const Order = () => {
     });
   };
 
+  // Hàm xử lý khi trang của danh sách đơn hàng thay đổi
   const handleChangePage_Order = async (newPage) => {
+    // Cập nhật trang hiện tại
     setCurrentPage_Order(newPage);
 
     try {
+      // Gọi API để lấy dữ liệu đơn hàng mới dựa trên năm, tháng, trang và cấu hình sắp xếp
       const response = await getOrderByYearAndMonths(
         selectedDate,
         newPage,
@@ -194,13 +206,14 @@ const Order = () => {
 
       if (response && response.pagination) {
         if (response.orders === null) {
+          // Xử lý trường hợp không có đơn hàng
           setTotalPages_Order(1);
           setCurrentPage_Order(1);
         } else {
+          // Cập nhật dữ liệu đơn hàng và thêm cột thứ tự
           setDataOrder((prevData) => {
             console.log("Previous Data:", prevData);
 
-            // Thêm cột thứ tự vào mỗi order
             const newData = response.orders.map((order, index) => ({
               ...order,
               orderNumber: (newPage - 1) * 5 + index + 1,
@@ -210,9 +223,9 @@ const Order = () => {
           });
           console.log("huhu", dataOrder);
 
+          // Cập nhật tổng số trang và chọn các dòng đã được chọn trước đó
           setTotalPages_Order(response.pagination.total_pages);
 
-          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
           const newSelectedRows = new Array(response.orders.length).fill(false);
           response.orders.forEach((order, index) => {
             if (selectedOrderIds.includes(order.id)) {
@@ -221,7 +234,6 @@ const Order = () => {
           });
 
           setSelectedRows_Order(newSelectedRows);
-          // setSelectedRow_Order([]);
         }
       } else {
         console.log("Invalid response format:", response);
@@ -235,14 +247,18 @@ const Order = () => {
     }
   };
 
-  // eslint-disable-next-line no-unused-vars
+  // Hàm xóa đơn hàng được chọn
   const deleteOrder = async () => {
     try {
+      // Gọi API để xóa các đơn hàng dựa trên ID đã chọn
       await deleteOrderByIds(selectedOrderIds);
-      // Clear selected order IDs after successful deletion
+
+      // Xóa các ID đơn hàng đã chọn sau khi xóa thành công
       setSelectedOrderIds([]);
       setCurrentPage_Order(1);
+
       try {
+        // Gọi API để lấy dữ liệu đơn hàng mới sau khi xóa
         const response = await getOrderByYearAndMonths(
           selectedDate,
           1,
@@ -256,10 +272,10 @@ const Order = () => {
             setTotalPages_Order(1);
             setCurrentPage_Order(1);
           } else {
+            // Cập nhật dữ liệu đơn hàng và thêm cột thứ tự
             setDataOrder((prevData) => {
               console.log("Previous Data:", prevData);
 
-              // Thêm cột thứ tự vào mỗi order
               const newData = response.orders.map((order, index) => ({
                 ...order,
                 orderNumber: (1 - 1) * 5 + index + 1,
@@ -269,9 +285,9 @@ const Order = () => {
             });
             console.log("huhu", dataOrder);
 
+            // Cập nhật tổng số trang và chọn các dòng đã được chọn trước đó
             setTotalPages_Order(response.pagination.total_pages);
 
-            // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
             const newSelectedRows = new Array(response.orders.length).fill(
               false
             );
@@ -282,7 +298,6 @@ const Order = () => {
             });
 
             setSelectedRows_Order(newSelectedRows);
-            // setSelectedRow_Order([]);
           }
         } else {
           console.log("Invalid response format:", response);
@@ -294,15 +309,22 @@ const Order = () => {
         setDataOrder([]);
         setTotalPages_Order(1);
       }
+
+      // Ẩn modal xác nhận xóa và hiển thị thông báo thành công
       updateState({ isShowDeleteModal_Order: false });
       showToast.success(t_order("announce.deleted_successfully"));
     } catch (error) {
       console.error("Error deleting orders:", error);
     }
   };
+
+  // Hàm fetch dữ liệu đơn hàng dựa trên cấu hình sắp xếp
   const fetchData_Order = async (sortConfigInput) => {
+    // Bắt đầu hiển thị loading
     setIsLoading_Order(true);
+
     try {
+      // Gọi API để lấy dữ liệu đơn hàng mới dựa trên năm, tháng, trang và cấu hình sắp xếp
       const response = await getOrderByYearAndMonths(
         selectedDate,
         currentPage_Order,
@@ -313,13 +335,14 @@ const Order = () => {
 
       if (response && response.pagination) {
         if (response.orders === null) {
+          // Xử lý trường hợp không có đơn hàng
           setTotalPages_Order(1);
           setCurrentPage_Order(1);
         } else {
+          // Cập nhật dữ liệu đơn hàng và thêm cột thứ tự
           setDataOrder((prevData) => {
             console.log("Previous Data:", prevData);
 
-            // Thêm cột thứ tự vào mỗi order
             const newData = response.orders.map((order, index) => ({
               ...order,
               orderNumber: (currentPage_Order - 1) * 5 + index + 1,
@@ -329,9 +352,9 @@ const Order = () => {
           });
           console.log("huhu", dataOrder);
 
+          // Cập nhật tổng số trang và chọn các dòng đã được chọn trước đó
           setTotalPages_Order(response.pagination.total_pages);
 
-          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
           const newSelectedRows = new Array(response.orders.length).fill(false);
           response.orders.forEach((order, index) => {
             if (selectedOrderIds.includes(order.id)) {
@@ -341,7 +364,6 @@ const Order = () => {
 
           setSelectedRows_Order(newSelectedRows);
           setCurrentPage_Order(1);
-          // setSelectedRow_Order([]);
         }
       } else {
         console.log("Invalid response format:", response);
@@ -355,35 +377,43 @@ const Order = () => {
       setTotalPages_Order(1);
       setCurrentPage_Order(1);
     } finally {
+      // Dừng hiển thị loading và cập nhật trang hiện tại
       setIsLoading_Order(false);
       setCurrentPage_Order(1);
     }
   };
+
+  // Hàm yêu cầu sắp xếp đơn hàng dựa trên một khóa
   const requestSort_Order = async (key) => {
+    // Xác định hướng sắp xếp mới
     let direction = "asc";
     if (sortConfig_Order.key === key) {
-      // Nếu đang sắp xếp theo cùng một cột
       direction = sortConfig_Order.direction === "asc" ? "desc" : "asc";
     }
-    let NewsortConfig = { key, direction };
+
+    // Tạo cấu hình sắp xếp mới
+    let newSortConfig = { key, direction };
+
     try {
+      // Gọi API để lấy dữ liệu đơn hàng mới dựa trên năm, tháng, trang và cấu hình sắp xếp mới
       const response = await getOrderByYearAndMonths(
         selectedDate,
         currentPage_Order,
-        NewsortConfig || sortConfig_Order
+        newSortConfig || sortConfig_Order
       );
 
       console.log("API Response:", response);
 
       if (response && response.pagination) {
         if (response.orders === null) {
+          // Xử lý trường hợp không có đơn hàng
           setTotalPages_Order(1);
           setCurrentPage_Order(1);
         } else {
+          // Cập nhật dữ liệu đơn hàng và thêm cột thứ tự
           setDataOrder((prevData) => {
             console.log("Previous Data:", prevData);
 
-            // Thêm cột thứ tự vào mỗi order
             const newData = response.orders.map((order, index) => ({
               ...order,
               orderNumber: (currentPage_Order - 1) * 5 + index + 1,
@@ -393,9 +423,9 @@ const Order = () => {
           });
           console.log("huhu", dataOrder);
 
+          // Cập nhật tổng số trang và chọn các dòng đã được chọn trước đó
           setTotalPages_Order(response.pagination.total_pages);
 
-          // Check và cập nhật selectedRows_Order dựa trên selectedOrderIds
           const newSelectedRows = new Array(response.orders.length).fill(false);
           response.orders.forEach((order, index) => {
             if (selectedOrderIds.includes(order.id)) {
@@ -417,9 +447,12 @@ const Order = () => {
       setTotalPages_Order(1);
       setCurrentPage_Order(1);
     } finally {
+      // Dừng hiển thị loading và cập nhật trạng thái sắp xếp
       setIsLoading_Order(false);
     }
-    setSortConfig_Order(NewsortConfig);
+
+    // Cập nhật cấu hình sắp xếp
+    setSortConfig_Order(newSortConfig);
   };
 
   //Payment

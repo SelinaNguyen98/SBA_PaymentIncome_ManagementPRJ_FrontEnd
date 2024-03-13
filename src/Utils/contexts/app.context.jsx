@@ -12,15 +12,6 @@ export const AppContext = createContext(initialAppContext);
 
 // eslint-disable-next-line react/prop-types
 export const AppProvider = ({ children }) => {
-  // const [isShowAsideFilter, setShowAsideFilter] = useState(
-  //   initialAppContext.isShowAsideFilter
-  // );
-
-  // const toggleAsideFilter = () => {
-  //   setShowAsideFilter((prev) => !prev);
-  //   console.log(isShowAsideFilter);
-  // };
-
   //State quản lý Toast thông báo
   const [toast, setToast] = useState(null);
   const showCustomToast = (message, type) => {
